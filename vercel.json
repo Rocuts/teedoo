@@ -1,7 +1,6 @@
 {
   "installCommand": "echo 'Dependencies handled in build step'",
   "buildCommand": "bash build.sh",
-  "nodeVersion": "20",
   "outputDirectory": "build/web",
   "framework": null,
   "routes": [
