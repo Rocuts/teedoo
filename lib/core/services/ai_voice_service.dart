@@ -65,11 +65,12 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
   // ephemeral token without exposing the secret key to the client.
 
   Future<String> _getEphemeralToken() async {
-    final apiKey = dotenv.env['OPENAI_API_KEY'];
+    // Try dart-define first (Vercel/production), then .env (local dev)
+    const envKey = String.fromEnvironment('OPENAI_API_KEY');
+    final apiKey = envKey.isNotEmpty ? envKey : dotenv.env['OPENAI_API_KEY'];
     if (apiKey == null || apiKey.isEmpty || apiKey == 'tu_clave_aqui_para_que_el_orb_funcione') {
-      throw Exception('Falta la API Key de OpenAI en el archivo .env');
+      throw Exception('Falta la API Key de OpenAI. Configura OPENAI_API_KEY en Vercel o .env local');
     }
-    debugPrint('[SECURITY] OpenAI API key loaded from .env — must be proxied via backend in production');
 
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/realtime/sessions'),

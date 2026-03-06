@@ -18,6 +18,11 @@ echo "==> Getting dependencies..."
 flutter pub get
 
 echo "==> Building Flutter Web (release)..."
-flutter build web --release --base-href /
+DART_DEFINES=""
+if [ -n "$OPENAI_API_KEY" ]; then
+  DART_DEFINES="--dart-define=OPENAI_API_KEY=$OPENAI_API_KEY"
+  echo "==> OPENAI_API_KEY injected via --dart-define"
+fi
+flutter build web --release --base-href / $DART_DEFINES
 
 echo "==> Build complete! Output in build/web/"
