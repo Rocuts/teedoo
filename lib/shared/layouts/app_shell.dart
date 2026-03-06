@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/responsive/responsive.dart';
 import '../../core/theme/app_colors_theme.dart';
+import '../widgets/ai/ai_orbit_widget.dart';
 import '../widgets/navigation/app_sidebar.dart';
 
 /// AppShell — Layout principal con sidebar + área de contenido.
@@ -24,28 +25,40 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = context.screenSize;
 
-    return Scaffold(
-      key: ValueKey(currentPath),
-      backgroundColor: context.colors.bgPrimary,
-      // Drawer solo en compact
-      drawer: screenSize == ScreenSize.compact
-          ? AppDrawer(currentPath: currentPath)
-          : null,
-      body: Row(
-        children: [
-          // ── Sidebar (medium + expanded) ──
-          if (screenSize != ScreenSize.compact)
-            AppSidebar(
-              currentPath: currentPath,
-              initiallyCollapsed: screenSize == ScreenSize.medium,
-            ),
+    return Stack(
+      children: [
+        Scaffold(
+          key: ValueKey(currentPath),
+          backgroundColor: context.colors.bgPrimary,
+          // Drawer solo en compact
+          drawer: screenSize == ScreenSize.compact
+              ? AppDrawer(currentPath: currentPath)
+              : null,
+          body: Row(
+            children: [
+              // ── Sidebar (medium + expanded) ──
+              if (screenSize != ScreenSize.compact)
+                AppSidebar(
+                  currentPath: currentPath,
+                  initiallyCollapsed: screenSize == ScreenSize.medium,
+                ),
 
-          // ── Área principal (fill) ──
-          Expanded(
-            child: ClipRect(child: child),
+              // ── Área principal (fill) ──
+              Expanded(
+                child: ClipRect(child: child),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: screenSize == ScreenSize.compact ? 16 : 40,
+          right: screenSize == ScreenSize.compact ? 16 : 40,
+          child: const Material(
+            type: MaterialType.transparency,
+            child: AiOrbitWidget(),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -308,7 +308,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Email
         TeeDooTextField(
           label: 'Correo electronico',
-          placeholder: 'tu@empresa.com',
+          placeholder: 'test@teedoo.com',
           keyboardType: TextInputType.emailAddress,
           controller: _emailController,
         ),
@@ -343,7 +343,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             const SizedBox(height: 8),
             TeeDooTextField(
-              placeholder: '••••••••',
+              placeholder: '123456789',
               obscureText: true,
               controller: _passwordController,
             ),

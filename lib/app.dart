@@ -8,7 +8,6 @@ import 'core/theme/theme_provider.dart';
 import 'core/router/app_router.dart' show appRouterProvider;
 import 'core/responsive/responsive.dart';
 import 'core/services/ai_voice_service.dart';
-import 'shared/widgets/ai/ai_orbit_widget.dart';
 
 /// Riverpod provider for the AI voice service.
 final aiVoiceProvider = ChangeNotifierProvider<AiVoiceService>((ref) {
@@ -54,24 +53,6 @@ class TeeDooApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
-      // ── AI Orbit Overlay — responsive position ──
-      builder: (context, child) {
-        final isCompact = context.isCompact;
-        return Stack(
-          children: [
-            child!,
-            Positioned(
-              bottom: isCompact ? 16 : 40,
-              right: isCompact ? 16 : 40,
-              child: const Material(
-                type: MaterialType.transparency,
-                child: AiOrbitWidget(),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
