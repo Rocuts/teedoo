@@ -1,0 +1,82 @@
+name: teedoo
+description: TeeDoo — Portal SaaS de Facturación Electrónica con IA Compliance
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Routing
+  go_router: ^14.8.1
+
+  # Network
+  dio: ^5.7.0
+
+  # Models & Serialization
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # UI & Charts
+  fl_chart: ^0.70.2
+  lucide_icons: ^0.257.0
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.2
+  shimmer: ^3.0.0
+
+  # i18n
+  intl: ^0.20.2
+  slang: ^3.31.2
+  slang_flutter: ^3.31.0
+
+  # Forms
+  reactive_forms: ^17.0.1
+
+  # File Upload
+  file_picker: ^8.1.6
+
+  # Utils
+  equatable: ^2.0.7
+  uuid: ^4.5.1
+  flutter_dotenv: ^5.1.0
+  web: ^1.1.0
+
+  # AI S2S (OpenAI Realtime)
+  record: ^5.0.5
+  audioplayers: ^5.2.1
+  http: ^1.6.0
+  http_parser: ^4.1.0
+  flutter_webrtc: ^1.3.1
+  docx_template: ^0.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Code Generation — TODO: Enable when models use @freezed
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.6.2
+
+  # Linting
+  flutter_lints: ^5.0.0
+
+  # i18n codegen
+  slang_build_runner: ^3.31.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/templates/

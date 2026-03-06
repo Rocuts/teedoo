@@ -1,0 +1,11 @@
+{
+  "name": "TeDoo",
+  "short_name": "TeDoo",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0D1117",
+  "theme_color": "#4A9EFF",
+  "description": "Portal SaaS de Facturación Electrónica con IA Compliance",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}

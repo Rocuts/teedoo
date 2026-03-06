@@ -1,0 +1,117 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/widgets/glass_card.dart';
+import '../../../../shared/widgets/inputs/text_input.dart';
+
+/// Card de numeraci\u00f3n de facturas.
+///
+/// Ref Pencil: Settings - Organization / Card 4
+/// Configura el prefijo y la secuencia de numeraci\u00f3n.
+class NumberingCard extends StatelessWidget {
+  final String invoicePrefix;
+  final String nextNumber;
+  final ValueChanged<String>? onPrefixChanged;
+  final ValueChanged<String>? onNumberChanged;
+
+  const NumberingCard({
+    super.key,
+    required this.invoicePrefix,
+    required this.nextNumber,
+    this.onPrefixChanged,
+    this.onNumberChanged,
+  });
+
+  String get _preview => '$invoicePrefix$nextNumber';
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.all(AppSpacing.s24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title
+          Text(
+            'Numeraci\u00f3n de facturas',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: context.colors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          // Description
+          Text(
+            'Configura el formato y la secuencia de numeraci\u00f3n '
+            'para tus facturas electr\u00f3nicas.',
+            style: TextStyle(
+              fontSize: 13,
+              color: context.colors.textSecondary,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s16),
+
+          // Form row: Prefix + Next number
+          Row(
+            children: [
+              Expanded(
+                child: TeeDooTextField(
+                  label: 'Prefijo',
+                  controller: TextEditingController(text: invoicePrefix),
+                  onChanged: onPrefixChanged,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.s16),
+              Expanded(
+                child: TeeDooTextField(
+                  label: 'Siguiente n\u00famero',
+                  controller: TextEditingController(text: nextNumber),
+                  onChanged: onNumberChanged,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s16),
+
+          // Preview row
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: context.colors.bgInput,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  'Vista previa:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: context.colors.textTertiary,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Text(
+                  _preview,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: context.colors.accentBlue,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

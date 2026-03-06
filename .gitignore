@@ -1,0 +1,29 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# macOS
+.DS_Store
+*.swp
+
+# Environment / Secrets
+.env
+.env.*
+
+# Generated
+*.g.dart
+*.freezed.dart
+
+# Misc
+*.log
+flutter_*.png
