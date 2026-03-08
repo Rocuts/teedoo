@@ -6,7 +6,6 @@ import 'core/l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/router/app_router.dart' show appRouterProvider;
-import 'core/responsive/responsive.dart';
 import 'core/services/ai_voice_service.dart';
 
 /// Riverpod provider for the AI voice service.
@@ -28,7 +27,7 @@ class TeeDooApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     final themeMode = ref.watch(themeModeProvider);
 
-    final ThemeMode flutterThemeMode = switch(themeMode) {
+    final ThemeMode flutterThemeMode = switch (themeMode) {
       AppThemeMode.system => ThemeMode.system,
       AppThemeMode.light => ThemeMode.light,
       AppThemeMode.dark => ThemeMode.dark,

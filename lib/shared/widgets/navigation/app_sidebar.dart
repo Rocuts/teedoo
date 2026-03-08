@@ -189,8 +189,13 @@ class _AppSidebarState extends State<AppSidebar> {
     for (final item in items) {
       if (widgets.isNotEmpty) widgets.add(const SizedBox(height: 2));
       bool isActive = widget.currentPath.startsWith(item.path);
-      if (item.label == 'Facturas' && widget.currentPath.contains('documentos')) isActive = false;
-      if (item.label == 'Documentos por Facturas' && !widget.currentPath.contains('documentos')) isActive = false;
+      if (item.label == 'Facturas' && widget.currentPath.contains('documentos')) {
+        isActive = false;
+      }
+      if (item.label == 'Documentos por Facturas' &&
+          !widget.currentPath.contains('documentos')) {
+        isActive = false;
+      }
       if (_collapsed) {
         widgets.add(_buildCollapsedNavItem(
           context,
@@ -356,8 +361,13 @@ class AppDrawer extends StatelessWidget {
     String path,
   ) {
     bool isActive = currentPath.startsWith(path);
-    if (label == 'Facturas' && currentPath.contains('documentos')) isActive = false;
-    if (label == 'Documentos por Facturas' && !currentPath.contains('documentos')) isActive = false;
+    if (label == 'Facturas' && currentPath.contains('documentos')) {
+      isActive = false;
+    }
+    if (label == 'Documentos por Facturas' &&
+        !currentPath.contains('documentos')) {
+      isActive = false;
+    }
     return NavItem(
       icon: icon,
       label: label,

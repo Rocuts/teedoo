@@ -4,6 +4,7 @@
   "outputDirectory": "build/web",
   "framework": null,
   "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
     {
       "src": "/assets/(.*)",
       "headers": {
@@ -19,7 +20,23 @@
       "source": "/(.*)",
       "headers": [
         { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' https://api.teedoo.app https://api.openai.com https://quickchart.io wss://api.openai.com; media-src 'self' blob: data:; worker-src 'self' blob:; font-src 'self' data: https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), geolocation=(), microphone=(self)"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
       ]
     }
   ]

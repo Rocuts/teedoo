@@ -70,6 +70,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _handlePasskey() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.loginWithPasskey();
+
+    if (!mounted) return;
+
+    final authState = ref.read(authProvider);
+    if (authState.isAuthenticated) {
+      context.go(RoutePaths.dashboard);
+    } else if (authState.error != null) {
+      GlassToast.show(
+        context,
+        message: authState.error!,
+        type: StatusType.error,
+      );
+      authNotifier.clearError();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final glass = context.glass;
@@ -122,7 +141,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   /// Layout movil: formulario full-width con branding minimo arriba.
   Widget _buildMobileLogin(
-      BuildContext context, GlassTheme glass, AuthState authState) {
+    BuildContext context,
+    GlassTheme glass,
+    AuthState authState,
+  ) {
     return Scaffold(
       backgroundColor: context.colors.bgPrimary,
       body: SafeArea(
@@ -210,10 +232,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0x152563EB),
-            Color(0x0009090B),
-          ],
+          colors: [Color(0x152563EB), Color(0x0009090B)],
         ),
       ),
       child: Column(
@@ -298,10 +317,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         const SizedBox(height: 8),
         Text(
           'Ingresa tus credenciales para acceder',
-          style: TextStyle(
-            color: context.colors.textSecondary,
-            fontSize: 13,
-          ),
+          style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
         ),
         const SizedBox(height: 24),
 
@@ -362,9 +378,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Divider
         Row(
           children: [
-            Expanded(
-              child: Divider(color: context.colors.borderSubtle),
-            ),
+            Expanded(child: Divider(color: context.colors.borderSubtle)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
@@ -375,9 +389,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
             ),
-            Expanded(
-              child: Divider(color: context.colors.borderSubtle),
-            ),
+            Expanded(child: Divider(color: context.colors.borderSubtle)),
           ],
         ),
         const SizedBox(height: 24),
@@ -387,21 +399,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           width: double.infinity,
           height: 44,
           child: OutlinedButton.icon(
-            onPressed: authState.isLoading
-                ? null
-                : () {
-                    GlassToast.show(
-                      context,
-                      message:
-                          'Autenticacion biometrica con Passkey activada. Simulando ingreso...',
-                      type: StatusType.info,
-                    );
-                    Future.delayed(const Duration(seconds: 2), () {
-                      if (context.mounted) {
-                        ref.read(authProvider.notifier).loginWithPasskey();
-                      }
-                    });
-                  },
+            onPressed: authState.isLoading ? null : _handlePasskey,
             icon: Icon(
               LucideIcons.keyRound,
               size: 16,
@@ -417,9 +415,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: context.colors.borderSubtle),
-              shape: RoundedRectangleBorder(
-                borderRadius: AppRadius.mdAll,
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
             ),
           ),
         ),

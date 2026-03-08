@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
 
-
+import '../constants/app_constants.dart';
 import '../mock/mock_data.dart';
 import '../utils/web_file_downloader.dart';
 import 'report_template_service.dart';
@@ -58,109 +58,119 @@ No des largas explicaciones a menos que se te pida. Piensa como un ejecutivo fin
 Si te preguntan datos específicos que no tienes, indica que estás conectado a la demo y ofrece ayuda general sobre facturación, compliance TicketBAI/Verifactu, e IVA.
 ''';
 
-  // ── Step 1: Get ephemeral token from OpenAI ──
-  //
-  // WARNING: This client-side token exchange exposes the API key in the browser.
-  // For production, move this call to a backend endpoint that returns the
-  // ephemeral token without exposing the secret key to the client.
+  static const _realtimeModel = 'gpt-realtime';
+  static Uri get _clientSecretEndpoint {
+    if (kIsWeb) return Uri.parse('/api/realtime/client-secrets');
+    return Uri.parse('${AppConstants.apiBaseUrl}/realtime/client-secrets');
+  }
+
+  // ── Step 1: Get ephemeral token from backend ──
 
   Future<String> _getEphemeralToken() async {
-    // Try dart-define first (Vercel/production), then .env (local dev)
-    const envKey = String.fromEnvironment('OPENAI_API_KEY');
-    final apiKey = envKey.isNotEmpty ? envKey : dotenv.env['OPENAI_API_KEY'];
-    if (apiKey == null || apiKey.isEmpty || apiKey == 'tu_clave_aqui_para_que_el_orb_funcione') {
-      throw Exception('Falta la API Key de OpenAI. Configura OPENAI_API_KEY en Vercel o .env local');
-    }
-
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/realtime/sessions'),
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Content-Type': 'application/json',
-      },
+      _clientSecretEndpoint,
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'model': 'gpt-4o-realtime-preview-2024-12-17',
-        'voice': 'coral',
-        'instructions': _sessionInstructions,
-        'modalities': ['audio', 'text'],
-        'turn_detection': {'type': 'server_vad'},
-        'tools': [
-          {
-            'type': 'function',
-            'name': 'get_dashboard_kpis',
-            'description': 'Llama a esta función para obtener los KPIs principales del negocio: cantidad de facturas emitidas, ingresos totales del mes actual, facturas pendientes de cobro y facturas vencidas.',
-            'parameters': {
-              'type': 'object',
-              'properties': <String, dynamic>{},
-              'required': <String>[],
+        'session': {
+          'model': _realtimeModel,
+          'voice': 'coral',
+          'instructions': _sessionInstructions,
+          'modalities': ['audio', 'text'],
+          'turn_detection': {'type': 'server_vad'},
+          'tools': [
+            {
+              'type': 'function',
+              'name': 'get_dashboard_kpis',
+              'description':
+                  'Llama a esta función para obtener los KPIs principales del negocio: cantidad de facturas emitidas, ingresos totales del mes actual, facturas pendientes de cobro y facturas vencidas.',
+              'parameters': {
+                'type': 'object',
+                'properties': <String, dynamic>{},
+                'required': <String>[],
+              },
             },
-          },
-          {
-            'type': 'function',
-            'name': 'get_invoices_history',
-            'description': 'Llama a esta función para obtener un resumen del histórico de facturas, incluyendo detalles sobre el mes (ej: Q1, Enero, Febrero, Marzo), su estado de pago, a quién se emitieron y su monto total.',
-            'parameters': {
-              'type': 'object',
-              'properties': <String, dynamic>{},
-              'required': <String>[],
+            {
+              'type': 'function',
+              'name': 'get_invoices_history',
+              'description':
+                  'Llama a esta función para obtener un resumen del histórico de facturas, incluyendo detalles sobre el mes (ej: Q1, Enero, Febrero, Marzo), su estado de pago, a quién se emitieron y su monto total.',
+              'parameters': {
+                'type': 'object',
+                'properties': <String, dynamic>{},
+                'required': <String>[],
+              },
             },
-          },
-          {
-            'type': 'function',
-            'name': 'highlight_ui_element',
-            'description': 'Llama a esta función cuando estés hablando con el usuario sobre un dato específico para que la pantalla lo resalte estéticamente y el usuario pueda seguirte visualmente. ¡Haz esto siempre que hables sobre una métrica clave!',
-            'parameters': {
-              'type': 'object',
-              'properties': {
-                'element_id': {
-                  'type': 'string',
-                  'enum': [
-                    'revenue_kpi',
-                    'emitted_kpi',
-                    'pending_kpi',
-                    'overdue_kpi',
-                    'revenue_chart',
-                    'invoice_status_panel'
-                  ],
-                  'description': 'El ID del elemento gráfico que deseas resaltar en la pantalla durante tu respuesta.'
-                }
+            {
+              'type': 'function',
+              'name': 'highlight_ui_element',
+              'description':
+                  'Llama a esta función cuando estés hablando con el usuario sobre un dato específico para que la pantalla lo resalte estéticamente y el usuario pueda seguirte visualmente. ¡Haz esto siempre que hables sobre una métrica clave!',
+              'parameters': {
+                'type': 'object',
+                'properties': {
+                  'element_id': {
+                    'type': 'string',
+                    'enum': [
+                      'revenue_kpi',
+                      'emitted_kpi',
+                      'pending_kpi',
+                      'overdue_kpi',
+                      'revenue_chart',
+                      'invoice_status_panel',
+                    ],
+                    'description':
+                        'El ID del elemento gráfico que deseas resaltar en la pantalla durante tu respuesta.',
+                  },
+                },
               },
               'required': ['element_id'],
             },
-          },
-          {
-            'type': 'function',
-            'name': 'generate_report',
-            'description': 'Llama a esta función para generar y descargar un documento Word (.docx) corporativo usando una plantilla predefinida. La plantilla tiene etiquetas clave. Debes analizar los datos e inyectar el valor exacto para cada variable como un String corto y directo. Si la variable es una lista, usa saltos de línea \\n.',
-            'parameters': {
-              'type': 'object',
-              'properties': {
-                'filename': {
-                  'type': 'string',
-                  'description': 'El título o nombre del archivo. Debe terminar en .docx. Ejemplo: Reporte_Q1.docx'
-                },
-                'variables': {
-                  'type': 'object',
-                  'description': 'El mapa de variables Mappleables. Las llaves son: TITULO_REPORTE, FECHA_CORTE, RESUMEN_EJECUTIVO, INGRESOS_TOTALES, FACTURAS_DESTACADAS, CONCLUSION.',
-                  'properties': {
-                    'TITULO_REPORTE': {'type': 'string'},
-                    'FECHA_CORTE': {'type': 'string'},
-                    'RESUMEN_EJECUTIVO': {'type': 'string'},
-                    'INGRESOS_TOTALES': {'type': 'string'},
-                    'FACTURAS_DESTACADAS': {'type': 'string'},
-                    'CONCLUSION': {'type': 'string'},
-                    'GRAFICO_JSON': {
-                      'type': 'string',
-                      'description': 'Configuración JSON literal de QuickChart con los datos relevantes a graficar (ej. {"type":"pie","data":{"labels":["Pagadas","Pendientes"],"datasets":[{"data":[12000,3000]}]}}). NO uses comillas en exceso ni escapes raros, solo un string de JSON válido para QuickChart.'
-                    }
+            {
+              'type': 'function',
+              'name': 'generate_report',
+              'description':
+                  'Llama a esta función para generar y descargar un documento Word (.docx) corporativo usando una plantilla predefinida. La plantilla tiene etiquetas clave. Debes analizar los datos e inyectar el valor exacto para cada variable como un String corto y directo. Si la variable es una lista, usa saltos de línea \\n.',
+              'parameters': {
+                'type': 'object',
+                'properties': {
+                  'filename': {
+                    'type': 'string',
+                    'description':
+                        'El título o nombre del archivo. Debe terminar en .docx. Ejemplo: Reporte_Q1.docx',
                   },
-                  'required': ['TITULO_REPORTE', 'FECHA_CORTE', 'RESUMEN_EJECUTIVO', 'INGRESOS_TOTALES', 'FACTURAS_DESTACADAS', 'CONCLUSION', 'GRAFICO_JSON']
-                }
+                  'variables': {
+                    'type': 'object',
+                    'description':
+                        'El mapa de variables Mappleables. Las llaves son: TITULO_REPORTE, FECHA_CORTE, RESUMEN_EJECUTIVO, INGRESOS_TOTALES, FACTURAS_DESTACADAS, CONCLUSION.',
+                    'properties': {
+                      'TITULO_REPORTE': {'type': 'string'},
+                      'FECHA_CORTE': {'type': 'string'},
+                      'RESUMEN_EJECUTIVO': {'type': 'string'},
+                      'INGRESOS_TOTALES': {'type': 'string'},
+                      'FACTURAS_DESTACADAS': {'type': 'string'},
+                      'CONCLUSION': {'type': 'string'},
+                      'GRAFICO_JSON': {
+                        'type': 'string',
+                        'description':
+                            'Configuración JSON literal de QuickChart con los datos relevantes a graficar (ej. {"type":"pie","data":{"labels":["Pagadas","Pendientes"],"datasets":[{"data":[12000,3000]}]}}). NO uses comillas en exceso ni escapes raros, solo un string de JSON válido para QuickChart.',
+                      },
+                    },
+                    'required': [
+                      'TITULO_REPORTE',
+                      'FECHA_CORTE',
+                      'RESUMEN_EJECUTIVO',
+                      'INGRESOS_TOTALES',
+                      'FACTURAS_DESTACADAS',
+                      'CONCLUSION',
+                      'GRAFICO_JSON',
+                    ],
+                  },
+                },
+                'required': ['filename', 'variables'],
               },
-              'required': ['filename', 'variables'],
             },
-          }
-        ],
+          ],
+        },
       }),
     );
 
@@ -172,11 +182,12 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       } catch (_) {
         errorMsg = 'HTTP ${response.statusCode}';
       }
-      throw Exception('Token error: $errorMsg');
+      throw Exception('Token efímero no disponible: $errorMsg');
     }
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
-    final token = (data['client_secret'] as Map<String, dynamic>?)?['value'] as String? ??
+    final token =
+        (data['client_secret'] as Map<String, dynamic>?)?['value'] as String? ??
         data['value'] as String?;
     if (token == null) {
       throw Exception('Respuesta inesperada: no se encontró el token efímero');
@@ -215,7 +226,8 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
       _peerConnection!.onConnectionState = (RTCPeerConnectionState connState) {
         if (connState == RTCPeerConnectionState.RTCPeerConnectionStateFailed ||
-            connState == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected) {
+            connState ==
+                RTCPeerConnectionState.RTCPeerConnectionStateDisconnected) {
           _state = AiVoiceState.error;
           _errorMessage = 'Conexión WebRTC perdida';
           notifyListeners();
@@ -229,7 +241,10 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
       // Step 4: Create Data Channel
       final dcInit = RTCDataChannelInit()..ordered = true;
-      _dataChannel = await _peerConnection!.createDataChannel('oai-events', dcInit);
+      _dataChannel = await _peerConnection!.createDataChannel(
+        'oai-events',
+        dcInit,
+      );
 
       _dataChannel!.onMessage = (RTCDataChannelMessage message) {
         if (message.isBinary) return;
@@ -251,7 +266,7 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
       // Step 6: Send SDP to OpenAI endpoint
       final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17'),
+        Uri.parse('https://api.openai.com/v1/realtime?model=$_realtimeModel'),
         headers: {
           'Authorization': 'Bearer $ephemeralToken',
           'Content-Type': 'application/sdp',
@@ -321,9 +336,10 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
       case 'response.function_call_arguments.done':
         _handleFunctionCall(event);
-        
+
       case 'error':
-        final msg = (event['error']?['message'] as String?) ?? 'Error del servidor';
+        final msg =
+            (event['error']?['message'] as String?) ?? 'Error del servidor';
         debugPrint('Server error event: $msg');
         _state = AiVoiceState.error;
         _errorMessage = msg;
@@ -334,19 +350,20 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
   // ── Execute requested functions and send results back ──
 
   void _handleFunctionCall(Map<String, dynamic> event) async {
-    if (_dataChannel == null || _dataChannel!.state != RTCDataChannelState.RTCDataChannelOpen) {
+    if (_dataChannel == null ||
+        _dataChannel!.state != RTCDataChannelState.RTCDataChannelOpen) {
       return;
     }
 
     final callId = event['call_id'] as String?;
     final functionName = event['name'] as String?;
-    
+
     if (callId == null || functionName == null) return;
 
     debugPrint('AI Function Call invoked: $functionName');
 
     String functionOutput = '';
-    
+
     if (functionName == 'get_dashboard_kpis') {
       functionOutput = MockData.getKpisSummary();
     } else if (functionName == 'get_invoices_history') {
@@ -355,12 +372,14 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       try {
         final argsString = event['arguments'] as String? ?? '{}';
         debugPrint('Raw highlight args: $argsString');
-        final Map<String, dynamic> args = jsonDecode(argsString) as Map<String, dynamic>;
+        final Map<String, dynamic> args =
+            jsonDecode(argsString) as Map<String, dynamic>;
         final elementId = args['element_id'] as String?;
         if (elementId != null) {
           _activeWidgetId = elementId;
           notifyListeners();
-          functionOutput = 'Success: Elemento $elementId resaltado exitosamente.';
+          functionOutput =
+              'Success: Elemento $elementId resaltado exitosamente.';
           debugPrint('Visual Agent: Highlighting $elementId');
         } else {
           functionOutput = 'Error: faltan parámetros.';
@@ -373,13 +392,15 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       try {
         String argsString = event['arguments'] as String? ?? '{}';
         debugPrint('Raw generate_report args: $argsString');
-        
+
         // OpenAI sometimes hallucinates an extra '}' at the end of long generations. Safety check:
         Map<String, dynamic> args;
         try {
           args = jsonDecode(argsString) as Map<String, dynamic>;
         } catch (e) {
-          debugPrint('First JSON decode failed, attempting to sanitize extra trailing characters...');
+          debugPrint(
+            'First JSON decode failed, attempting to sanitize extra trailing characters...',
+          );
           argsString = argsString.trim();
           if (argsString.endsWith('}}')) {
             argsString = argsString.substring(0, argsString.length - 1);
@@ -389,15 +410,19 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
         final filename = args['filename'] as String? ?? 'reporte.docx';
         final variablesMap = args['variables'] as Map<String, dynamic>? ?? {};
-        
-        final bytes = await ReportTemplateService.generateReportFromTemplate(variablesMap);
-        
+
+        final bytes = await ReportTemplateService.generateReportFromTemplate(
+          variablesMap,
+        );
+
         if (bytes != null) {
           WebFileDownloader.downloadBytes(filename, bytes);
-          functionOutput = 'Success: Reporte DOCX corporativo descargado exitosamente.';
+          functionOutput =
+              'Success: Reporte DOCX corporativo descargado exitosamente.';
           debugPrint('Visual Agent: Downloading Word Report $filename');
         } else {
-          functionOutput = 'Error: No se pudo generar el documento Word. Revisa la plantilla assets/templates/informe_base.docx.';
+          functionOutput =
+              'Error: No se pudo generar el documento Word. Revisa la plantilla assets/templates/informe_base.docx.';
         }
       } catch (e) {
         debugPrint('Exception in generate_report: $e');
@@ -414,7 +439,7 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
         'type': 'function_call_output',
         'call_id': callId,
         'output': functionOutput,
-      }
+      },
     };
 
     _dataChannel!.send(RTCDataChannelMessage(jsonEncode(resultEvent)));
@@ -424,9 +449,9 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       'type': 'response.create',
       'response': {
         'modalities': ['text', 'audio'],
-      }
+      },
     };
-    
+
     _dataChannel!.send(RTCDataChannelMessage(jsonEncode(responseEvent)));
   }
 

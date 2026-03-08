@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/auth/providers/auth_provider.dart';
 import '../constants/app_constants.dart';
 import 'api_result.dart';
 
@@ -15,11 +18,14 @@ import 'api_result.dart';
 final dioClientProvider = Provider<DioClient>((ref) {
   return DioClient(
     tokenProvider: () async {
-      // TODO: conectar con AuthRepository para obtener el JWT actual
-      return null;
+      return ref.read(authTokenProvider);
     },
     onAuthError: () {
-      // TODO: conectar con AuthNotifier para forzar logout
+      unawaited(
+        Future<void>.microtask(() {
+          ref.read(authProvider.notifier).logout();
+        }),
+      );
     },
   );
 });
@@ -48,8 +54,8 @@ class DioClient {
     required TokenProvider tokenProvider,
     AuthErrorCallback? onAuthError,
     String? baseUrl,
-  })  : _tokenProvider = tokenProvider,
-        _onAuthError = onAuthError {
+  }) : _tokenProvider = tokenProvider,
+       _onAuthError = onAuthError {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl ?? AppConstants.apiBaseUrl,
@@ -90,12 +96,14 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.get<T>(
-          path,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-        ));
+    return _safeRequest(
+      () => _dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
   }
 
   /// POST request seguro que retorna [Result<T>].
@@ -106,13 +114,15 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.post<T>(
-          path,
-          data: data,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-        ));
+    return _safeRequest(
+      () => _dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
   }
 
   /// PUT request seguro que retorna [Result<T>].
@@ -123,13 +133,15 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.put<T>(
-          path,
-          data: data,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-        ));
+    return _safeRequest(
+      () => _dio.put<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
   }
 
   /// PATCH request seguro que retorna [Result<T>].
@@ -140,13 +152,15 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.patch<T>(
-          path,
-          data: data,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-        ));
+    return _safeRequest(
+      () => _dio.patch<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
   }
 
   /// DELETE request seguro que retorna [Result<T>].
@@ -157,13 +171,15 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.delete<T>(
-          path,
-          data: data,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-        ));
+    return _safeRequest(
+      () => _dio.delete<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
   }
 
   /// Upload de archivo con progreso.
@@ -173,15 +189,15 @@ class DioClient {
     void Function(int, int)? onSendProgress,
     CancelToken? cancelToken,
   }) async {
-    return _safeRequest(() => _dio.post<T>(
-          path,
-          data: data,
-          onSendProgress: onSendProgress,
-          cancelToken: cancelToken,
-          options: Options(
-            headers: {'Content-Type': 'multipart/form-data'},
-          ),
-        ));
+    return _safeRequest(
+      () => _dio.post<T>(
+        path,
+        data: data,
+        onSendProgress: onSendProgress,
+        cancelToken: cancelToken,
+        options: Options(headers: {'Content-Type': 'multipart/form-data'}),
+      ),
+    );
   }
 
   /// Ejecuta una request Dio y convierte el resultado a [Result<T>].
@@ -190,14 +206,20 @@ class DioClient {
   ) async {
     try {
       final response = await request();
-      return Success(response.data as T);
+      final data = response.data;
+      if (data == null && null is! T) {
+        return Failure(
+          UnknownException(
+            message:
+                'Respuesta vacía del servidor para una request de tipo $T.',
+          ),
+        );
+      }
+      return Success(data as T);
     } on DioException catch (e) {
       return Failure(_mapDioException(e));
     } on Exception catch (e) {
-      return Failure(UnknownException(
-        message: e.toString(),
-        originalError: e,
-      ));
+      return Failure(UnknownException(message: e.toString(), originalError: e));
     }
   }
 
@@ -206,24 +228,23 @@ class DioClient {
     return switch (e.type) {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.sendTimeout ||
-      DioExceptionType.receiveTimeout =>
-        NetworkException(
-          message: 'La conexión ha expirado. Verifica tu red.',
-          originalError: e,
-        ),
+      DioExceptionType.receiveTimeout => NetworkException(
+        message: 'La conexión ha expirado. Verifica tu red.',
+        originalError: e,
+      ),
       DioExceptionType.connectionError => NetworkException(
-          message: 'No se pudo conectar al servidor.',
-          originalError: e,
-        ),
+        message: 'No se pudo conectar al servidor.',
+        originalError: e,
+      ),
       DioExceptionType.badResponse => _mapStatusCode(e),
       DioExceptionType.cancel => NetworkException(
-          message: 'La solicitud fue cancelada.',
-          originalError: e,
-        ),
+        message: 'La solicitud fue cancelada.',
+        originalError: e,
+      ),
       _ => UnknownException(
-          message: e.message ?? 'Error desconocido de red.',
-          originalError: e,
-        ),
+        message: e.message ?? 'Error desconocido de red.',
+        originalError: e,
+      ),
     };
   }
 
@@ -243,41 +264,40 @@ class DioClient {
     return switch (statusCode) {
       400 => _mapValidationError(e, serverMessage),
       401 => AuthException(
-          message: serverMessage ?? 'Sesión expirada. Inicia sesión de nuevo.',
-          statusCode: 401,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Sesión expirada. Inicia sesión de nuevo.',
+        statusCode: 401,
+        originalError: e,
+      ),
       403 => AuthException(
-          message: serverMessage ?? 'No tienes permisos para esta acción.',
-          statusCode: 403,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'No tienes permisos para esta acción.',
+        statusCode: 403,
+        originalError: e,
+      ),
       404 => ServerException(
-          message: serverMessage ?? 'Recurso no encontrado.',
-          statusCode: 404,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Recurso no encontrado.',
+        statusCode: 404,
+        originalError: e,
+      ),
       409 => ServerException(
-          message: serverMessage ?? 'Conflicto con el estado actual.',
-          statusCode: 409,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Conflicto con el estado actual.',
+        statusCode: 409,
+        originalError: e,
+      ),
       422 => _mapValidationError(e, serverMessage),
       429 => ServerException(
-          message:
-              serverMessage ?? 'Demasiadas solicitudes. Intenta más tarde.',
-          statusCode: 429,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Demasiadas solicitudes. Intenta más tarde.',
+        statusCode: 429,
+        originalError: e,
+      ),
       final code? when code >= 500 => ServerException(
-          message: serverMessage ?? 'Error interno del servidor.',
-          statusCode: code,
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Error interno del servidor.',
+        statusCode: code,
+        originalError: e,
+      ),
       _ => UnknownException(
-          message: serverMessage ?? 'Error inesperado (código $statusCode).',
-          originalError: e,
-        ),
+        message: serverMessage ?? 'Error inesperado (código $statusCode).',
+        originalError: e,
+      ),
     };
   }
 
@@ -293,8 +313,7 @@ class DioClient {
     if (responseData case {'errors': final Map<String, dynamic> errors}) {
       for (final entry in errors.entries) {
         fieldErrors[entry.key] = switch (entry.value) {
-          final List<dynamic> list =>
-            list.map((e) => e.toString()).toList(),
+          final List<dynamic> list => list.map((e) => e.toString()).toList(),
           final String s => [s],
           _ => [entry.value.toString()],
         };
@@ -320,8 +339,8 @@ class _AuthInterceptor extends Interceptor {
   const _AuthInterceptor({
     required TokenProvider tokenProvider,
     AuthErrorCallback? onAuthError,
-  })  : _tokenProvider = tokenProvider,
-        _onAuthError = onAuthError;
+  }) : _tokenProvider = tokenProvider,
+       _onAuthError = onAuthError;
 
   @override
   Future<void> onRequest(
@@ -350,17 +369,30 @@ class _AuthInterceptor extends Interceptor {
 class _LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final maskedHeaders = Map<String, dynamic>.from(options.headers);
+    for (final key in maskedHeaders.keys.toList()) {
+      final lower = key.toLowerCase();
+      if (lower == 'authorization' ||
+          lower.contains('api-key') ||
+          lower.contains('token')) {
+        maskedHeaders[key] = '***';
+      }
+    }
+
     debugPrint(
       '\u2500\u2500 REQUEST \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n'
       '${options.method} ${options.uri}\n'
-      'Headers: ${options.headers}\n'
+      'Headers: $maskedHeaders\n'
       '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
     );
     handler.next(options);
   }
 
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     debugPrint(
       '\u2500\u2500 RESPONSE [${response.statusCode}] \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n'
       '${response.requestOptions.method} ${response.requestOptions.uri}\n'

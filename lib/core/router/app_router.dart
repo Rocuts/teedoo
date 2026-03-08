@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,17 +47,18 @@ class _AuthRefreshListenable extends ChangeNotifier {
 /// Router provider that integrates with auth state for route guards.
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshListenable = _AuthRefreshListenable(ref);
-
-  return GoRouter(
+  final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: RoutePaths.login,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: kDebugMode,
     refreshListenable: refreshListenable,
     redirect: (context, state) {
-      final isLoggedIn = ref.read(authProvider).isAuthenticated;
-      final currentPath = state.uri.toString();
-      final isPublicRoute =
-          _publicPaths.any(currentPath.startsWith);
+      final authState = ref.read(authProvider);
+      if (authState.isBootstrapping) return null;
+
+      final isLoggedIn = authState.isAuthenticated;
+      final currentPath = state.uri.path;
+      final isPublicRoute = _publicPaths.contains(currentPath);
 
       if (!isLoggedIn && !isPublicRoute) return RoutePaths.login;
       if (isLoggedIn && isPublicRoute) return RoutePaths.dashboard;
@@ -88,10 +90,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // ── App Routes (con AppShell: sidebar + topbar) ──
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) => AppShell(
-          currentPath: state.uri.toString(),
-          child: child,
-        ),
+        builder: (context, state, child) =>
+            AppShell(currentPath: state.uri.toString(), child: child),
         routes: [
           GoRoute(
             name: RouteNames.dashboard,
@@ -116,9 +116,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 name: RouteNames.invoiceDetail,
                 path: ':id',
-                builder: (context, state) => InvoiceDetailScreen(
-                  invoiceId: state.pathParameters['id']!,
-                ),
+                builder: (context, state) =>
+                    InvoiceDetailScreen(invoiceId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -130,9 +129,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 name: RouteNames.complianceResults,
                 path: 'results/:id',
-                builder: (context, state) => ResultsScreen(
-                  checkId: state.pathParameters['id']!,
-                ),
+                builder: (context, state) =>
+                    ResultsScreen(checkId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -150,4 +148,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
+
+  ref.onDispose(() {
+    refreshListenable.dispose();
+    router.dispose();
+  });
+
+  return router;
 });

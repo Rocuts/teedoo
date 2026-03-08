@@ -16,11 +16,7 @@ class LoginCard extends StatelessWidget {
   final VoidCallback? onLogin;
   final VoidCallback? onPasskey;
 
-  const LoginCard({
-    super.key,
-    this.onLogin,
-    this.onPasskey,
-  });
+  const LoginCard({super.key, this.onLogin, this.onPasskey});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +37,7 @@ class LoginCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Ingresa tus credenciales para acceder',
-            style: TextStyle(
-              color: context.colors.textSecondary,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
           ),
           const SizedBox(height: 24),
 
@@ -84,10 +77,7 @@ class LoginCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              const TeeDooTextField(
-                placeholder: '••••••••',
-                obscureText: true,
-              ),
+              const TeeDooTextField(placeholder: '••••••••', obscureText: true),
             ],
           ),
           const SizedBox(height: 24),
@@ -103,11 +93,9 @@ class LoginCard extends StatelessWidget {
           // Divider
           Row(
             children: [
-              Expanded(
-                child: Divider(color: context.colors.borderSubtle),
-              ),
+              Expanded(child: Divider(color: context.colors.borderSubtle)),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
                   'o continúa con',
                   style: TextStyle(
@@ -116,9 +104,7 @@ class LoginCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: Divider(color: context.colors.borderSubtle),
-              ),
+              Expanded(child: Divider(color: context.colors.borderSubtle)),
             ],
           ),
           const SizedBox(height: 24),
@@ -144,9 +130,7 @@ class LoginCard extends StatelessWidget {
               ),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: context.colors.borderSubtle),
-                shape: RoundedRectangleBorder(
-                  borderRadius: AppRadius.mdAll,
-                ),
+                shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
               ),
             ),
           ),

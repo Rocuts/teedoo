@@ -10,7 +10,10 @@ abstract final class AppConstants {
   static const String appTaglineEn = 'Smart electronic invoicing';
 
   // ── API ──
-  static const String apiBaseUrl = 'https://api.teedoo.app/v1';
+  static const String apiBaseUrl = String.fromEnvironment(
+    'TEEDOO_API_BASE_URL',
+    defaultValue: 'https://api.teedoo.app/v1',
+  );
   static const Duration connectTimeout = Duration(seconds: 15);
   static const Duration receiveTimeout = Duration(seconds: 30);
   static const Duration sendTimeout = Duration(seconds: 15);
@@ -37,6 +40,7 @@ abstract final class AppConstants {
   // ── Storage Keys ──
   static const String authTokenKey = 'auth_token';
   static const String refreshTokenKey = 'refresh_token';
+  static const String authUserKey = 'auth_user';
   static const String localeKey = 'locale';
 
   // ── Invoice Defaults ──
