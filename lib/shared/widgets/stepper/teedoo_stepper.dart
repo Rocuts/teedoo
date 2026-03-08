@@ -151,7 +151,9 @@ class _StepLine extends StatelessWidget {
         height: 2,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          color: isCompleted ? context.colors.accentBlue : context.colors.borderSubtle,
+          color: isCompleted
+              ? context.colors.accentBlue
+              : context.colors.borderSubtle,
           borderRadius: BorderRadius.circular(1),
         ),
       ),

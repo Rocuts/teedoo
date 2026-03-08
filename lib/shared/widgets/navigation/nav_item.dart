@@ -28,9 +28,12 @@ class NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = isActive ? context.colors.accentBlue : context.colors.textTertiary;
-    final labelColor = isActive ? context.colors.accentBlue : context.colors.textSecondary;
-    final bgColor = isActive ? context.colors.accentBlueSubtle : Colors.transparent;
+    final iconColor =
+        isActive ? context.colors.accentBlue : context.colors.textTertiary;
+    final labelColor =
+        isActive ? context.colors.accentBlue : context.colors.textSecondary;
+    final bgColor =
+        isActive ? context.colors.accentBlueSubtle : Colors.transparent;
     final fontWeight = isActive ? FontWeight.w500 : FontWeight.w400;
 
     return Semantics(
