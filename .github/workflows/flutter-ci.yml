@@ -23,7 +23,7 @@ jobs:
         run: flutter pub get
 
       - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed lib test
+        run: ./tool/ci/check_format.sh
 
       - name: Static analysis
         run: flutter analyze
