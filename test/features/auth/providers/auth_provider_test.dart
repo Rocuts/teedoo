@@ -47,6 +47,21 @@ void main() {
       expect(state.accessToken, isNull);
       expect(state.user, isNull);
     });
+
+    test('loginWithPasskey autentica con cuenta demo hardcodeada', () async {
+      SharedPreferences.setMockInitialValues({});
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      await _awaitAuthReady(container);
+      await container.read(authProvider.notifier).loginWithPasskey();
+
+      final state = container.read(authProvider);
+      expect(state.isAuthenticated, isTrue);
+      expect(state.error, isNull);
+      expect(state.user?.email, 'demo@teedoo.app');
+      expect(state.accessToken, 'demo_access_token');
+    });
   });
 }
 

@@ -203,9 +203,13 @@ class AuthNotifier extends Notifier<AuthState> {
       );
     }
 
+    return _buildDemoSession(email: normalizedEmail);
+  }
+
+  _AuthSession _buildDemoSession({String email = _demoEmail}) {
     final user = UserModel(
       id: 'usr_demo_001',
-      email: normalizedEmail,
+      email: email,
       name: 'Usuario Demo',
       organizationId: 'org_demo_001',
       role: 'admin',
@@ -257,21 +261,13 @@ class AuthNotifier extends Notifier<AuthState> {
     );
   }
 
-  /// Passkey solo habilitado en modo demo.
+  /// Passkey demo: permite acceso inmediato con usuario hardcodeado.
   Future<void> loginWithPasskey() async {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      if (!_demoAuthEnabled) {
-        throw Exception(
-          'Passkey requiere backend WebAuthn. Habilita DEMO_AUTH_ENABLED o integra /auth/passkey.',
-        );
-      }
-
-      final session = await _loginDemo(
-        email: _demoEmail,
-        password: _demoPassword,
-      );
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      final session = _buildDemoSession();
 
       await _persistSession(session);
       state = state.copyWith(
