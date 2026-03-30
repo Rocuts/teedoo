@@ -178,9 +178,10 @@ class _AppSidebarState extends State<AppSidebar> {
   List<Widget> _buildNavItems(BuildContext context) {
     const items = [
       _NavDef(LucideIcons.layoutDashboard, 'Dashboard', RoutePaths.dashboard),
-      _NavDef(LucideIcons.fileText, 'Facturas', RoutePaths.invoices),
+      _NavDef(LucideIcons.fileText, 'Facturas', RoutePaths.invoices, exactMatch: true),
       _NavDef(LucideIcons.folderOpen, 'Documentos por Facturas', RoutePaths.invoiceDocuments),
       _NavDef(LucideIcons.shieldCheck, 'Compliance IA', RoutePaths.compliance),
+      _NavDef(LucideIcons.calculator, 'Fiscal', RoutePaths.fiscal),
       _NavDef(LucideIcons.scrollText, 'Evidencias', RoutePaths.audit),
       _NavDef(LucideIcons.settings, 'Configuración', RoutePaths.settings),
     ];
@@ -188,14 +189,7 @@ class _AppSidebarState extends State<AppSidebar> {
     final widgets = <Widget>[];
     for (final item in items) {
       if (widgets.isNotEmpty) widgets.add(const SizedBox(height: 2));
-      bool isActive = widget.currentPath.startsWith(item.path);
-      if (item.label == 'Facturas' && widget.currentPath.contains('documentos')) {
-        isActive = false;
-      }
-      if (item.label == 'Documentos por Facturas' &&
-          !widget.currentPath.contains('documentos')) {
-        isActive = false;
-      }
+      final isActive = item.isActive(widget.currentPath);
       if (_collapsed) {
         widgets.add(_buildCollapsedNavItem(
           context,
@@ -315,13 +309,16 @@ class AppDrawer extends StatelessWidget {
                           'Dashboard', RoutePaths.dashboard),
                       const SizedBox(height: 2),
                       _drawerItem(context, LucideIcons.fileText, 'Facturas',
-                          RoutePaths.invoices),
+                          RoutePaths.invoices, exactMatch: true),
                       const SizedBox(height: 2),
                       _drawerItem(context, LucideIcons.folderOpen, 'Documentos por Facturas',
                           RoutePaths.invoiceDocuments),
                       const SizedBox(height: 2),
                       _drawerItem(context, LucideIcons.shieldCheck,
                           'Compliance IA', RoutePaths.compliance),
+                      const SizedBox(height: 2),
+                      _drawerItem(context, LucideIcons.calculator, 'Fiscal',
+                          RoutePaths.fiscal),
                       const SizedBox(height: 2),
                       _drawerItem(context, LucideIcons.scrollText, 'Evidencias',
                           RoutePaths.audit),
@@ -358,20 +355,14 @@ class AppDrawer extends StatelessWidget {
     BuildContext context,
     IconData icon,
     String label,
-    String path,
-  ) {
-    bool isActive = currentPath.startsWith(path);
-    if (label == 'Facturas' && currentPath.contains('documentos')) {
-      isActive = false;
-    }
-    if (label == 'Documentos por Facturas' &&
-        !currentPath.contains('documentos')) {
-      isActive = false;
-    }
+    String path, {
+    bool exactMatch = false,
+  }) {
+    final def = _NavDef(icon, label, path, exactMatch: exactMatch);
     return NavItem(
       icon: icon,
       label: label,
-      isActive: isActive,
+      isActive: def.isActive(currentPath),
       onTap: () {
         Navigator.of(context).pop();
         context.go(path);
@@ -380,9 +371,41 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
+/// Definición de un ítem de navegación en el sidebar/drawer.
+///
+/// Cada instancia agrupa el ícono, la etiqueta visible, la ruta de destino
+/// y la estrategia de comparación para determinar si el ítem está activo.
+///
+/// ### Estrategias de active-state ([exactMatch])
+///
+/// | `exactMatch` | Comportamiento | Caso de uso |
+/// |---|---|---|
+/// | `false` (default) | `currentPath.startsWith(path)` | Rutas que NO tienen sub-rutas expuestas como ítems independientes (e.g. `/compliance`, `/settings`). |
+/// | `true` | `currentPath == path` | Rutas padre cuyas sub-rutas aparecen como ítems separados en el sidebar (e.g. `/invoices` vs `/invoices/documents`). Evita que el padre se ilumine al visitar una sub-ruta. |
+///
+/// ### Ejemplo
+/// ```dart
+/// // "/invoices" solo se activa en exactamente "/invoices"
+/// _NavDef(Icons.list, 'Facturas', '/invoices', exactMatch: true)
+///
+/// // "/invoices/documents" se activa en "/invoices/documents" y cualquier sub-ruta
+/// _NavDef(Icons.folder, 'Documentos', '/invoices/documents')
+/// ```
 class _NavDef {
   final IconData icon;
   final String label;
   final String path;
-  const _NavDef(this.icon, this.label, this.path);
+
+  /// Cuando es `true`, el ítem solo se marca como activo si [currentPath]
+  /// coincide exactamente con [path]. Cuando es `false` (default), basta
+  /// con que [currentPath] empiece con [path].
+  final bool exactMatch;
+
+  const _NavDef(this.icon, this.label, this.path, {this.exactMatch = false});
+
+  /// Determina si este ítem debe mostrarse como activo dado el [currentPath].
+  bool isActive(String currentPath) {
+    if (exactMatch) return currentPath == path;
+    return currentPath.startsWith(path);
+  }
 }
