@@ -4335,7 +4335,7 @@ class MockData {
     };
   }
 
-  static const chartMonths = [
+  static const _allMonths = [
     'Ene',
     'Feb',
     'Mar',
@@ -4350,37 +4350,24 @@ class MockData {
     'Dic',
   ];
 
-  static List<double> get chartValues {
-    final janTotal =
-        invoices
-            .where((i) => i.issueDate.month == 1)
-            .fold<double>(0, (s, i) => s + i.total) /
-        1000.0;
-    final febTotal =
-        invoices
-            .where((i) => i.issueDate.month == 2)
-            .fold<double>(0, (s, i) => s + i.total) /
-        1000.0;
-    final marchTotal =
-        invoices
-            .where((i) => i.issueDate.month == 3)
-            .fold<double>(0, (s, i) => s + i.total) /
-        1000.0;
+  /// Solo devuelve los meses hasta el mes actual (inclusive).
+  static List<String> get chartMonths {
+    final now = DateTime.now();
+    return _allMonths.sublist(0, now.month);
+  }
 
-    return [
-      janTotal > 0 ? janTotal : 12.5,
-      febTotal > 0 ? febTotal : 14.2,
-      marchTotal > 0 ? marchTotal : 13.8,
-      18.5,
-      21.0,
-      19.5,
-      24.3,
-      22.1,
-      28.4,
-      30.5,
-      32.1,
-      34.5,
-    ];
+  /// Calcula ingresos reales por mes, solo hasta el mes actual.
+  static List<double> get chartValues {
+    final now = DateTime.now();
+    return List.generate(now.month, (i) {
+      final month = i + 1;
+      final total =
+          invoices
+              .where((inv) => inv.issueDate.month == month)
+              .fold<double>(0, (s, inv) => s + inv.total) /
+          1000.0;
+      return total;
+    });
   }
 
   static String getKpisSummary() {

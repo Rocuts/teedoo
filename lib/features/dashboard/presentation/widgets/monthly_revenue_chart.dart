@@ -13,7 +13,7 @@ import '../../../../core/mock/mock_data.dart';
 class MonthlyRevenueChart extends StatelessWidget {
   const MonthlyRevenueChart({super.key});
 
-  static const _months = MockData.chartMonths;
+  static List<String> get _months => MockData.chartMonths;
 
   static List<double> get _values => MockData.chartValues;
 
@@ -24,7 +24,7 @@ class MonthlyRevenueChart extends StatelessWidget {
     return GlassCard(
       header: GlassCardHeader(
         title: 'Ingresos Mensuales',
-        subtitle: 'Resumen del año fiscal 2025',
+        subtitle: 'Resumen del año fiscal ${DateTime.now().year}',
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
