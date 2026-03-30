@@ -36,15 +36,8 @@ class TeeDooStepper extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (int i = 0; i < steps.length; i++) ...[
-          _StepCircle(
-            index: i,
-            label: steps[i].label,
-            state: _stepState(i),
-          ),
-          if (i < steps.length - 1)
-            _StepLine(
-              isCompleted: i < currentStep,
-            ),
+          _StepCircle(index: i, label: steps[i].label, state: _stepState(i)),
+          if (i < steps.length - 1) _StepLine(isCompleted: i < currentStep),
         ],
       ],
     );

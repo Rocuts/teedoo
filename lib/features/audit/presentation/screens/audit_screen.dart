@@ -3,7 +3,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/secondary_button.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../../data/models/audit_event.dart';
@@ -82,11 +84,7 @@ class _AuditScreenState extends State<AuditScreen> {
     ),
   ];
 
-  static const _tabLabels = [
-    'Log de eventos',
-    'Integridad',
-    'Exportaciones',
-  ];
+  static const _tabLabels = ['Log de eventos', 'Integridad', 'Exportaciones'];
 
   void _onTabChanged(int index) {
     if (index == _activeTab) return;
@@ -167,9 +165,7 @@ class _AuditScreenState extends State<AuditScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Left: Timeline
-          Expanded(
-            child: AuditTimeline(events: _mockEvents),
-          ),
+          Expanded(child: AuditTimeline(events: _mockEvents)),
           const SizedBox(width: AppSpacing.s20),
           // Right: Side cards
           const SizedBox(
@@ -205,17 +201,12 @@ class _AuditScreenState extends State<AuditScreen> {
       children: [
         Text(
           'Evidencias y Auditoría',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h2.copyWith(color: context.colors.textPrimary),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           'Trazabilidad completa de operaciones e integridad',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
           ),
         ),
@@ -247,10 +238,7 @@ class _AuditScreenState extends State<AuditScreen> {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        titleColumn,
-        exportButton,
-      ],
+      children: [titleColumn, exportButton],
     );
   }
 
@@ -258,7 +246,7 @@ class _AuditScreenState extends State<AuditScreen> {
     return Row(
       children: [
         for (int i = 0; i < _tabLabels.length; i++) ...[
-          if (i > 0) const SizedBox(width: 4),
+          if (i > 0) const SizedBox(width: AppSpacing.xs),
           _buildTab(i),
         ],
       ],
@@ -272,12 +260,15 @@ class _AuditScreenState extends State<AuditScreen> {
       child: GestureDetector(
         onTap: () => _onTabChanged(index),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.sm,
+          ),
           decoration: BoxDecoration(
             color: isActive
                 ? context.colors.accentBlueSubtle
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: AppRadius.mdAll,
             border: Border.all(
               color: isActive
                   ? context.colors.accentBlue
@@ -286,9 +277,7 @@ class _AuditScreenState extends State<AuditScreen> {
           ),
           child: Text(
             _tabLabels[index],
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
+            style: AppTypography.bodySmallMedium.copyWith(
               color: isActive
                   ? context.colors.accentBlue
                   : context.colors.textSecondary,

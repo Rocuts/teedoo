@@ -4,6 +4,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../shared/widgets/inputs/text_input.dart';
@@ -21,25 +23,23 @@ class LoginCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(48),
+      padding: const EdgeInsets.all(AppSpacing.s48),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Iniciar sesión',
-            style: TextStyle(
-              color: context.colors.textPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTypography.h2.copyWith(color: context.colors.textPrimary),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Ingresa tus credenciales para acceder',
-            style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
+            style: AppTypography.bodySmall.copyWith(
+              color: context.colors.textSecondary,
+            ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
 
           // Email
           const TeeDooTextField(
@@ -47,7 +47,7 @@ class LoginCard extends StatelessWidget {
             placeholder: 'tu@empresa.com',
             keyboardType: TextInputType.emailAddress,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
 
           // Password
           Column(
@@ -58,9 +58,7 @@ class LoginCard extends StatelessWidget {
                 children: [
                   Text(
                     'Contraseña',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                    style: AppTypography.captionMedium.copyWith(
                       color: context.colors.textSecondary,
                     ),
                   ),
@@ -68,19 +66,18 @@ class LoginCard extends StatelessWidget {
                     onTap: () => context.go(RoutePaths.forgotPassword),
                     child: Text(
                       'Olvidé mi contraseña',
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: AppTypography.caption.copyWith(
                         color: context.colors.accentBlue,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               const TeeDooTextField(placeholder: '••••••••', obscureText: true),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
 
           // Login button
           PrimaryButton(
@@ -88,18 +85,17 @@ class LoginCard extends StatelessWidget {
             isExpanded: true,
             onPressed: onLogin ?? () => context.go(RoutePaths.dashboard),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
 
           // Divider
           Row(
             children: [
               Expanded(child: Divider(color: context.colors.borderSubtle)),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text(
                   'o continúa con',
-                  style: TextStyle(
-                    fontSize: 11,
+                  style: AppTypography.captionSmall.copyWith(
                     color: context.colors.textTertiary,
                   ),
                 ),
@@ -107,7 +103,7 @@ class LoginCard extends StatelessWidget {
               Expanded(child: Divider(color: context.colors.borderSubtle)),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
 
           // Passkey button
           SizedBox(
@@ -122,9 +118,7 @@ class LoginCard extends StatelessWidget {
               ),
               label: Text(
                 'Continuar con passkey',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                style: AppTypography.bodySmallMedium.copyWith(
                   color: context.colors.textSecondary,
                 ),
               ),

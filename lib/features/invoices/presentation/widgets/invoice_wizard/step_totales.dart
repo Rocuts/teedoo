@@ -5,6 +5,7 @@ import '../../../../../core/responsive/responsive.dart';
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 import '../../../../../shared/widgets/inputs/text_input.dart';
 import '../../../../../shared/widgets/inputs/select_input.dart';
@@ -44,12 +45,17 @@ class StepTotales extends StatelessWidget {
         subtitle: 'Verifica los importes y añade condiciones de pago',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.s20,
+          AppSpacing.s24,
+          0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppSpacing.s20),
               decoration: BoxDecoration(
                 color: context.colors.bgInput,
                 borderRadius: AppRadius.mdAll,
@@ -58,8 +64,12 @@ class StepTotales extends StatelessWidget {
               child: Column(
                 children: [
                   buildTotalRow(context, 'Subtotal', formatCurrency(subtotal)),
-                  const SizedBox(height: 12),
-                  buildTotalRow(context, 'IVA (21%)', formatCurrency(taxAmount)),
+                  const SizedBox(height: AppSpacing.lg),
+                  buildTotalRow(
+                    context,
+                    'IVA (21%)',
+                    formatCurrency(taxAmount),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     child: Divider(
@@ -81,10 +91,8 @@ class StepTotales extends StatelessWidget {
 
             Text(
               'Condiciones de pago',
-              style: TextStyle(
+              style: AppTypography.h4.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: AppSpacing.s16),
@@ -94,7 +102,10 @@ class StepTotales extends StatelessWidget {
                 placeholder: 'Seleccionar método',
                 value: paymentMethod,
                 options: const [
-                  SelectOption(value: 'transfer', label: 'Transferencia bancaria'),
+                  SelectOption(
+                    value: 'transfer',
+                    label: 'Transferencia bancaria',
+                  ),
                   SelectOption(value: 'card', label: 'Tarjeta de crédito'),
                   SelectOption(value: 'direct_debit', label: 'Domiciliación'),
                   SelectOption(value: 'cash', label: 'Efectivo'),
@@ -116,9 +127,18 @@ class StepTotales extends StatelessWidget {
                       placeholder: 'Seleccionar método',
                       value: paymentMethod,
                       options: const [
-                        SelectOption(value: 'transfer', label: 'Transferencia bancaria'),
-                        SelectOption(value: 'card', label: 'Tarjeta de crédito'),
-                        SelectOption(value: 'direct_debit', label: 'Domiciliación'),
+                        SelectOption(
+                          value: 'transfer',
+                          label: 'Transferencia bancaria',
+                        ),
+                        SelectOption(
+                          value: 'card',
+                          label: 'Tarjeta de crédito',
+                        ),
+                        SelectOption(
+                          value: 'direct_debit',
+                          label: 'Domiciliación',
+                        ),
                         SelectOption(value: 'cash', label: 'Efectivo'),
                       ],
                       onChanged: onPaymentMethodChanged,
@@ -146,10 +166,7 @@ class StepTotales extends StatelessWidget {
       ),
       actions: GlassCardActions(
         children: [
-          SecondaryButton(
-            label: 'Anterior',
-            onPressed: onPrev,
-          ),
+          SecondaryButton(label: 'Anterior', onPressed: onPrev),
           const SizedBox(width: AppSpacing.buttonGap),
           PrimaryButton(
             label: 'Siguiente: Revisión',

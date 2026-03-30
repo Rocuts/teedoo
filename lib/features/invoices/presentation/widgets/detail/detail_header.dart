@@ -4,18 +4,25 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../../core/responsive/responsive.dart';
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../../shared/widgets/buttons/secondary_button.dart';
 import '../../../../../shared/widgets/buttons/ghost_button.dart';
 import '../../../../../shared/widgets/glass_toast.dart';
+import '../../../data/models/invoice_model.dart';
+import '../../../data/models/invoice_status.dart';
 
 class DetailHeader extends StatelessWidget {
   final String invoiceNumber;
+  final InvoiceStatus status;
+  final ComplianceStatus complianceStatus;
 
   const DetailHeader({
     super.key,
     required this.invoiceNumber,
+    required this.status,
+    required this.complianceStatus,
   });
 
   @override
@@ -26,22 +33,15 @@ class DetailHeader extends StatelessWidget {
         Flexible(
           child: Text(
             invoiceNumber,
-            style: TextStyle(
-              color: context.colors.textPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTypography.h2.copyWith(color: context.colors.textPrimary),
           ),
         ),
-        const SizedBox(width: 12),
-        const StatusBadge(
-          label: 'Enviada',
-          type: StatusType.success,
-        ),
-        const SizedBox(width: 8),
-        const StatusBadge(
-          label: 'Pass',
-          type: StatusType.success,
+        const SizedBox(width: AppSpacing.lg),
+        StatusBadge(label: status.label, type: status.badgeType),
+        const SizedBox(width: AppSpacing.sm),
+        StatusBadge(
+          label: complianceStatus.label,
+          type: complianceStatus.badgeType,
         ),
       ],
     );
@@ -51,9 +51,11 @@ class DetailHeader extends StatelessWidget {
         label: 'Duplicar',
         icon: LucideIcons.copy,
         onPressed: () {
-          GlassToast.show(context,
-              message: 'Factura duplicada en borradores',
-              type: StatusType.success);
+          GlassToast.show(
+            context,
+            message: 'Factura duplicada en borradores',
+            type: StatusType.success,
+          );
         },
       ),
       const SizedBox(width: 8),
@@ -61,9 +63,11 @@ class DetailHeader extends StatelessWidget {
         label: 'Exportar',
         icon: LucideIcons.download,
         onPressed: () {
-          GlassToast.show(context,
-              message: 'Descarga de factura iniciada...',
-              type: StatusType.info);
+          GlassToast.show(
+            context,
+            message: 'Descarga de factura iniciada...',
+            type: StatusType.info,
+          );
         },
       ),
       const SizedBox(width: AppSpacing.buttonGap),
@@ -71,9 +75,11 @@ class DetailHeader extends StatelessWidget {
         label: 'Enviar',
         icon: LucideIcons.send,
         onPressed: () {
-          GlassToast.show(context,
-              message: 'Enviando al sistema del cliente...',
-              type: StatusType.info);
+          GlassToast.show(
+            context,
+            message: 'Enviando al sistema del cliente...',
+            type: StatusType.info,
+          );
         },
       ),
     ];
@@ -83,10 +89,10 @@ class DetailHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           titleAndBadges,
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.lg),
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
             children: actionButtons,
           ),
         ],
@@ -97,10 +103,7 @@ class DetailHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(child: titleAndBadges),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: actionButtons,
-        ),
+        Row(mainAxisSize: MainAxisSize.min, children: actionButtons),
       ],
     );
   }

@@ -108,7 +108,10 @@ abstract final class Formatters {
   /// Ejemplo: `12345678A` -> `12.345.678-A`
   /// Ejemplo: `B12345678` -> `B-12345678`
   static String nifCif(String value) {
-    final cleaned = value.trim().toUpperCase().replaceAll(RegExp(r'[\s.-]'), '');
+    final cleaned = value.trim().toUpperCase().replaceAll(
+      RegExp(r'[\s.-]'),
+      '',
+    );
 
     if (cleaned.isEmpty) return '';
 
@@ -136,11 +139,7 @@ abstract final class Formatters {
   /// Formatea un número de factura con prefijo y padding.
   ///
   /// Ejemplo: `invoiceNumber(42, prefix: 'FAC')` -> `FAC-2026-00042`
-  static String invoiceNumber(
-    int number, {
-    String prefix = 'FAC',
-    int? year,
-  }) {
+  static String invoiceNumber(int number, {String prefix = 'FAC', int? year}) {
     final y = year ?? DateTime.now().year;
     final padded = number.toString().padLeft(5, '0');
     return '$prefix-$y-$padded';

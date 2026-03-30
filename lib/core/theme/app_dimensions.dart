@@ -21,6 +21,7 @@ abstract final class AppDimensions {
   static const double iconSizeLarge = 24;
 
   // ── Button / Touch Targets ──
+  static const double buttonHeight = 44;
   static const double touchTargetSize = 40;
   static const double collapsedNavItemSize = 44;
   static const double avatarSize = 32;
@@ -30,6 +31,13 @@ abstract final class AppDimensions {
   static const double tableCheckboxColumnWidth = 40;
   static const double tableCellPaddingH = 16;
   static const double tableCellPaddingV = 12;
+
+  // ── AI Voice ──
+  static const double aiOrbIdle = 64;
+  static const double aiOrbActive = 80;
+  static const double aiCardWidth = 320;
+  static const double aiOrbVisualizerIdle = 40;
+  static const double aiOrbVisualizerActive = 60;
 
   // ── Auth Screens ──
   static const double authCardPadding = 40;

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/secondary_button.dart';
 import '../../../../shared/widgets/glass_card.dart';
 
@@ -24,8 +26,18 @@ class CertificateCard extends StatelessWidget {
 
   String _formatExpiry(DateTime date) {
     const months = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+      'Ene',
+      'Feb',
+      'Mar',
+      'Abr',
+      'May',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dic',
     ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
@@ -45,15 +57,19 @@ class CertificateCard extends StatelessWidget {
         ),
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.lg,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Certificado necesario para la firma electr\u00f3nica de facturas. '
               'Compatible con formatos .p12 y .pfx.',
-              style: TextStyle(
-                fontSize: 13,
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textSecondary,
                 height: 1.5,
               ),
@@ -72,12 +88,12 @@ class CertificateCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.xl,
       ),
       decoration: BoxDecoration(
         color: context.colors.bgInput,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.mdAll,
       ),
       child: Row(
         children: [
@@ -104,8 +120,7 @@ class CertificateCard extends StatelessWidget {
             children: [
               Text(
                 certificateName!,
-                style: TextStyle(
-                  fontSize: 13,
+                style: AppTypography.bodySmall.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
@@ -113,8 +128,7 @@ class CertificateCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   'V\u00e1lido hasta: ${_formatExpiry(certificateExpiry!)}',
-                  style: TextStyle(
-                    fontSize: 11,
+                  style: AppTypography.captionSmall.copyWith(
                     color: context.colors.textTertiary,
                   ),
                 ),

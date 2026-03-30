@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/buttons/secondary_button.dart';
 import '../../../../shared/widgets/glass_card.dart';
@@ -23,17 +25,12 @@ class IntegrationsTab extends StatelessWidget {
         // Header
         Text(
           'Integraciones',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
           'Conecta TeDoo con tus herramientas y servicios externos',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
           ),
         ),
@@ -126,17 +123,12 @@ class IntegrationsTab extends StatelessWidget {
           const SizedBox(height: AppSpacing.s16),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: context.colors.textPrimary,
-            ),
+            style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
             description,
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTypography.bodySmall.copyWith(
               color: context.colors.textSecondary,
               height: 1.4,
             ),
@@ -145,7 +137,12 @@ class IntegrationsTab extends StatelessWidget {
           SecondaryButton(
             label: 'Configurar',
             onPressed: () {
-                GlassToast.show(context, message: 'Iniciando flujo de conexión segura con la integración...', type: StatusType.info);
+              GlassToast.show(
+                context,
+                message:
+                    'Iniciando flujo de conexión segura con la integración...',
+                type: StatusType.info,
+              );
             },
           ),
         ],

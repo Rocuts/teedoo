@@ -86,7 +86,7 @@ class _DocumentGridViewState extends State<DocumentGridView> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         const SizedBox(height: AppSpacing.s16),
@@ -151,13 +151,17 @@ class _ViewToggleButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? context.colors.accentBlue.withValues(alpha: 0.1) : Colors.transparent,
+            color: isSelected
+                ? context.colors.accentBlue.withValues(alpha: 0.1)
+                : Colors.transparent,
             borderRadius: AppRadius.mdAll,
           ),
           child: Icon(
             icon,
             size: 16,
-            color: isSelected ? context.colors.accentBlue : context.colors.textTertiary,
+            color: isSelected
+                ? context.colors.accentBlue
+                : context.colors.textTertiary,
           ),
         ),
       ),
@@ -188,7 +192,7 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
   Widget build(BuildContext context) {
     final IconData iconData;
     final Color iconColor;
-    
+
     switch (widget.document.type) {
       case 'pdf':
         iconData = LucideIcons.fileText;
@@ -217,7 +221,9 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
           color: _isHovered ? context.colors.bgSurface : context.colors.bgInput,
           borderRadius: AppRadius.lgAll,
           border: Border.all(
-            color: _isHovered ? context.colors.accentBlue.withValues(alpha: 0.3) : context.colors.borderSubtle,
+            color: _isHovered
+                ? context.colors.accentBlue.withValues(alpha: 0.3)
+                : context.colors.borderSubtle,
           ),
           boxShadow: _isHovered
               ? [
@@ -225,7 +231,7 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
                     color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
-                  )
+                  ),
                 ]
               : [],
         ),
@@ -238,7 +244,9 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: context.colors.bgSurface,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(15),
+                  ),
                 ),
                 child: Stack(
                   children: [
@@ -254,11 +262,18 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
                         top: 10,
                         right: 10,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: context.colors.bgSurface.withValues(alpha: 0.8),
+                            color: context.colors.bgSurface.withValues(
+                              alpha: 0.8,
+                            ),
                             borderRadius: AppRadius.smAll,
-                            border: Border.all(color: context.colors.borderSubtle),
+                            border: Border.all(
+                              color: context.colors.borderSubtle,
+                            ),
                           ),
                           child: Text(
                             widget.document.tag!,
@@ -275,8 +290,12 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
                       Positioned.fill(
                         child: DecoratedBox(
                           decoration: BoxDecoration(
-                            color: context.colors.bgSurface.withValues(alpha: 0.85),
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                            color: context.colors.bgSurface.withValues(
+                              alpha: 0.85,
+                            ),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(15),
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -330,7 +349,7 @@ class _DocumentCardItemState extends State<_DocumentCardItem> {
                       ),
                     ),
                   ],
-               ),
+                ),
               ),
             ),
           ],
@@ -363,7 +382,7 @@ class _DocumentListItemState extends State<_DocumentListItem> {
   Widget build(BuildContext context) {
     final IconData iconData;
     final Color iconColor;
-    
+
     switch (widget.document.type) {
       case 'pdf':
         iconData = LucideIcons.fileText;
@@ -392,7 +411,9 @@ class _DocumentListItemState extends State<_DocumentListItem> {
           color: _isHovered ? context.colors.bgSurface : context.colors.bgInput,
           borderRadius: AppRadius.mdAll,
           border: Border.all(
-             color: _isHovered ? context.colors.accentBlue.withValues(alpha: 0.3) : context.colors.borderSubtle,
+            color: _isHovered
+                ? context.colors.accentBlue.withValues(alpha: 0.3)
+                : context.colors.borderSubtle,
           ),
         ),
         child: Row(
@@ -402,7 +423,9 @@ class _DocumentListItemState extends State<_DocumentListItem> {
               decoration: BoxDecoration(
                 color: context.colors.bgSurface,
                 borderRadius: AppRadius.mdAll,
-                border: Border.all(color: context.colors.borderSubtle.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: context.colors.borderSubtle.withValues(alpha: 0.5),
+                ),
               ),
               child: Icon(iconData, size: 20, color: iconColor),
             ),
@@ -429,7 +452,7 @@ class _DocumentListItemState extends State<_DocumentListItem> {
                         const SizedBox(width: 8),
                         StatusBadge(
                           label: widget.document.tag!,
-                          type: StatusType.info, 
+                          type: StatusType.info,
                         ),
                       ],
                     ],
@@ -447,17 +470,29 @@ class _DocumentListItemState extends State<_DocumentListItem> {
             ),
             if (_isHovered) ...[
               IconButton(
-                icon: Icon(LucideIcons.download, size: 18, color: context.colors.textSecondary),
+                icon: Icon(
+                  LucideIcons.download,
+                  size: 18,
+                  color: context.colors.textSecondary,
+                ),
                 onPressed: widget.onDownload,
                 tooltip: 'Descargar',
               ),
               IconButton(
-                icon: const Icon(LucideIcons.trash2, size: 18, color: Colors.redAccent),
+                icon: const Icon(
+                  LucideIcons.trash2,
+                  size: 18,
+                  color: Colors.redAccent,
+                ),
                 onPressed: widget.onDelete,
                 tooltip: 'Eliminar',
               ),
             ] else
-              Icon(LucideIcons.moreVertical, size: 18, color: context.colors.textTertiary),
+              Icon(
+                LucideIcons.moreVertical,
+                size: 18,
+                color: context.colors.textTertiary,
+              ),
           ],
         ),
       ),

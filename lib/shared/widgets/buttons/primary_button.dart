@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors_theme.dart';
+import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_typography.dart';
 
 /// Botón primario del Design System.
 ///
@@ -11,7 +14,9 @@ import '../../../core/theme/app_radius.dart';
 /// - Padding: 10/20
 /// - Text: 14px/500, text-on-accent
 /// - Icon opcional (lucide, 16x16)
-class PrimaryButton extends StatelessWidget {
+///
+/// Uses tactile feedback (scale + opacity) instead of Material ripple.
+class PrimaryButton extends StatefulWidget {
   final String label;
   final IconData? icon;
   final VoidCallback? onPressed;
@@ -28,53 +33,114 @@ class PrimaryButton extends StatelessWidget {
   });
 
   @override
+  State<PrimaryButton> createState() => _PrimaryButtonState();
+}
+
+class _PrimaryButtonState extends State<PrimaryButton> {
+  bool _isPressed = false;
+  bool _isHovered = false;
+
+  bool get _enabled => widget.onPressed != null && !widget.isLoading;
+
+  void _handleTapDown(TapDownDetails _) {
+    if (!_enabled) return;
+    setState(() => _isPressed = true);
+  }
+
+  void _handleTapUp(TapUpDetails _) {
+    if (!_enabled) return;
+    setState(() => _isPressed = false);
+    widget.onPressed?.call();
+  }
+
+  void _handleTapCancel() {
+    if (!_enabled) return;
+    setState(() => _isPressed = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+
     final Widget child = Row(
-      mainAxisSize: isExpanded ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisSize: widget.isExpanded ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (isLoading) ...[
+        if (widget.isLoading) ...[
           SizedBox(
-            width: 16,
-            height: 16,
+            width: AppDimensions.iconSizeSmall,
+            height: AppDimensions.iconSizeSmall,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: context.colors.textOnAccent,
+              color: colors.textOnAccent,
             ),
           ),
-          const SizedBox(width: 8),
-        ] else if (icon != null) ...[
-          Icon(icon, size: 16, color: context.colors.textOnAccent),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
+        ] else if (widget.icon != null) ...[
+          Icon(
+            widget.icon,
+            size: AppDimensions.iconSizeSmall,
+            color: colors.textOnAccent,
+          ),
+          const SizedBox(width: AppSpacing.sm),
         ],
         Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: context.colors.textOnAccent,
+          widget.label,
+          style: AppTypography.buttonMedium.copyWith(
+            color: colors.textOnAccent,
           ),
         ),
       ],
     );
 
+    Color bgColor;
+    if (!_enabled) {
+      bgColor = colors.accentBlue.withValues(alpha: 0.5);
+    } else if (_isPressed) {
+      bgColor = colors.accentBlue.withValues(alpha: 0.9);
+    } else if (_isHovered) {
+      bgColor = colors.accentBlueHover;
+    } else {
+      bgColor = colors.accentBlue;
+    }
+
     return Semantics(
       button: true,
-      enabled: onPressed != null && !isLoading,
-      label: label,
-      child: SizedBox(
-        width: isExpanded ? double.infinity : null,
-        height: 44,
-        child: Material(
-          color: onPressed != null ? context.colors.accentBlue : context.colors.accentBlue.withValues(alpha: 0.5),
-          borderRadius: AppRadius.buttonAll,
-          child: InkWell(
-            onTap: isLoading ? null : onPressed,
-            borderRadius: AppRadius.buttonAll,
-            hoverColor: context.colors.accentBlueHover,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ExcludeSemantics(child: child),
+      enabled: _enabled,
+      label: widget.label,
+      child: MouseRegion(
+        cursor: _enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          child: AnimatedScale(
+            scale: _isPressed ? 0.97 : 1.0,
+            duration: Duration(milliseconds: _isPressed ? 100 : 150),
+            curve: Curves.easeOutCubic,
+            child: AnimatedOpacity(
+              opacity: _isPressed ? 0.9 : 1.0,
+              duration: Duration(milliseconds: _isPressed ? 100 : 150),
+              curve: Curves.easeOutCubic,
+              child: SizedBox(
+                width: widget.isExpanded ? double.infinity : null,
+                height: AppDimensions.buttonHeight,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  curve: Curves.easeOutCubic,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: AppRadius.buttonAll,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xxl,
+                    vertical: AppSpacing.lg,
+                  ),
+                  child: ExcludeSemantics(child: child),
+                ),
+              ),
             ),
           ),
         ),

@@ -5,31 +5,30 @@ sealed class Result<T> {
 
   /// Mapea el valor exitoso.
   Result<R> map<R>(R Function(T data) transform) => switch (this) {
-        Success(:final data) => Success(transform(data)),
-        Failure(:final error) => Failure(error),
-      };
+    Success(:final data) => Success(transform(data)),
+    Failure(:final error) => Failure(error),
+  };
 
   /// Ejecuta callback según el tipo.
   R when<R>({
     required R Function(T data) success,
     required R Function(AppException error) failure,
-  }) =>
-      switch (this) {
-        Success(:final data) => success(data),
-        Failure(:final error) => failure(error),
-      };
+  }) => switch (this) {
+    Success(:final data) => success(data),
+    Failure(:final error) => failure(error),
+  };
 
   /// Obtiene el valor o null.
   T? get dataOrNull => switch (this) {
-        Success(:final data) => data,
-        Failure() => null,
-      };
+    Success(:final data) => data,
+    Failure() => null,
+  };
 
   /// Obtiene el error o null.
   AppException? get errorOrNull => switch (this) {
-        Success() => null,
-        Failure(:final error) => error,
-      };
+    Success() => null,
+    Failure(:final error) => error,
+  };
 
   bool get isSuccess => this is Success<T>;
   bool get isFailure => this is Failure<T>;
@@ -94,8 +93,5 @@ final class ValidationException extends AppException {
 }
 
 final class UnknownException extends AppException {
-  const UnknownException({
-    required super.message,
-    super.originalError,
-  });
+  const UnknownException({required super.message, super.originalError});
 }

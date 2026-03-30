@@ -107,5 +107,5 @@ class SettingsNotifier extends AutoDisposeNotifier<SettingsState> {
 /// Provider de configuración con autoDispose.
 final settingsProvider =
     AutoDisposeNotifierProvider<SettingsNotifier, SettingsState>(
-  SettingsNotifier.new,
-);
+      SettingsNotifier.new,
+    );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 /// Stepper horizontal para el flujo de onboarding.
 ///
@@ -41,7 +43,7 @@ class OnboardingStepper extends StatelessWidget {
           return Container(
             width: 60,
             height: 2,
-            margin: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: AppSpacing.s20),
             color: isCompleted
                 ? context.colors.accentBlue
                 : context.colors.borderSubtle,
@@ -72,8 +74,8 @@ class _StepIndicator extends StatelessWidget {
       children: [
         // Circle
         Container(
-          width: 28,
-          height: 28,
+          width: AppSpacing.s28,
+          height: AppSpacing.s28,
           decoration: BoxDecoration(
             color: _circleColor(context),
             shape: BoxShape.circle,
@@ -83,32 +85,26 @@ class _StepIndicator extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: isCompleted
-              ? const Icon(
-                  LucideIcons.check,
-                  size: 14,
-                  color: Colors.white,
-                )
+              ? const Icon(LucideIcons.check, size: 14, color: Colors.white)
               : Text(
                   '$stepNumber',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.button.copyWith(
                     color: _isPending
                         ? context.colors.textTertiary
                         : Colors.white,
                   ),
                 ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
 
         // Label
         Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-            color: _labelColor(context),
-          ),
+          style:
+              (isActive
+                      ? AppTypography.bodySmallMedium
+                      : AppTypography.bodySmall)
+                  .copyWith(color: _labelColor(context)),
         ),
       ],
     );

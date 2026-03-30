@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
 
 /// Card de subida de logotipo de la empresa.
@@ -15,11 +16,7 @@ class LogoUploadCard extends StatelessWidget {
   final String? logoUrl;
   final VoidCallback? onUpload;
 
-  const LogoUploadCard({
-    super.key,
-    this.logoUrl,
-    this.onUpload,
-  });
+  const LogoUploadCard({super.key, this.logoUrl, this.onUpload});
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +27,13 @@ class LogoUploadCard extends StatelessWidget {
       children: [
         Text(
           'Logotipo de la empresa',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           'Se mostrar\u00e1 en tus facturas y documentos. '
           'Formato PNG o SVG, m\u00e1ximo 2MB.',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
             height: 1.5,
           ),
@@ -72,8 +64,7 @@ class LogoUploadCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   'Subir logo',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTypography.caption.copyWith(
                     color: context.colors.textTertiary,
                   ),
                 ),
@@ -125,10 +116,7 @@ class _DashedBorderPainter extends CustomPainter {
   static const double _dashWidth = 6;
   static const double _dashSpace = 4;
 
-  const _DashedBorderPainter({
-    required this.color,
-    required this.radius,
-  });
+  const _DashedBorderPainter({required this.color, required this.radius});
 
   @override
   void paint(Canvas canvas, Size size) {

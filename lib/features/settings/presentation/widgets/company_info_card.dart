@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/inputs/select_input.dart';
@@ -45,14 +46,16 @@ class CompanyInfoCard extends StatelessWidget {
         title: 'Informaci\u00f3n de la empresa',
         trailing: SizedBox(
           height: 34,
-          child: PrimaryButton(
-            label: 'Guardar cambios',
-            onPressed: onSave,
-          ),
+          child: PrimaryButton(label: 'Guardar cambios', onPressed: onSave),
         ),
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Column(
           children: [
             // Row 1: Nombre + NIF

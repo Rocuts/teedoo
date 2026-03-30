@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/glass_card.dart';
 
@@ -20,17 +22,12 @@ class LanguageTab extends StatelessWidget {
         // Header
         Text(
           'Idioma y regi\u00f3n',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
           'Configura el idioma y las preferencias regionales de tu cuenta',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
           ),
         ),
@@ -44,22 +41,22 @@ class LanguageTab extends StatelessWidget {
             children: [
               Text(
                 'Idioma de la interfaz',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.h4.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppSpacing.s16),
               Row(
                 children: [
-                  _buildLanguageOption(context,
+                  _buildLanguageOption(
+                    context,
                     label: 'Espa\u00f1ol',
                     code: 'ES',
                     isActive: true,
                   ),
                   const SizedBox(width: AppSpacing.xl),
-                  _buildLanguageOption(context,
+                  _buildLanguageOption(
+                    context,
                     label: 'English',
                     code: 'EN',
                     isActive: false,
@@ -79,26 +76,27 @@ class LanguageTab extends StatelessWidget {
             children: [
               Text(
                 'Configuraci\u00f3n regional',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.h4.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildRegionRow(context,
+              _buildRegionRow(
+                context,
                 icon: LucideIcons.clock,
                 label: 'Zona horaria',
                 value: 'Europe/Madrid (UTC+1)',
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildRegionRow(context,
+              _buildRegionRow(
+                context,
                 icon: LucideIcons.calendar,
                 label: 'Formato de fecha',
                 value: 'DD/MM/AAAA',
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildRegionRow(context,
+              _buildRegionRow(
+                context,
                 icon: LucideIcons.hash,
                 label: 'Formato num\u00e9rico',
                 value: '1.234,56',
@@ -116,20 +114,18 @@ class LanguageTab extends StatelessWidget {
             children: [
               Text(
                 'Vista previa de formatos',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.h4.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildPreviewRow(context,'Fecha:', '25/02/2026'),
+              _buildPreviewRow(context, 'Fecha:', '25/02/2026'),
               const SizedBox(height: AppSpacing.md),
-              _buildPreviewRow(context,'Hora:', '14:30'),
+              _buildPreviewRow(context, 'Hora:', '14:30'),
               const SizedBox(height: AppSpacing.md),
-              _buildPreviewRow(context,'Moneda:', '\u20ac12.345,67'),
+              _buildPreviewRow(context, 'Moneda:', '\u20ac12.345,67'),
               const SizedBox(height: AppSpacing.md),
-              _buildPreviewRow(context,'N\u00famero:', '1.234.567,89'),
+              _buildPreviewRow(context, 'N\u00famero:', '1.234.567,89'),
             ],
           ),
         ),
@@ -137,7 +133,8 @@ class LanguageTab extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, {
+  Widget _buildLanguageOption(
+    BuildContext context, {
     required String label,
     required String code,
     required bool isActive,
@@ -145,9 +142,7 @@ class LanguageTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isActive
-            ? context.colors.accentBlueSubtle
-            : Colors.transparent,
+        color: isActive ? context.colors.accentBlueSubtle : Colors.transparent,
         borderRadius: BorderRadius.circular(AppSpacing.md),
         border: Border.all(
           color: isActive
@@ -160,9 +155,7 @@ class LanguageTab extends StatelessWidget {
         children: [
           Text(
             code,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: AppTypography.captionBold.copyWith(
               color: isActive
                   ? context.colors.accentBlue
                   : context.colors.textTertiary,
@@ -171,9 +164,7 @@ class LanguageTab extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
+            style: AppTypography.bodySmallMedium.copyWith(
               color: isActive
                   ? context.colors.accentBlue
                   : context.colors.textSecondary,
@@ -181,18 +172,15 @@ class LanguageTab extends StatelessWidget {
           ),
           if (isActive) ...[
             const SizedBox(width: AppSpacing.md),
-            Icon(
-              LucideIcons.check,
-              size: 14,
-              color: context.colors.accentBlue,
-            ),
+            Icon(LucideIcons.check, size: 14, color: context.colors.accentBlue),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildRegionRow(BuildContext context, {
+  Widget _buildRegionRow(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required String value,
@@ -205,8 +193,7 @@ class LanguageTab extends StatelessWidget {
           width: 160,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTypography.bodySmall.copyWith(
               color: context.colors.textSecondary,
             ),
           ),
@@ -221,8 +208,7 @@ class LanguageTab extends StatelessWidget {
             ),
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: 13,
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
               ),
             ),
@@ -239,18 +225,14 @@ class LanguageTab extends StatelessWidget {
           width: 80,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+            style: AppTypography.captionMedium.copyWith(
               color: context.colors.textTertiary,
             ),
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+          style: AppTypography.bodySmallMedium.copyWith(
             color: context.colors.textPrimary,
           ),
         ),

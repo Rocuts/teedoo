@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_radius.dart';
+import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 
 /// Shared helper widgets and functions for the invoice wizard.
 
@@ -33,17 +35,18 @@ Widget buildReadOnlyField(BuildContext context, String label, String value) {
     children: [
       Text(
         label,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        style: AppTypography.captionMedium.copyWith(
           color: context.colors.textSecondary,
         ),
       ),
-      const SizedBox(height: 8),
+      const SizedBox(height: AppSpacing.sm),
       Container(
         width: double.infinity,
         height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.lg,
+        ),
         decoration: BoxDecoration(
           color: context.colors.bgInput,
           borderRadius: AppRadius.inputAll,
@@ -52,8 +55,7 @@ Widget buildReadOnlyField(BuildContext context, String label, String value) {
         alignment: Alignment.centerLeft,
         child: Text(
           value,
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textTertiary,
           ),
         ),
@@ -74,19 +76,19 @@ Widget buildTotalRow(
     children: [
       Text(
         label,
-        style: TextStyle(
-          color: isBold ? context.colors.textPrimary : context.colors.textSecondary,
-          fontSize: isBold ? 15 : 13,
-          fontWeight: isBold ? FontWeight.w600 : FontWeight.w400,
+        style: (isBold ? AppTypography.h4 : AppTypography.bodySmall).copyWith(
+          color: isBold
+              ? context.colors.textPrimary
+              : context.colors.textSecondary,
         ),
       ),
       Text(
         value,
-        style: TextStyle(
-          color: valueColor ?? context.colors.textPrimary,
-          fontSize: isBold ? 18 : 14,
-          fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
-        ),
+        style: (isBold ? AppTypography.logo : AppTypography.bodyMedium)
+            .copyWith(
+              color: valueColor ?? context.colors.textPrimary,
+              fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+            ),
       ),
     ],
   );
@@ -105,20 +107,20 @@ Widget buildCompactInput(
     child: TextFormField(
       controller: controller,
       onChanged: onChanged,
-      style: TextStyle(
-        fontSize: 13,
+      style: AppTypography.bodySmall.copyWith(
         color: context.colors.textPrimary,
       ),
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
         prefixText: prefix,
-        prefixStyle: TextStyle(
-          fontSize: 13,
+        prefixStyle: AppTypography.bodySmall.copyWith(
           color: context.colors.textTertiary,
         ),
         suffixText: suffix,
-        suffixStyle: TextStyle(
-          fontSize: 13,
+        suffixStyle: AppTypography.bodySmall.copyWith(
           color: context.colors.textTertiary,
         ),
         filled: true,

@@ -67,21 +67,23 @@ class _AppSidebarState extends State<AppSidebar> {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: context.colors.bgSidebar,
-        border: Border(
-          right: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(right: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(_collapsed ? 12 : 16)
-            .copyWith(top: 20, bottom: 20),
+        padding: EdgeInsets.all(
+          _collapsed ? 12 : 16,
+        ).copyWith(top: 20, bottom: 20),
         child: Column(
-          crossAxisAlignment:
-              _collapsed ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          crossAxisAlignment: _collapsed
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
           children: [
             // ── Logo ──
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _collapsed ? _buildCollapsedLogo(context) : _buildLogo(context),
+              child: _collapsed
+                  ? _buildCollapsedLogo(context)
+                  : _buildLogo(context),
             ),
 
             // ── Nav Items ──
@@ -148,8 +150,12 @@ class _AppSidebarState extends State<AppSidebar> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset('assets/images/logo.png',
-              width: 32, height: 32, fit: BoxFit.contain),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 32,
+            height: 32,
+            fit: BoxFit.contain,
+          ),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -170,16 +176,29 @@ class _AppSidebarState extends State<AppSidebar> {
   Widget _buildCollapsedLogo(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Image.asset('assets/images/logo.png',
-          width: 32, height: 32, fit: BoxFit.contain),
+      child: Image.asset(
+        'assets/images/logo.png',
+        width: 32,
+        height: 32,
+        fit: BoxFit.contain,
+      ),
     );
   }
 
   List<Widget> _buildNavItems(BuildContext context) {
     const items = [
       _NavDef(LucideIcons.layoutDashboard, 'Dashboard', RoutePaths.dashboard),
-      _NavDef(LucideIcons.fileText, 'Facturas', RoutePaths.invoices, exactMatch: true),
-      _NavDef(LucideIcons.folderOpen, 'Documentos por Facturas', RoutePaths.invoiceDocuments),
+      _NavDef(
+        LucideIcons.fileText,
+        'Facturas',
+        RoutePaths.invoices,
+        exactMatch: true,
+      ),
+      _NavDef(
+        LucideIcons.folderOpen,
+        'Documentos por Facturas',
+        RoutePaths.invoiceDocuments,
+      ),
       _NavDef(LucideIcons.shieldCheck, 'Compliance IA', RoutePaths.compliance),
       _NavDef(LucideIcons.calculator, 'Fiscal', RoutePaths.fiscal),
       _NavDef(LucideIcons.scrollText, 'Evidencias', RoutePaths.audit),
@@ -191,20 +210,24 @@ class _AppSidebarState extends State<AppSidebar> {
       if (widgets.isNotEmpty) widgets.add(const SizedBox(height: 2));
       final isActive = item.isActive(widget.currentPath);
       if (_collapsed) {
-        widgets.add(_buildCollapsedNavItem(
-          context,
-          icon: item.icon,
-          isActive: isActive,
-          onTap: () => context.go(item.path),
-          tooltip: item.label,
-        ));
+        widgets.add(
+          _buildCollapsedNavItem(
+            context,
+            icon: item.icon,
+            isActive: isActive,
+            onTap: () => context.go(item.path),
+            tooltip: item.label,
+          ),
+        );
       } else {
-        widgets.add(NavItem(
-          icon: item.icon,
-          label: item.label,
-          isActive: isActive,
-          onTap: () => context.go(item.path),
-        ));
+        widgets.add(
+          NavItem(
+            icon: item.icon,
+            label: item.label,
+            isActive: isActive,
+            onTap: () => context.go(item.path),
+          ),
+        );
       }
     }
     return widgets;
@@ -217,10 +240,12 @@ class _AppSidebarState extends State<AppSidebar> {
     required VoidCallback onTap,
     required String tooltip,
   }) {
-    final iconColor =
-        isActive ? context.colors.accentBlue : context.colors.textTertiary;
-    final bgColor =
-        isActive ? context.colors.accentBlueSubtle : Colors.transparent;
+    final iconColor = isActive
+        ? context.colors.accentBlue
+        : context.colors.textTertiary;
+    final bgColor = isActive
+        ? context.colors.accentBlueSubtle
+        : Colors.transparent;
 
     return Semantics(
       button: true,
@@ -241,7 +266,11 @@ class _AppSidebarState extends State<AppSidebar> {
               child: SizedBox(
                 width: AppDimensions.collapsedNavItemSize,
                 height: AppDimensions.collapsedNavItemSize,
-                child: Icon(icon, size: AppDimensions.iconSize, color: iconColor),
+                child: Icon(
+                  icon,
+                  size: AppDimensions.iconSize,
+                  color: iconColor,
+                ),
               ),
             ),
           ),
@@ -255,10 +284,7 @@ class _AppSidebarState extends State<AppSidebar> {
 class AppDrawer extends StatelessWidget {
   final String currentPath;
 
-  const AppDrawer({
-    super.key,
-    required this.currentPath,
-  });
+  const AppDrawer({super.key, required this.currentPath});
 
   @override
   Widget build(BuildContext context) {
@@ -277,8 +303,12 @@ class AppDrawer extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset('assets/images/logo.png',
-                          width: 32, height: 32, fit: BoxFit.contain),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -292,8 +322,11 @@ class AppDrawer extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(LucideIcons.x,
-                          size: AppDimensions.iconSize, color: context.colors.textSecondary),
+                      icon: Icon(
+                        LucideIcons.x,
+                        size: AppDimensions.iconSize,
+                        color: context.colors.textSecondary,
+                      ),
                       tooltip: 'Cerrar menú',
                     ),
                   ],
@@ -305,26 +338,55 @@ class AppDrawer extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _drawerItem(context, LucideIcons.layoutDashboard,
-                          'Dashboard', RoutePaths.dashboard),
+                      _drawerItem(
+                        context,
+                        LucideIcons.layoutDashboard,
+                        'Dashboard',
+                        RoutePaths.dashboard,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.fileText, 'Facturas',
-                          RoutePaths.invoices, exactMatch: true),
+                      _drawerItem(
+                        context,
+                        LucideIcons.fileText,
+                        'Facturas',
+                        RoutePaths.invoices,
+                        exactMatch: true,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.folderOpen, 'Documentos por Facturas',
-                          RoutePaths.invoiceDocuments),
+                      _drawerItem(
+                        context,
+                        LucideIcons.folderOpen,
+                        'Documentos por Facturas',
+                        RoutePaths.invoiceDocuments,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.shieldCheck,
-                          'Compliance IA', RoutePaths.compliance),
+                      _drawerItem(
+                        context,
+                        LucideIcons.shieldCheck,
+                        'Compliance IA',
+                        RoutePaths.compliance,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.calculator, 'Fiscal',
-                          RoutePaths.fiscal),
+                      _drawerItem(
+                        context,
+                        LucideIcons.calculator,
+                        'Fiscal',
+                        RoutePaths.fiscal,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.scrollText, 'Evidencias',
-                          RoutePaths.audit),
+                      _drawerItem(
+                        context,
+                        LucideIcons.scrollText,
+                        'Evidencias',
+                        RoutePaths.audit,
+                      ),
                       const SizedBox(height: 2),
-                      _drawerItem(context, LucideIcons.settings, 'Configuración',
-                          RoutePaths.settings),
+                      _drawerItem(
+                        context,
+                        LucideIcons.settings,
+                        'Configuración',
+                        RoutePaths.settings,
+                      ),
                     ],
                   ),
                 ),

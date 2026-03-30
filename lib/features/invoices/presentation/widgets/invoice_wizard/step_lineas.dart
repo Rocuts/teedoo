@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 import '../../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../../shared/widgets/buttons/secondary_button.dart';
@@ -39,7 +40,12 @@ class StepLineas extends StatelessWidget {
         subtitle: 'Añade los productos o servicios a facturar',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.s20,
+          AppSpacing.s24,
+          0,
+        ),
         child: Column(
           children: [
             LayoutBuilder(
@@ -51,7 +57,8 @@ class StepLineas extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildTableHeader(context),
-                        for (int i = 0; i < lines.length; i++) _buildLineRow(context, i),
+                        for (int i = 0; i < lines.length; i++)
+                          _buildLineRow(context, i),
                       ],
                     ),
                   ),
@@ -74,10 +81,7 @@ class StepLineas extends StatelessWidget {
       ),
       actions: GlassCardActions(
         children: [
-          SecondaryButton(
-            label: 'Anterior',
-            onPressed: onPrev,
-          ),
+          SecondaryButton(label: 'Anterior', onPressed: onPrev),
           const SizedBox(width: AppSpacing.buttonGap),
           PrimaryButton(
             label: 'Siguiente: Totales',
@@ -91,11 +95,9 @@ class StepLineas extends StatelessWidget {
 
   Widget _buildTableHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Row(
         children: [
@@ -103,58 +105,48 @@ class StepLineas extends StatelessWidget {
             width: 280,
             child: Text(
               'Descripción',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 80,
             child: Text(
               'Cantidad',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 100,
             child: Text(
               'Precio unit.',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 70,
             child: Text(
               'IVA %',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 100,
             child: Text(
               'Total',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -167,7 +159,7 @@ class StepLineas extends StatelessWidget {
   Widget _buildLineRow(BuildContext context, int index) {
     final line = lines[index];
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.only(top: AppSpacing.lg),
       child: Row(
         children: [
           SizedBox(
@@ -182,7 +174,7 @@ class StepLineas extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 80,
             child: buildCompactInput(
@@ -195,7 +187,7 @@ class StepLineas extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 100,
             child: buildCompactInput(
@@ -209,7 +201,7 @@ class StepLineas extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 70,
             child: buildCompactInput(
@@ -223,12 +215,12 @@ class StepLineas extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           SizedBox(
             width: 100,
             child: Container(
               height: 38,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               decoration: BoxDecoration(
                 color: context.colors.bgInput,
                 borderRadius: AppRadius.inputAll,
@@ -237,15 +229,13 @@ class StepLineas extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 formatCurrency(lineTotal(index)),
-                style: TextStyle(
-                  fontSize: 13,
+                style: AppTypography.bodySmallMedium.copyWith(
                   color: context.colors.textPrimary,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           Semantics(
             button: true,
             label: 'Eliminar línea ${index + 1}',

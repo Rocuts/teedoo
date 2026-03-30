@@ -7,6 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/glass_theme.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -69,10 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // ── Stepper ──
-              OnboardingStepper(
-                steps: _stepLabels,
-                currentStep: _currentStep,
-              ),
+              OnboardingStepper(steps: _stepLabels, currentStep: _currentStep),
               const SizedBox(height: AppSpacing.s32),
 
               // ── Card ──
@@ -135,18 +133,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: [
         Text(
           'Crear organización',
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.h3.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           'Configura los datos principales de tu empresa',
-          style: TextStyle(
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
-            fontSize: 13,
             height: 1.5,
           ),
         ),
@@ -235,18 +228,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: [
         Text(
           'Configuración fiscal',
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.h3.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           'Define los parámetros de facturación de tu empresa',
-          style: TextStyle(
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
-            fontSize: 13,
             height: 1.5,
           ),
         ),
@@ -322,18 +310,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: [
         Text(
           'Integraciones',
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.h3.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           'Conecta con tus herramientas existentes (opcional)',
-          style: TextStyle(
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
-            fontSize: 13,
             height: 1.5,
           ),
         ),
@@ -401,19 +384,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
         Text(
           'Todo listo',
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.h3.copyWith(color: context.colors.textPrimary),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           'Tu organización está configurada. Revisa el resumen.',
-          style: TextStyle(
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
-            fontSize: 13,
             height: 1.5,
           ),
           textAlign: TextAlign.center,
@@ -481,8 +459,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         // Step counter
         Text(
           leftText,
-          style: TextStyle(
-            fontSize: 12,
+          style: AppTypography.caption.copyWith(
             color: context.colors.textTertiary,
           ),
         ),
@@ -490,19 +467,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
         // Back button
         if (showBack) ...[
-          SecondaryButton(
-            label: 'Anterior',
-            onPressed: onBack,
-          ),
+          SecondaryButton(label: 'Anterior', onPressed: onBack),
           const SizedBox(width: AppSpacing.buttonGap),
         ],
 
         // Next button
-        PrimaryButton(
-          label: nextLabel,
-          icon: nextIcon,
-          onPressed: onNext,
-        ),
+        PrimaryButton(label: nextLabel, icon: nextIcon, onPressed: onNext),
       ],
     );
   }
@@ -543,11 +513,7 @@ class _IntegrationTile extends StatelessWidget {
               color: context.colors.accentBlueSubtle,
               borderRadius: AppRadius.smAll,
             ),
-            child: Icon(
-              icon,
-              size: 20,
-              color: context.colors.accentBlue,
-            ),
+            child: Icon(icon, size: 20, color: context.colors.accentBlue),
           ),
           const SizedBox(width: AppSpacing.s16),
 
@@ -558,18 +524,15 @@ class _IntegrationTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: AppTypography.bodyMedium.copyWith(
                     color: context.colors.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   description,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 12,
                   ),
                 ),
               ],
@@ -577,10 +540,7 @@ class _IntegrationTile extends StatelessWidget {
           ),
 
           // Configure button
-          GhostButton(
-            label: 'Configurar',
-            onPressed: onConfigure,
-          ),
+          GhostButton(label: 'Configurar', onPressed: onConfigure),
         ],
       ),
     );
@@ -594,10 +554,7 @@ class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-  });
+  const _SummaryRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -606,16 +563,13 @@ class _SummaryRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textTertiary,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+          style: AppTypography.bodySmallMedium.copyWith(
             color: context.colors.textPrimary,
           ),
         ),

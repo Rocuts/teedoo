@@ -111,10 +111,7 @@ class _ToastOverlayState extends State<_ToastOverlay>
     _slideAnimation = Tween<Offset>(
       begin: const Offset(1, 0),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
 
@@ -160,18 +157,14 @@ class _ToastCard extends StatelessWidget {
   final StatusType type;
   final VoidCallback? onClose;
 
-  const _ToastCard({
-    required this.message,
-    required this.type,
-    this.onClose,
-  });
+  const _ToastCard({required this.message, required this.type, this.onClose});
 
   IconData get _icon => switch (type) {
-        StatusType.success => LucideIcons.checkCircle,
-        StatusType.warning => LucideIcons.alertTriangle,
-        StatusType.error => LucideIcons.xCircle,
-        StatusType.info => LucideIcons.info,
-      };
+    StatusType.success => LucideIcons.checkCircle,
+    StatusType.warning => LucideIcons.alertTriangle,
+    StatusType.error => LucideIcons.xCircle,
+    StatusType.info => LucideIcons.info,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -188,10 +181,7 @@ class _ToastCard extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
-            constraints: const BoxConstraints(
-              maxWidth: 360,
-              minWidth: 240,
-            ),
+            constraints: const BoxConstraints(maxWidth: 360, minWidth: 240),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.s16,
               vertical: AppSpacing.xl,

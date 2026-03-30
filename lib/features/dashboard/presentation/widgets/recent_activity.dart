@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 /// Datos de un item de actividad reciente.
 class ActivityItemData {
@@ -22,21 +24,15 @@ class ActivityItem extends StatelessWidget {
   final ActivityItemData data;
   final bool showBorder;
 
-  const ActivityItem({
-    super.key,
-    required this.data,
-    this.showBorder = true,
-  });
+  const ActivityItem({super.key, required this.data, this.showBorder = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       decoration: BoxDecoration(
         border: showBorder
-            ? Border(
-                bottom: BorderSide(color: context.colors.borderSubtle),
-              )
+            ? Border(bottom: BorderSide(color: context.colors.borderSubtle))
             : null,
       ),
       child: Row(
@@ -49,25 +45,22 @@ class ActivityItem extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data.title,
-                  style: TextStyle(
+                  style: AppTypography.bodySmallMedium.copyWith(
                     color: context.colors.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   data.time,
-                  style: TextStyle(
+                  style: AppTypography.captionSmall.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
                   ),
                 ),
               ],
@@ -85,20 +78,14 @@ class ActivityItem extends StatelessWidget {
 class RecentActivityList extends StatelessWidget {
   final List<ActivityItemData> items;
 
-  const RecentActivityList({
-    super.key,
-    required this.items,
-  });
+  const RecentActivityList({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         for (int i = 0; i < items.length; i++)
-          ActivityItem(
-            data: items[i],
-            showBorder: i < items.length - 1,
-          ),
+          ActivityItem(data: items[i], showBorder: i < items.length - 1),
       ],
     );
   }

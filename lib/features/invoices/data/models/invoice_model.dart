@@ -12,11 +12,15 @@ enum InvoiceStatus {
 }
 
 /// Estado del compliance check de la factura.
-enum ComplianceStatus {
-  pass,
-  warnings,
-  fail,
-  pending,
+enum ComplianceStatus { pass, warnings, fail, pending }
+
+/// Condición de pago de la factura.
+enum PaymentTerm {
+  /// Pago inmediato al emitir la factura.
+  contado,
+
+  /// Pago aplazado con fecha de vencimiento.
+  credito,
 }
 
 /// Modelo principal de factura.
@@ -44,6 +48,7 @@ class Invoice {
   final String currency;
   final DateTime issueDate;
   final DateTime? dueDate;
+  final PaymentTerm paymentTerm;
   final String? paymentMethod;
   final String? paymentIban;
   final String? notes;
@@ -70,6 +75,7 @@ class Invoice {
     this.currency = 'EUR',
     required this.issueDate,
     this.dueDate,
+    this.paymentTerm = PaymentTerm.credito,
     this.paymentMethod,
     this.paymentIban,
     this.notes,
@@ -97,6 +103,7 @@ class Invoice {
     String? currency,
     DateTime? issueDate,
     DateTime? dueDate,
+    PaymentTerm? paymentTerm,
     String? paymentMethod,
     String? paymentIban,
     String? notes,
@@ -123,6 +130,7 @@ class Invoice {
       currency: currency ?? this.currency,
       issueDate: issueDate ?? this.issueDate,
       dueDate: dueDate ?? this.dueDate,
+      paymentTerm: paymentTerm ?? this.paymentTerm,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       paymentIban: paymentIban ?? this.paymentIban,
       notes: notes ?? this.notes,

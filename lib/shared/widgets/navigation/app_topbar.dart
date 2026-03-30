@@ -16,10 +16,7 @@ import '../../../core/theme/theme_provider.dart';
 class AppTopbar extends ConsumerWidget {
   final List<BreadcrumbItem> breadcrumbs;
 
-  const AppTopbar({
-    super.key,
-    this.breadcrumbs = const [],
-  });
+  const AppTopbar({super.key, this.breadcrumbs = const []});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,9 +28,7 @@ class AppTopbar extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: isCompact ? 12 : 24),
       decoration: BoxDecoration(
         color: context.colors.bgTopbar,
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Row(
         children: [
@@ -48,7 +43,10 @@ class AppTopbar extends ConsumerWidget {
               ),
               tooltip: 'Menú',
               padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: AppDimensions.touchTargetSize, minHeight: AppDimensions.touchTargetSize),
+              constraints: const BoxConstraints(
+                minWidth: AppDimensions.touchTargetSize,
+                minHeight: AppDimensions.touchTargetSize,
+              ),
             ),
             const SizedBox(width: 4),
           ],
@@ -100,26 +98,32 @@ class AppTopbar extends ConsumerWidget {
             ),
           ],
           if (i == breadcrumbs.length - 1)
-            Text(
-              breadcrumbs[i].label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: context.colors.textPrimary,
+            Flexible(
+              child: Text(
+                breadcrumbs[i].label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: context.colors.textPrimary,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             )
           else
-            Semantics(
-              button: true,
-              label: 'Ir a ${breadcrumbs[i].label}',
-              child: InkWell(
-                onTap: breadcrumbs[i].onTap,
-                borderRadius: BorderRadius.circular(4),
-                child: Text(
-                  breadcrumbs[i].label,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: context.colors.textSecondary,
+            Flexible(
+              child: Semantics(
+                button: true,
+                label: 'Ir a ${breadcrumbs[i].label}',
+                child: InkWell(
+                  onTap: breadcrumbs[i].onTap,
+                  borderRadius: BorderRadius.circular(4),
+                  child: Text(
+                    breadcrumbs[i].label,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: context.colors.textSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -164,8 +168,11 @@ class AppTopbar extends ConsumerWidget {
         // Search
         IconButton(
           onPressed: () {},
-          icon: Icon(LucideIcons.search,
-              size: 20, color: context.colors.textSecondary),
+          icon: Icon(
+            LucideIcons.search,
+            size: 20,
+            color: context.colors.textSecondary,
+          ),
           tooltip: 'Buscar',
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -175,8 +182,11 @@ class AppTopbar extends ConsumerWidget {
         // Notifications
         IconButton(
           onPressed: () {},
-          icon: Icon(LucideIcons.bell,
-              size: 20, color: context.colors.textSecondary),
+          icon: Icon(
+            LucideIcons.bell,
+            size: 20,
+            color: context.colors.textSecondary,
+          ),
           tooltip: 'Notificaciones',
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -200,8 +210,11 @@ class AppTopbar extends ConsumerWidget {
       children: [
         IconButton(
           onPressed: () {},
-          icon: Icon(LucideIcons.bell,
-              size: 20, color: context.colors.textSecondary),
+          icon: Icon(
+            LucideIcons.bell,
+            size: 20,
+            color: context.colors.textSecondary,
+          ),
           tooltip: 'Notificaciones',
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -240,10 +253,7 @@ class BreadcrumbItem {
   final String label;
   final VoidCallback? onTap;
 
-  const BreadcrumbItem({
-    required this.label,
-    this.onTap,
-  });
+  const BreadcrumbItem({required this.label, this.onTap});
 }
 
 /// Botón con popup para cambiar entre temas (dark/light/auto).
@@ -269,11 +279,26 @@ class _ThemeSwitcher extends StatelessWidget {
       },
       itemBuilder: (context) => [
         _buildItem(
-            context, AppThemeMode.dark, LucideIcons.moon, 'Oscuro', current),
+          context,
+          AppThemeMode.dark,
+          LucideIcons.moon,
+          'Oscuro',
+          current,
+        ),
         _buildItem(
-            context, AppThemeMode.light, LucideIcons.sun, 'Claro', current),
+          context,
+          AppThemeMode.light,
+          LucideIcons.sun,
+          'Claro',
+          current,
+        ),
         _buildItem(
-            context, AppThemeMode.system, LucideIcons.monitor, 'Auto', current),
+          context,
+          AppThemeMode.system,
+          LucideIcons.monitor,
+          'Auto',
+          current,
+        ),
       ],
       child: Container(
         width: AppDimensions.avatarSize,
@@ -323,11 +348,7 @@ class _ThemeSwitcher extends StatelessWidget {
           ),
           const Spacer(),
           if (isActive)
-            Icon(
-              LucideIcons.check,
-              size: 14,
-              color: context.colors.accentBlue,
-            ),
+            Icon(LucideIcons.check, size: 14, color: context.colors.accentBlue),
         ],
       ),
     );

@@ -7,6 +7,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/glass_theme.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -58,39 +60,36 @@ class ForgotPasswordScreen extends StatelessWidget {
                       size: 24,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   Text(
                     'Restablecer contraseña',
-                    style: TextStyle(
+                    style: AppTypography.h3.copyWith(
                       color: context.colors.textPrimary,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   SizedBox(
                     width: 340,
                     child: Text(
                       'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
-                      style: TextStyle(
+                      style: AppTypography.bodySmall.copyWith(
                         color: context.colors.textSecondary,
-                        fontSize: 13,
                         height: 1.5,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   const TeeDooTextField(
                     label: 'Correo electrónico',
                     placeholder: 'tu@empresa.com',
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   PrimaryButton(
                     label: 'Enviar enlace',
@@ -106,15 +105,14 @@ class ForgotPasswordScreen extends StatelessWidget {
                       });
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   GestureDetector(
                     onTap: () => context.go(RoutePaths.login),
                     child: Text(
                       'Volver al inicio de sesión',
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: context.colors.accentBlue,
-                        fontSize: 12,
                       ),
                       textAlign: TextAlign.center,
                     ),

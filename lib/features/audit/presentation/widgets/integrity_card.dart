@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
 
 /// Card de estado de integridad de la cadena de registros.
@@ -24,39 +27,49 @@ class IntegrityCard extends StatelessWidget {
     return GlassCard(
       header: const GlassCardHeader(title: 'Estado de integridad'),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.lg,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Status box
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xl,
+                vertical: AppSpacing.xl,
+              ),
               decoration: BoxDecoration(
                 color: isIntact
                     ? context.colors.statusSuccessBg
                     : context.colors.statusErrorBg,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.lgAll,
               ),
               child: Row(
                 children: [
                   Icon(
-                    isIntact ? LucideIcons.shieldCheck : LucideIcons.shieldAlert,
+                    isIntact
+                        ? LucideIcons.shieldCheck
+                        : LucideIcons.shieldAlert,
                     size: 18,
                     color: isIntact
                         ? context.colors.statusSuccess
                         : context.colors.statusError,
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.lg),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isIntact ? 'Registros intactos' : 'Integridad comprometida',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                          isIntact
+                              ? 'Registros intactos'
+                              : 'Integridad comprometida',
+                          style: AppTypography.bodySmallMedium.copyWith(
                             color: context.colors.textPrimary,
                           ),
                         ),
@@ -65,8 +78,7 @@ class IntegrityCard extends StatelessWidget {
                           isIntact
                               ? 'Cadena de registros verificada'
                               : 'Se detectaron inconsistencias',
-                          style: TextStyle(
-                            fontSize: 11,
+                          style: AppTypography.captionSmall.copyWith(
                             color: context.colors.textSecondary,
                           ),
                         ),
@@ -76,17 +88,16 @@ class IntegrityCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.xl),
             // Hash info
             Text(
               '\u00daltimo hash generado: $lastHash',
-              style: TextStyle(
-                fontSize: 11,
+              style: AppTypography.captionSmall.copyWith(
                 color: context.colors.textTertiary,
                 fontFamily: 'monospace',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.sm),
             // Chain count
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -94,17 +105,14 @@ class IntegrityCard extends StatelessWidget {
               children: [
                 Text(
                   _formatCount(operationCount),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.h4.copyWith(
                     color: context.colors.textPrimary,
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: AppSpacing.sm),
                 Text(
                   'operaciones registradas',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTypography.caption.copyWith(
                     color: context.colors.textSecondary,
                   ),
                 ),

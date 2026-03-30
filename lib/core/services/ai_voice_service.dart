@@ -59,8 +59,18 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 ''';
 
   static const _realtimeModel = 'gpt-realtime';
+
+  /// URL del endpoint que devuelve el token efímero.
+  /// En producción (Vercel) usa ruta relativa.
+  /// En dev local (localhost) apunta al proxy en puerto 3001.
   static Uri get _clientSecretEndpoint {
-    if (kIsWeb) return Uri.parse('/api/realtime/client-secrets');
+    if (kIsWeb) {
+      final host = Uri.base.host;
+      if (host == 'localhost' || host == '127.0.0.1') {
+        return Uri.parse('http://localhost:3001/api/realtime/client-secrets');
+      }
+      return Uri.parse('/api/realtime/client-secrets');
+    }
     return Uri.parse('${AppConstants.apiBaseUrl}/realtime/client-secrets');
   }
 
@@ -72,10 +82,13 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'session': {
+          'type': 'realtime',
           'model': _realtimeModel,
-          'voice': 'coral',
           'instructions': _sessionInstructions,
           'modalities': ['audio', 'text'],
+          'audio': {
+            'output': {'voice': 'coral'},
+          },
           'turn_detection': {'type': 'server_vad'},
           'tools': [
             {
@@ -264,9 +277,9 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       final offer = await _peerConnection!.createOffer();
       await _peerConnection!.setLocalDescription(offer);
 
-      // Step 6: Send SDP to OpenAI endpoint
+      // Step 6: Send SDP to OpenAI Realtime calls endpoint
       final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/realtime?model=$_realtimeModel'),
+        Uri.parse('https://api.openai.com/v1/realtime/calls'),
         headers: {
           'Authorization': 'Bearer $ephemeralToken',
           'Content-Type': 'application/sdp',

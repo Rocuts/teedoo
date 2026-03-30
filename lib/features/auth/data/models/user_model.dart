@@ -75,7 +75,8 @@ class UserModel {
   }
 
   @override
-  int get hashCode => Object.hash(id, email, name, organizationId, role, locale);
+  int get hashCode =>
+      Object.hash(id, email, name, organizationId, role, locale);
 
   @override
   String toString() {

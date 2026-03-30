@@ -36,29 +36,19 @@ extension ResponsiveContext on BuildContext {
   }
 
   /// Retorna un valor adaptativo por breakpoint.
-  T responsive<T>({
-    required T compact,
-    T? medium,
-    required T expanded,
-  }) {
+  T responsive<T>({required T compact, T? medium, required T expanded}) {
     if (isCompact) return compact;
     if (isMedium) return medium ?? expanded;
     return expanded;
   }
 
   /// Padding horizontal adaptativo para áreas de contenido.
-  double get contentPaddingH => responsive(
-        compact: 16.0,
-        medium: 24.0,
-        expanded: 32.0,
-      );
+  double get contentPaddingH =>
+      responsive(compact: 16.0, medium: 24.0, expanded: 32.0);
 
   /// Padding vertical adaptativo para áreas de contenido.
-  double get contentPaddingV => responsive(
-        compact: 16.0,
-        medium: 24.0,
-        expanded: 28.0,
-      );
+  double get contentPaddingV =>
+      responsive(compact: 16.0, medium: 24.0, expanded: 28.0);
 }
 
 /// Widget que construye layouts diferentes según el breakpoint.

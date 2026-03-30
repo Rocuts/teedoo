@@ -38,10 +38,7 @@ class SearchInput extends StatelessWidget {
             child: TextFormField(
               controller: controller,
               onChanged: onChanged,
-              style: TextStyle(
-                fontSize: 13,
-                color: context.colors.textPrimary,
-              ),
+              style: TextStyle(fontSize: 13, color: context.colors.textPrimary),
               decoration: InputDecoration(
                 hintText: placeholder,
                 hintStyle: TextStyle(

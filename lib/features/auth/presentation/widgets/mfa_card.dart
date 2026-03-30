@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 /// Widget reutilizable de entrada MFA de 6 dígitos.
 ///
@@ -38,14 +40,8 @@ class _MfaDigitInputState extends State<MfaDigitInput> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(
-      widget.length,
-      (_) => TextEditingController(),
-    );
-    _focusNodes = List.generate(
-      widget.length,
-      (_) => FocusNode(),
-    );
+    _controllers = List.generate(widget.length, (_) => TextEditingController());
+    _focusNodes = List.generate(widget.length, (_) => FocusNode());
   }
 
   @override
@@ -59,8 +55,7 @@ class _MfaDigitInputState extends State<MfaDigitInput> {
     super.dispose();
   }
 
-  String get _currentCode =>
-      _controllers.map((c) => c.text).join();
+  String get _currentCode => _controllers.map((c) => c.text).join();
 
   void _onDigitChanged(int index, String value) {
     if (value.length == 1 && index < widget.length - 1) {
@@ -93,7 +88,7 @@ class _MfaDigitInputState extends State<MfaDigitInput> {
         return Container(
           width: 48,
           height: 56,
-          margin: EdgeInsets.only(left: i > 0 ? 10 : 0),
+          margin: EdgeInsets.only(left: i > 0 ? AppSpacing.sm : 0),
           child: KeyboardListener(
             focusNode: FocusNode(),
             onKeyEvent: (event) => _onKeyEvent(i, event),
@@ -103,12 +98,9 @@ class _MfaDigitInputState extends State<MfaDigitInput> {
               textAlign: TextAlign.center,
               maxLength: 1,
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              style: TextStyle(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              style: AppTypography.h3.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 22,
                 fontWeight: FontWeight.w500,
               ),
               decoration: InputDecoration(
@@ -118,15 +110,11 @@ class _MfaDigitInputState extends State<MfaDigitInput> {
                 contentPadding: EdgeInsets.zero,
                 border: OutlineInputBorder(
                   borderRadius: AppRadius.mdAll,
-                  borderSide: BorderSide(
-                    color: context.colors.borderSubtle,
-                  ),
+                  borderSide: BorderSide(color: context.colors.borderSubtle),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: AppRadius.mdAll,
-                  borderSide: BorderSide(
-                    color: context.colors.borderSubtle,
-                  ),
+                  borderSide: BorderSide(color: context.colors.borderSubtle),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: AppRadius.mdAll,

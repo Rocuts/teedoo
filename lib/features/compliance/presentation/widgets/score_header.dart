@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../shared/widgets/buttons/secondary_button.dart';
@@ -23,22 +25,22 @@ class ScoreHeader extends StatelessWidget {
   });
 
   Color _scoreColor(BuildContext context) => switch (result.level) {
-        ComplianceLevel.pass => context.colors.statusSuccess,
-        ComplianceLevel.warnings => context.colors.statusWarning,
-        ComplianceLevel.fail => context.colors.statusError,
-      };
+    ComplianceLevel.pass => context.colors.statusSuccess,
+    ComplianceLevel.warnings => context.colors.statusWarning,
+    ComplianceLevel.fail => context.colors.statusError,
+  };
 
   StatusType get _statusType => switch (result.level) {
-        ComplianceLevel.pass => StatusType.success,
-        ComplianceLevel.warnings => StatusType.warning,
-        ComplianceLevel.fail => StatusType.error,
-      };
+    ComplianceLevel.pass => StatusType.success,
+    ComplianceLevel.warnings => StatusType.warning,
+    ComplianceLevel.fail => StatusType.error,
+  };
 
   String get _statusLabel => switch (result.level) {
-        ComplianceLevel.pass => 'Pass',
-        ComplianceLevel.warnings => 'Warnings',
-        ComplianceLevel.fail => 'Fail',
-      };
+    ComplianceLevel.pass => 'Pass',
+    ComplianceLevel.warnings => 'Warnings',
+    ComplianceLevel.fail => 'Fail',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -50,22 +52,15 @@ class ScoreHeader extends StatelessWidget {
           height: 64,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              color: _scoreColor(context),
-              width: 4,
-            ),
+            border: Border.all(color: _scoreColor(context), width: 4),
           ),
           alignment: Alignment.center,
           child: Text(
             result.score.toString(),
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: context.colors.textPrimary,
-            ),
+            style: AppTypography.h1.copyWith(color: context.colors.textPrimary),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppSpacing.xl),
         // Info
         Expanded(
           child: Column(
@@ -75,21 +70,18 @@ class ScoreHeader extends StatelessWidget {
                 children: [
                   Text(
                     result.invoiceId,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.h4.copyWith(
                       color: context.colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: AppSpacing.sm),
                   StatusBadge(label: _statusLabel, type: _statusType),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.xs),
               Text(
                 'Espa\u00f1a \u2014 Facturae / VeriFActu \u00b7 Fecha: ${_formatDate(result.analyzedAt)}',
-                style: TextStyle(
-                  fontSize: 11,
+                style: AppTypography.captionSmall.copyWith(
                   color: context.colors.textTertiary,
                 ),
               ),
@@ -102,7 +94,7 @@ class ScoreHeader extends StatelessWidget {
           icon: LucideIcons.download,
           onPressed: onExport ?? () {},
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: AppSpacing.sm),
         PrimaryButton(
           label: 'Aplicar correcciones',
           icon: LucideIcons.check,
@@ -114,8 +106,18 @@ class ScoreHeader extends StatelessWidget {
 
   String _formatDate(DateTime dt) {
     const months = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+      'Ene',
+      'Feb',
+      'Mar',
+      'Abr',
+      'May',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dic',
     ];
     final h = dt.hour.toString().padLeft(2, '0');
     final m = dt.minute.toString().padLeft(2, '0');

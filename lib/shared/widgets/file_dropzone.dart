@@ -4,7 +4,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../core/theme/app_colors_theme.dart';
 
-
 /// File dropzone del Design System.
 ///
 /// Ref Pencil: Compliance Quick Check
@@ -37,9 +36,7 @@ class _FileDropzoneState extends State<FileDropzone> {
   Future<void> _pickFiles() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      type: widget.allowedExtensions != null
-          ? FileType.custom
-          : FileType.any,
+      type: widget.allowedExtensions != null ? FileType.custom : FileType.any,
       allowedExtensions: widget.allowedExtensions,
     );
 

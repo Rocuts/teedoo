@@ -6,6 +6,7 @@ import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../../../../shared/widgets/stepper/teedoo_stepper.dart';
@@ -146,15 +147,23 @@ class _InvoiceCreateScreenState extends State<InvoiceCreateScreen> {
           children: [
             Icon(LucideIcons.checkCircle2, color: Colors.white, size: 20),
             SizedBox(width: 12),
-            Text('Factura emitida con éxito',
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w500)),
+            Text(
+              'Factura emitida con éxito',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
         backgroundColor: context.colors.statusSuccess,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: AppRadius.badgeAll),
-        margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
+        margin: const EdgeInsets.only(
+          bottom: AppSpacing.s24,
+          left: AppSpacing.s24,
+          right: AppSpacing.s24,
+        ),
       ),
     );
     context.go(RoutePaths.invoices);
@@ -186,85 +195,78 @@ class _InvoiceCreateScreenState extends State<InvoiceCreateScreen> {
                 children: [
                   Text(
                     'Crear nueva factura',
-                    style: TextStyle(
+                    style: AppTypography.h2.copyWith(
                       color: context.colors.textPrimary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     'Complete los datos para emitir una factura electrónica',
-                    style: TextStyle(
+                    style: AppTypography.bodySmall.copyWith(
                       color: context.colors.textSecondary,
-                      fontSize: 13,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.s24),
 
-                  TeeDooStepper(
-                    steps: _steps,
-                    currentStep: _currentStep,
-                  ),
+                  TeeDooStepper(steps: _steps, currentStep: _currentStep),
                   const SizedBox(height: AppSpacing.s24),
 
                   KeyedSubtree(
                     key: ValueKey<int>(_currentStep),
                     child: switch (_currentStep) {
                       0 => StepPartes(
-                          emisorName: _emisorName,
-                          emisorNif: _emisorNif,
-                          emisorAddress: _emisorAddress,
-                          receptorNameController: _receptorNameController,
-                          receptorNifController: _receptorNifController,
-                          receptorAddressController: _receptorAddressController,
-                          onNext: _nextStep,
-                        ),
+                        emisorName: _emisorName,
+                        emisorNif: _emisorNif,
+                        emisorAddress: _emisorAddress,
+                        receptorNameController: _receptorNameController,
+                        receptorNifController: _receptorNifController,
+                        receptorAddressController: _receptorAddressController,
+                        onNext: _nextStep,
+                      ),
                       1 => StepLineas(
-                          lines: _lines,
-                          onAddLine: _addLine,
-                          onRemoveLine: _removeLine,
-                          onNext: _nextStep,
-                          onPrev: _prevStep,
-                          onChanged: () => setState(() {}),
-                          lineTotal: _lineTotal,
-                        ),
+                        lines: _lines,
+                        onAddLine: _addLine,
+                        onRemoveLine: _removeLine,
+                        onNext: _nextStep,
+                        onPrev: _prevStep,
+                        onChanged: () => setState(() {}),
+                        lineTotal: _lineTotal,
+                      ),
                       2 => StepTotales(
-                          subtotal: _subtotal,
-                          taxAmount: _taxAmount,
-                          total: _total,
-                          paymentMethod: _paymentMethod,
-                          onPaymentMethodChanged: (value) =>
-                              setState(() => _paymentMethod = value),
-                          dueDateController: _dueDateController,
-                          notesController: _notesController,
-                          onNext: _nextStep,
-                          onPrev: _prevStep,
-                        ),
+                        subtotal: _subtotal,
+                        taxAmount: _taxAmount,
+                        total: _total,
+                        paymentMethod: _paymentMethod,
+                        onPaymentMethodChanged: (value) =>
+                            setState(() => _paymentMethod = value),
+                        dueDateController: _dueDateController,
+                        notesController: _notesController,
+                        onNext: _nextStep,
+                        onPrev: _prevStep,
+                      ),
                       3 => StepRevision(
-                          emisorName: _emisorName,
-                          emisorNif: _emisorNif,
-                          emisorAddress: _emisorAddress,
-                          receptorName:
-                              _receptorNameController.text.isNotEmpty
-                                  ? _receptorNameController.text
-                                  : 'Sin especificar',
-                          receptorNif: _receptorNifController.text.isNotEmpty
-                              ? _receptorNifController.text
-                              : 'Sin especificar',
-                          receptorAddress:
-                              _receptorAddressController.text.isNotEmpty
-                                  ? _receptorAddressController.text
-                                  : 'Sin especificar',
-                          lines: _lines,
-                          subtotal: _subtotal,
-                          taxAmount: _taxAmount,
-                          total: _total,
-                          lineTotal: _lineTotal,
-                          isSaving: _isSaving,
-                          onPrev: _prevStep,
-                          onSubmit: _onSubmit,
-                        ),
+                        emisorName: _emisorName,
+                        emisorNif: _emisorNif,
+                        emisorAddress: _emisorAddress,
+                        receptorName: _receptorNameController.text.isNotEmpty
+                            ? _receptorNameController.text
+                            : 'Sin especificar',
+                        receptorNif: _receptorNifController.text.isNotEmpty
+                            ? _receptorNifController.text
+                            : 'Sin especificar',
+                        receptorAddress:
+                            _receptorAddressController.text.isNotEmpty
+                            ? _receptorAddressController.text
+                            : 'Sin especificar',
+                        lines: _lines,
+                        subtotal: _subtotal,
+                        taxAmount: _taxAmount,
+                        total: _total,
+                        lineTotal: _lineTotal,
+                        isSaving: _isSaving,
+                        onPrev: _prevStep,
+                        onSubmit: _onSubmit,
+                      ),
                       _ => const SizedBox.shrink(),
                     },
                   ),

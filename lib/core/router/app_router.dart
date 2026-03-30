@@ -16,6 +16,8 @@ import '../../features/invoices/presentation/screens/invoice_documents_screen.da
 import '../../features/compliance/presentation/screens/quick_check_screen.dart';
 import '../../features/compliance/presentation/screens/results_screen.dart';
 import '../../features/audit/presentation/screens/audit_screen.dart';
+import '../../features/fiscal/presentation/screens/fiscal_screen.dart';
+import '../../features/fiscal/presentation/screens/optimization_detail_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../shared/layouts/app_shell.dart';
 import 'route_names.dart';
@@ -131,6 +133,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'results/:id',
                 builder: (context, state) =>
                     ResultsScreen(checkId: state.pathParameters['id']!),
+              ),
+            ],
+          ),
+          GoRoute(
+            name: RouteNames.fiscal,
+            path: RoutePaths.fiscal,
+            builder: (context, state) => const FiscalScreen(),
+            routes: [
+              GoRoute(
+                name: RouteNames.optimizationDetail,
+                path: 'optimizations/:id',
+                builder: (context, state) => OptimizationDetailScreen(
+                  optimizationId: state.pathParameters['id']!,
+                ),
               ),
             ],
           ),

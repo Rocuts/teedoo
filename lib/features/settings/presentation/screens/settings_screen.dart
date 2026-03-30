@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../../providers/settings_provider.dart';
 import '../widgets/certificate_card.dart';
@@ -79,17 +80,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 children: [
                   Text(
                     'Configuración',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.h2.copyWith(
                       color: context.colors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     'Administra la configuración de tu organización',
-                    style: TextStyle(
-                      fontSize: 13,
+                    style: AppTypography.bodySmall.copyWith(
                       color: context.colors.textSecondary,
                     ),
                   ),
@@ -114,9 +112,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget _buildTabBar() {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -142,19 +138,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
+                      horizontal: AppSpacing.xl,
+                      vertical: AppSpacing.sm,
                     ),
                     child: ExcludeSemantics(
                       child: Text(
                         _tabs[index],
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-                          color: isActive
-                              ? context.colors.accentBlue
-                              : context.colors.textTertiary,
-                        ),
+                        style:
+                            (isActive
+                                    ? AppTypography.bodySmallMedium
+                                    : AppTypography.bodySmall)
+                                .copyWith(
+                                  color: isActive
+                                      ? context.colors.accentBlue
+                                      : context.colors.textTertiary,
+                                ),
                       ),
                     ),
                   ),

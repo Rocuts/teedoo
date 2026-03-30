@@ -6,20 +6,27 @@ import 'package:http/http.dart' as http;
 
 class ReportTemplateService {
   /// Carga la plantilla desde assets, inyecta las variables y devuelve el .docx en bytes.
-  static Future<Uint8List?> generateReportFromTemplate(Map<String, dynamic> variables) async {
+  static Future<Uint8List?> generateReportFromTemplate(
+    Map<String, dynamic> variables,
+  ) async {
     try {
       // 1. Cargar plantilla cruda
-      final ByteData data = await rootBundle.load('assets/templates/informe_base.docx');
+      final ByteData data = await rootBundle.load(
+        'assets/templates/informe_base.docx',
+      );
       // Forzar una copia explícita y "growable" para que el paquete docx no tire un "Unmodifiable list"
-      final List<int> byteList = List<int>.from(data.buffer.asUint8List(), growable: true);
+      final List<int> byteList = List<int>.from(
+        data.buffer.asUint8List(),
+        growable: true,
+      );
       final bytes = Uint8List.fromList(byteList);
-      
+
       // 2. Instanciar manejador de docx_template
       final docx = await DocxTemplate.fromBytes(bytes);
-      
+
       // 3. Crear el contenido inyectable
       final content = Content();
-      
+
       for (final entry in variables.entries) {
         if (entry.key == 'GRAFICO_JSON') {
           // Construir URL de QuickChart y descargar la imagen del gráfico
@@ -27,7 +34,7 @@ class ReportTemplateService {
             final chartJson = entry.value.toString();
             final encoded = Uri.encodeComponent(chartJson);
             final url = 'https://quickchart.io/chart?c=$encoded';
-            
+
             final response = await http.get(Uri.parse(url));
             if (response.statusCode == 200) {
               // Copia explícita de los bytes HTTP, ya que en Web devuelven Listas inmutables
@@ -36,7 +43,7 @@ class ReportTemplateService {
             } else {
               debugPrint('Error fetch chart: ${response.statusCode}');
             }
-          } catch(e) {
+          } catch (e) {
             debugPrint('Error fetching chart image: $e');
           }
         } else {

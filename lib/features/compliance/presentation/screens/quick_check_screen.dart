@@ -6,7 +6,9 @@ import '../../../../core/responsive/responsive.dart';
 import '../../../../core/router/route_names.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
 import '../../../../shared/widgets/file_dropzone.dart';
 import '../../../../shared/widgets/glass_card.dart';
@@ -122,23 +124,24 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
       children: [
         Row(
           children: [
-            Icon(LucideIcons.sparkles, size: 24, color: context.colors.aiPurple),
-            const SizedBox(width: 10),
+            Icon(
+              LucideIcons.sparkles,
+              size: 24,
+              color: context.colors.aiPurple,
+            ),
+            const SizedBox(width: AppSpacing.sm),
             Text(
               'Compliance IA',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+              style: AppTypography.h2.copyWith(
                 color: context.colors.textPrimary,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           'Valida documentos contra regulaciones vigentes con asistencia de IA',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
           ),
         ),
@@ -153,18 +156,21 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
         subtitle: 'Arrastra un archivo o selecciona una factura existente',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.s24,
+        ),
         child: Column(
           children: [
             // Dropzone
-            const FileDropzone(
-              allowedExtensions: ['pdf', 'xml'],
-            ),
-            const SizedBox(height: 20),
+            const FileDropzone(allowedExtensions: ['pdf', 'xml']),
+            const SizedBox(height: AppSpacing.s20),
 
             // Divider with text
             _buildDivider(),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.s20),
 
             // Search input
             const SearchInput(
@@ -181,11 +187,10 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
       children: [
         Expanded(child: Divider(color: context.colors.borderSubtle)),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: Text(
             'o busca una factura existente',
-            style: TextStyle(
-              fontSize: 12,
+            style: AppTypography.caption.copyWith(
               color: context.colors.textTertiary,
             ),
           ),
@@ -205,7 +210,12 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
             subtitle: 'Selecciona el marco normativo a validar',
           ),
           content: GlassCardContent(
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s24,
+              AppSpacing.xl,
+              AppSpacing.s24,
+              AppSpacing.s24,
+            ),
             child: RegulationSelector(
               regulations: _regulations,
               selectedId: _selectedRegulation,
@@ -213,21 +223,29 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.xl),
 
         // Analyze button
         PrimaryButton(
-          label: _isAnalyzing ? 'Analizando con IA...' : 'Analizar cumplimiento',
+          label: _isAnalyzing
+              ? 'Analizando con IA...'
+              : 'Analizar cumplimiento',
           icon: _isAnalyzing ? LucideIcons.loader : LucideIcons.sparkles,
           isExpanded: true,
-          onPressed: _isAnalyzing ? () {} : () async {
-            setState(() => _isAnalyzing = true);
-            await Future<void>.delayed(const Duration(milliseconds: 2500));
-            if (!mounted) return;
-            context.go(RoutePaths.complianceResults('inv_3')); // demo fail check
-          },
+          onPressed: _isAnalyzing
+              ? () {}
+              : () async {
+                  setState(() => _isAnalyzing = true);
+                  await Future<void>.delayed(
+                    const Duration(milliseconds: 2500),
+                  );
+                  if (!mounted) return;
+                  context.go(
+                    RoutePaths.complianceResults('inv_3'),
+                  ); // demo fail check
+                },
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.lg),
 
         // Disclaimer
         _buildDisclaimer(),
@@ -238,10 +256,13 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
   Widget _buildDisclaimer() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.lg,
+      ),
       decoration: BoxDecoration(
         color: context.colors.aiPurpleBg,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.mdAll,
         border: Border.all(color: context.colors.aiPurpleBorder),
       ),
       child: Row(
@@ -255,14 +276,13 @@ class _QuickCheckScreenState extends State<QuickCheckScreen> {
               color: context.colors.aiPurple,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
               'Los resultados de IA son orientativos y no constituyen '
               'asesoramiento legal. Verifica siempre con un profesional '
               'antes de enviar documentos oficiales.',
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTypography.caption.copyWith(
                 color: context.colors.aiPurple,
                 height: 1.4,
               ),

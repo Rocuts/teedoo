@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/theme_provider.dart';
@@ -24,19 +26,12 @@ class AppearanceTab extends ConsumerWidget {
         // Header
         Text(
           'Apariencia',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
           'Personaliza el tema visual de TeDoo',
-          style: TextStyle(
-            fontSize: 13,
-            color: context.colors.textSecondary,
-          ),
+          style: TextStyle(color: context.colors.textSecondary),
         ),
         const SizedBox(height: AppSpacing.s24),
 
@@ -138,8 +133,7 @@ class AppearanceTab extends ConsumerWidget {
                   label,
                   style: TextStyle(
                     fontSize: 13,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected
                         ? context.colors.accentBlue
                         : context.colors.textSecondary,

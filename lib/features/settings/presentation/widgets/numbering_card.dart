@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/inputs/text_input.dart';
 
@@ -35,11 +37,7 @@ class NumberingCard extends StatelessWidget {
           // Title
           Text(
             'Numeraci\u00f3n de facturas',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: context.colors.textPrimary,
-            ),
+            style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
           ),
           const SizedBox(height: AppSpacing.md),
 
@@ -47,8 +45,7 @@ class NumberingCard extends StatelessWidget {
           Text(
             'Configura el formato y la secuencia de numeraci\u00f3n '
             'para tus facturas electr\u00f3nicas.',
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTypography.bodySmall.copyWith(
               color: context.colors.textSecondary,
               height: 1.5,
             ),
@@ -81,29 +78,25 @@ class NumberingCard extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.lg,
             ),
             decoration: BoxDecoration(
               color: context.colors.bgInput,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadius.mdAll,
             ),
             child: Row(
               children: [
                 Text(
                   'Vista previa:',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                  style: AppTypography.captionMedium.copyWith(
                     color: context.colors.textTertiary,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Text(
                   _preview,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.button.copyWith(
                     color: context.colors.accentBlue,
                   ),
                 ),

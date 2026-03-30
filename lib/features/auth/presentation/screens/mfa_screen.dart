@@ -7,6 +7,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/glass_theme.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -58,32 +60,29 @@ class MfaScreen extends StatelessWidget {
                       size: 24,
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   Text(
                     'Verificación de seguridad',
-                    style: TextStyle(
+                    style: AppTypography.h3.copyWith(
                       color: context.colors.textPrimary,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   SizedBox(
                     width: 340,
                     child: Text(
                       'Introduce el código de 6 dígitos de tu aplicación de autenticación',
-                      style: TextStyle(
+                      style: AppTypography.bodySmall.copyWith(
                         color: context.colors.textSecondary,
-                        fontSize: 13,
                         height: 1.5,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   // 6 digit inputs
                   Row(
@@ -94,7 +93,9 @@ class MfaScreen extends StatelessWidget {
                       return Container(
                         width: 48,
                         height: 56,
-                        margin: EdgeInsets.only(left: i > 0 ? 10 : 0),
+                        margin: EdgeInsets.only(
+                          left: i > 0 ? AppSpacing.sm : 0,
+                        ),
                         decoration: BoxDecoration(
                           color: context.colors.bgInput,
                           borderRadius: AppRadius.mdAll,
@@ -108,26 +109,24 @@ class MfaScreen extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           sampleDigits[i],
-                          style: TextStyle(
+                          style: AppTypography.h3.copyWith(
                             color: context.colors.textPrimary,
-                            fontSize: 22,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       );
                     }),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   Text(
                     'El código expira en 4:32',
-                    style: TextStyle(
+                    style: AppTypography.captionSmall.copyWith(
                       color: context.colors.textTertiary,
-                      fontSize: 11,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   PrimaryButton(
                     label: 'Verificar',
@@ -143,13 +142,12 @@ class MfaScreen extends StatelessWidget {
                       });
                     },
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpacing.s28),
 
                   Text(
                     'Usar código de recuperación',
-                    style: TextStyle(
+                    style: AppTypography.caption.copyWith(
                       color: context.colors.accentBlue,
-                      fontSize: 12,
                     ),
                     textAlign: TextAlign.center,
                   ),

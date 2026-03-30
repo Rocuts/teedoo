@@ -61,10 +61,7 @@ class TeeDooTextField extends StatelessWidget {
             validator: validator,
             onChanged: onChanged,
             maxLines: maxLines,
-            style: TextStyle(
-              fontSize: 13,
-              color: context.colors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 13, color: context.colors.textPrimary),
             decoration: InputDecoration(
               hintText: placeholder,
               hintStyle: TextStyle(

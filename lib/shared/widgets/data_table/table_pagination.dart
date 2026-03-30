@@ -43,10 +43,7 @@ class TablePagination extends StatelessWidget {
           // ── Info text (left) ──
           Text(
             'Mostrando $_startItem-$_endItem de $totalItems',
-            style: TextStyle(
-              fontSize: 12,
-              color: context.colors.textTertiary,
-            ),
+            style: TextStyle(fontSize: 12, color: context.colors.textTertiary),
           ),
 
           // ── Page buttons (right) ──
@@ -99,11 +96,7 @@ class _PaginationButton extends StatelessWidget {
     final iconWidget = Icon(icon, size: 14, color: color);
     final textWidget = Text(
       label,
-      style: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-        color: color,
-      ),
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: color),
     );
 
     return Material(

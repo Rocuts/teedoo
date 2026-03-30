@@ -9,10 +9,7 @@ class SelectOption {
   final String value;
   final String label;
 
-  const SelectOption({
-    required this.value,
-    required this.label,
-  });
+  const SelectOption({required this.value, required this.label});
 }
 
 /// Dropdown select del Design System.
@@ -68,10 +65,7 @@ class TeeDooSelect extends StatelessWidget {
               color: context.colors.textTertiary,
             ),
             dropdownColor: context.colors.bgSecondary,
-            style: TextStyle(
-              fontSize: 13,
-              color: context.colors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 13, color: context.colors.textPrimary),
             hint: placeholder != null
                 ? Text(
                     placeholder!,

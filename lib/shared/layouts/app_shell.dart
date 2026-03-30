@@ -15,11 +15,7 @@ class AppShell extends StatelessWidget {
   final String currentPath;
   final Widget child;
 
-  const AppShell({
-    super.key,
-    required this.currentPath,
-    required this.child,
-  });
+  const AppShell({super.key, required this.currentPath, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +40,7 @@ class AppShell extends StatelessWidget {
                 ),
 
               // ── Área principal (fill) ──
-              Expanded(
-                child: ClipRect(child: child),
-              ),
+              Expanded(child: ClipRect(child: child)),
             ],
           ),
         ),

@@ -42,23 +42,29 @@ class AdjuntosTab extends StatelessWidget {
       children: [
         DropzoneArea(
           onUploadTap: () {
-            GlassToast.show(context,
-                message: 'Abriendo explorador de archivos...',
-                type: StatusType.info);
+            GlassToast.show(
+              context,
+              message: 'Abriendo explorador de archivos...',
+              type: StatusType.info,
+            );
           },
         ),
         const SizedBox(height: AppSpacing.s24),
         DocumentGridView(
           documents: mockDocuments,
           onDownloadTap: (doc) {
-            GlassToast.show(context,
-                message: 'Descargando ${doc.name}...',
-                type: StatusType.success);
+            GlassToast.show(
+              context,
+              message: 'Descargando ${doc.name}...',
+              type: StatusType.success,
+            );
           },
           onDeleteTap: (doc) {
-            GlassToast.show(context,
-                message: 'Eliminando ${doc.name}...',
-                type: StatusType.error);
+            GlassToast.show(
+              context,
+              message: 'Eliminando ${doc.name}...',
+              type: StatusType.error,
+            );
           },
           onUploadTap: () {},
         ),

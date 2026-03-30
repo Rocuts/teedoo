@@ -5,6 +5,7 @@ import '../../../../../core/responsive/responsive.dart';
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 import '../../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../../shared/widgets/buttons/primary_button.dart';
@@ -56,7 +57,12 @@ class StepRevision extends StatelessWidget {
             subtitle: 'Verifique todos los datos antes de emitir la factura',
           ),
           content: GlassCardContent(
-            padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s24,
+              AppSpacing.s20,
+              AppSpacing.s24,
+              0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -87,9 +93,17 @@ class StepRevision extends StatelessWidget {
                       const SizedBox(width: AppSpacing.s24),
                       Expanded(
                         child: _buildReviewSection(context, 'Receptor', [
-                          _buildReviewRow(context, 'Razón social', receptorName),
+                          _buildReviewRow(
+                            context,
+                            'Razón social',
+                            receptorName,
+                          ),
                           _buildReviewRow(context, 'NIF/CIF', receptorNif),
-                          _buildReviewRow(context, 'Dirección', receptorAddress),
+                          _buildReviewRow(
+                            context,
+                            'Dirección',
+                            receptorAddress,
+                          ),
                         ]),
                       ),
                     ],
@@ -102,10 +116,8 @@ class StepRevision extends StatelessWidget {
                 // Lines table
                 Text(
                   'Líneas de factura',
-                  style: TextStyle(
+                  style: AppTypography.h4.copyWith(
                     color: context.colors.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.s16),
@@ -125,9 +137,17 @@ class StepRevision extends StatelessWidget {
                     width: context.isCompact ? double.infinity : 280,
                     child: Column(
                       children: [
-                        buildTotalRow(context, 'Subtotal', formatCurrency(subtotal)),
-                        const SizedBox(height: 8),
-                        buildTotalRow(context, 'IVA (21%)', formatCurrency(taxAmount)),
+                        buildTotalRow(
+                          context,
+                          'Subtotal',
+                          formatCurrency(subtotal),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        buildTotalRow(
+                          context,
+                          'IVA (21%)',
+                          formatCurrency(taxAmount),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Divider(
@@ -158,19 +178,15 @@ class StepRevision extends StatelessWidget {
                       size: 18,
                       color: context.colors.statusSuccess,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: AppSpacing.sm),
                     Text(
                       'Compliance check pendiente',
-                      style: TextStyle(
+                      style: AppTypography.bodySmall.copyWith(
                         color: context.colors.textSecondary,
-                        fontSize: 13,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    const StatusBadge(
-                      label: 'Pending',
-                      type: StatusType.info,
-                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    const StatusBadge(label: 'Pending', type: StatusType.info),
                   ],
                 ),
               ],
@@ -178,10 +194,7 @@ class StepRevision extends StatelessWidget {
           ),
           actions: GlassCardActions(
             children: [
-              SecondaryButton(
-                label: 'Anterior',
-                onPressed: onPrev,
-              ),
+              SecondaryButton(label: 'Anterior', onPressed: onPrev),
               const SizedBox(width: AppSpacing.buttonGap),
               PrimaryButton(
                 label: isSaving ? 'Emitiendo...' : 'Emitir factura',
@@ -197,11 +210,9 @@ class StepRevision extends StatelessWidget {
 
   Widget _buildLinesTableHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Row(
         children: [
@@ -209,10 +220,8 @@ class StepRevision extends StatelessWidget {
             flex: 3,
             child: Text(
               'Descripción',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -220,10 +229,8 @@ class StepRevision extends StatelessWidget {
             width: 80,
             child: Text(
               'Cant.',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -231,10 +238,8 @@ class StepRevision extends StatelessWidget {
             width: 100,
             child: Text(
               'Precio',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -242,10 +247,8 @@ class StepRevision extends StatelessWidget {
             width: 70,
             child: Text(
               'IVA',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -253,10 +256,8 @@ class StepRevision extends StatelessWidget {
             width: 110,
             child: Text(
               'Total',
-              style: TextStyle(
+              style: AppTypography.captionSmallBold.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.right,
             ),
@@ -270,9 +271,7 @@ class StepRevision extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Row(
         children: [
@@ -280,9 +279,8 @@ class StepRevision extends StatelessWidget {
             flex: 3,
             child: Text(
               lines[index].description,
-              style: TextStyle(
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 13,
               ),
             ),
           ),
@@ -290,9 +288,8 @@ class StepRevision extends StatelessWidget {
             width: 80,
             child: Text(
               lines[index].quantity,
-              style: TextStyle(
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 13,
               ),
             ),
           ),
@@ -300,9 +297,8 @@ class StepRevision extends StatelessWidget {
             width: 100,
             child: Text(
               '\u20ac${lines[index].unitPrice}',
-              style: TextStyle(
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 13,
               ),
             ),
           ),
@@ -310,9 +306,8 @@ class StepRevision extends StatelessWidget {
             width: 70,
             child: Text(
               '${lines[index].taxRate}%',
-              style: TextStyle(
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 13,
               ),
             ),
           ),
@@ -322,7 +317,6 @@ class StepRevision extends StatelessWidget {
               formatCurrency(lineTotal(index)),
               style: TextStyle(
                 color: context.colors.textPrimary,
-                fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.right,
@@ -333,9 +327,13 @@ class StepRevision extends StatelessWidget {
     );
   }
 
-  Widget _buildReviewSection(BuildContext context, String title, List<Widget> rows) {
+  Widget _buildReviewSection(
+    BuildContext context,
+    String title,
+    List<Widget> rows,
+  ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
         color: context.colors.bgInput,
         borderRadius: AppRadius.mdAll,
@@ -346,13 +344,11 @@ class StepRevision extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.button.copyWith(
               color: context.colors.textPrimary,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.lg),
           ...rows,
         ],
       ),
@@ -361,7 +357,7 @@ class StepRevision extends StatelessWidget {
 
   Widget _buildReviewRow(BuildContext context, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -369,18 +365,16 @@ class StepRevision extends StatelessWidget {
             width: 100,
             child: Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: context.colors.textTertiary,
-                fontSize: 12,
               ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 13,
               ),
             ),
           ),

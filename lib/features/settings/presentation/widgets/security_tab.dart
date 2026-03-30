@@ -3,6 +3,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -26,17 +28,12 @@ class SecurityTab extends StatelessWidget {
         // Header
         Text(
           'Seguridad',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: context.colors.textPrimary,
-          ),
+          style: AppTypography.h4.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
           'Gestiona la seguridad de tu cuenta y las claves de acceso',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
           ),
         ),
@@ -60,28 +57,26 @@ class SecurityTab extends StatelessWidget {
                   ),
                   Text(
                     'Autenticaci\u00f3n multifactor (MFA)',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.h4.copyWith(
                       color: context.colors.textPrimary,
                     ),
                   ),
-                  const StatusBadge(
-                    label: 'Activo',
-                    type: StatusType.success,
-                  ),
+                  const StatusBadge(label: 'Activo', type: StatusType.success),
                 ],
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildMfaOption(context,
+              _buildMfaOption(
+                context,
                 label: 'TOTP (Aplicaci\u00f3n autenticadora)',
                 description: 'Google Authenticator, Authy, etc.',
                 isEnabled: true,
               ),
               const SizedBox(height: AppSpacing.xl),
-              _buildMfaOption(context,
+              _buildMfaOption(
+                context,
                 label: 'SMS',
-                description: 'C\u00f3digo de verificaci\u00f3n por mensaje de texto',
+                description:
+                    'C\u00f3digo de verificaci\u00f3n por mensaje de texto',
                 isEnabled: false,
               ),
             ],
@@ -106,9 +101,7 @@ class SecurityTab extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'Sesiones activas',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      style: AppTypography.h4.copyWith(
                         color: context.colors.textPrimary,
                       ),
                     ),
@@ -116,14 +109,16 @@ class SecurityTab extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.s16),
-              _buildSessionRow(context,
+              _buildSessionRow(
+                context,
                 device: 'MacBook Pro \u2014 Chrome 122',
                 location: 'Madrid, Espa\u00f1a',
                 time: 'Sesi\u00f3n actual',
                 isCurrent: true,
               ),
               const SizedBox(height: AppSpacing.xl),
-              _buildSessionRow(context,
+              _buildSessionRow(
+                context,
                 device: 'iPhone 15 Pro \u2014 Safari',
                 location: 'Madrid, Espa\u00f1a',
                 time: 'Hace 2 horas',
@@ -152,9 +147,7 @@ class SecurityTab extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Claves API',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.h4.copyWith(
                           color: context.colors.textPrimary,
                         ),
                       ),
@@ -166,7 +159,12 @@ class SecurityTab extends StatelessWidget {
                   label: 'Crear clave',
                   icon: LucideIcons.plus,
                   onPressed: () {
-                    GlassToast.show(context, message: 'Funci\u00f3n de creaci\u00f3n de claves API en desarrollo...', type: StatusType.info);
+                    GlassToast.show(
+                      context,
+                      message:
+                          'Funci\u00f3n de creaci\u00f3n de claves API en desarrollo...',
+                      type: StatusType.info,
+                    );
                   },
                 ),
               ] else ...[
@@ -180,9 +178,7 @@ class SecurityTab extends StatelessWidget {
                     const SizedBox(width: AppSpacing.md),
                     Text(
                       'Claves API',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      style: AppTypography.h4.copyWith(
                         color: context.colors.textPrimary,
                       ),
                     ),
@@ -191,21 +187,28 @@ class SecurityTab extends StatelessWidget {
                       label: 'Crear clave',
                       icon: LucideIcons.plus,
                       onPressed: () {
-                        GlassToast.show(context, message: 'Funci\u00f3n de creaci\u00f3n de claves API en desarrollo...', type: StatusType.info);
+                        GlassToast.show(
+                          context,
+                          message:
+                              'Funci\u00f3n de creaci\u00f3n de claves API en desarrollo...',
+                          type: StatusType.info,
+                        );
                       },
                     ),
                   ],
                 ),
               ],
               const SizedBox(height: AppSpacing.s16),
-              _buildApiKeyRow(context,
+              _buildApiKeyRow(
+                context,
                 name: 'Producci\u00f3n',
                 key: 'td_live_****...****7f2a',
                 created: '15 Ene 2026',
                 isCompact: isCompact,
               ),
               const SizedBox(height: AppSpacing.xl),
-              _buildApiKeyRow(context,
+              _buildApiKeyRow(
+                context,
                 name: 'Desarrollo',
                 key: 'td_test_****...****3b9c',
                 created: '03 Feb 2026',
@@ -234,9 +237,7 @@ class SecurityTab extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Contrase\u00f1a',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                            style: AppTypography.h4.copyWith(
                               color: context.colors.textPrimary,
                             ),
                           ),
@@ -246,8 +247,7 @@ class SecurityTab extends StatelessWidget {
                     const SizedBox(height: AppSpacing.xs),
                     Text(
                       '\u00daltimo cambio: hace 45 d\u00edas',
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: AppTypography.bodySmall.copyWith(
                         color: context.colors.textSecondary,
                       ),
                     ),
@@ -255,7 +255,12 @@ class SecurityTab extends StatelessWidget {
                     PrimaryButton(
                       label: 'Cambiar contrase\u00f1a',
                       onPressed: () {
-                        GlassToast.show(context, message: 'Solicitud de cambio de contrase\u00f1a enviada', type: StatusType.success);
+                        GlassToast.show(
+                          context,
+                          message:
+                              'Solicitud de cambio de contrase\u00f1a enviada',
+                          type: StatusType.success,
+                        );
                       },
                     ),
                   ],
@@ -274,17 +279,14 @@ class SecurityTab extends StatelessWidget {
                         children: [
                           Text(
                             'Contrase\u00f1a',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                            style: AppTypography.h4.copyWith(
                               color: context.colors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
                             '\u00daltimo cambio: hace 45 d\u00edas',
-                            style: TextStyle(
-                              fontSize: 13,
+                            style: AppTypography.bodySmall.copyWith(
                               color: context.colors.textSecondary,
                             ),
                           ),
@@ -294,7 +296,12 @@ class SecurityTab extends StatelessWidget {
                     PrimaryButton(
                       label: 'Cambiar contrase\u00f1a',
                       onPressed: () {
-                        GlassToast.show(context, message: 'Solicitud de cambio de contrase\u00f1a enviada', type: StatusType.success);
+                        GlassToast.show(
+                          context,
+                          message:
+                              'Solicitud de cambio de contrase\u00f1a enviada',
+                          type: StatusType.success,
+                        );
                       },
                     ),
                   ],
@@ -304,7 +311,8 @@ class SecurityTab extends StatelessWidget {
     );
   }
 
-  Widget _buildMfaOption(BuildContext context, {
+  Widget _buildMfaOption(
+    BuildContext context, {
     required String label,
     required String description,
     required bool isEnabled,
@@ -317,17 +325,14 @@ class SecurityTab extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                style: AppTypography.bodySmallMedium.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 12,
+                style: AppTypography.caption.copyWith(
                   color: context.colors.textTertiary,
                 ),
               ),
@@ -344,8 +349,7 @@ class SecurityTab extends StatelessWidget {
                 : context.colors.borderSubtle,
             borderRadius: BorderRadius.circular(11),
           ),
-          alignment:
-              isEnabled ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: isEnabled ? Alignment.centerRight : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 2),
           child: Container(
             width: 18,
@@ -360,7 +364,8 @@ class SecurityTab extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionRow(BuildContext context, {
+  Widget _buildSessionRow(
+    BuildContext context, {
     required String device,
     required String location,
     required String time,
@@ -380,17 +385,14 @@ class SecurityTab extends StatelessWidget {
             children: [
               Text(
                 device,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                style: AppTypography.bodySmallMedium.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 '$location \u00b7 $time',
-                style: TextStyle(
-                  fontSize: 12,
+                style: AppTypography.caption.copyWith(
                   color: context.colors.textTertiary,
                 ),
               ),
@@ -403,7 +405,8 @@ class SecurityTab extends StatelessWidget {
     );
   }
 
-  Widget _buildApiKeyRow(BuildContext context, {
+  Widget _buildApiKeyRow(
+    BuildContext context, {
     required String name,
     required String key,
     required String created,
@@ -430,9 +433,7 @@ class SecurityTab extends StatelessWidget {
                     Expanded(
                       child: Text(
                         name,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                        style: AppTypography.bodySmallMedium.copyWith(
                           color: context.colors.textPrimary,
                         ),
                       ),
@@ -444,8 +445,7 @@ class SecurityTab extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 14 + AppSpacing.xl),
                   child: Text(
                     key,
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTypography.caption.copyWith(
                       fontFamily: 'monospace',
                       color: context.colors.textTertiary,
                     ),
@@ -478,9 +478,7 @@ class SecurityTab extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                        style: AppTypography.bodySmallMedium.copyWith(
                           color: context.colors.textPrimary,
                         ),
                       ),
@@ -498,8 +496,7 @@ class SecurityTab extends StatelessWidget {
                 ),
                 Text(
                   'Creada: $created',
-                  style: TextStyle(
-                    fontSize: 11,
+                  style: AppTypography.captionSmall.copyWith(
                     color: context.colors.textTertiary,
                   ),
                 ),

@@ -14,10 +14,7 @@ import '../../../core/theme/app_radius.dart';
 class AIBadge extends StatelessWidget {
   final String label;
 
-  const AIBadge({
-    super.key,
-    this.label = 'IA Compliance',
-  });
+  const AIBadge({super.key, this.label = 'IA Compliance'});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +28,7 @@ class AIBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            LucideIcons.sparkles,
-            size: 12,
-            color: context.colors.aiPurple,
-          ),
+          Icon(LucideIcons.sparkles, size: 12, color: context.colors.aiPurple),
           const SizedBox(width: 6),
           Text(
             label,

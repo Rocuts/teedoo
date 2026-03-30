@@ -19,8 +19,7 @@ const Map<String, String> stringsEn = {
   'mfa_verify': 'Verify',
   'mfa_recovery': 'Use recovery code',
   'reset_title': 'Reset password',
-  'reset_subtitle':
-      "Enter your email and we'll send you a reset link",
+  'reset_subtitle': "Enter your email and we'll send you a reset link",
   'send_link': 'Send link',
   'back_to_login': 'Back to sign in',
   'onboarding_title': 'Create organization',

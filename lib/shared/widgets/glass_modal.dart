@@ -46,16 +46,10 @@ class GlassModal extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 250),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
-          opacity: CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeOut,
-          ),
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
           child: ScaleTransition(
             scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOut,
-              ),
+              CurvedAnimation(parent: animation, curve: Curves.easeOut),
             ),
             child: child,
           ),
@@ -88,9 +82,7 @@ class GlassModal extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: glass.cardFill,
                     borderRadius: AppRadius.cardAll,
-                    border: Border.all(
-                      color: glass.glassBorder,
-                    ),
+                    border: Border.all(color: glass.glassBorder),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -148,9 +140,13 @@ class GlassModal extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                           AppSpacing.cardPadding,
-                          title != null ? AppSpacing.s16 : AppSpacing.cardPadding,
+                          title != null
+                              ? AppSpacing.s16
+                              : AppSpacing.cardPadding,
                           AppSpacing.cardPadding,
-                          actions != null ? AppSpacing.s16 : AppSpacing.cardPadding,
+                          actions != null
+                              ? AppSpacing.s16
+                              : AppSpacing.cardPadding,
                         ),
                         child: content,
                       ),

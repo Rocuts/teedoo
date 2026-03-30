@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/ghost_button.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../data/models/finding.dart';
@@ -13,10 +16,7 @@ import '../../../../shared/widgets/badges/status_badge.dart';
 class FindingsList extends StatefulWidget {
   final List<Finding> findings;
 
-  const FindingsList({
-    super.key,
-    required this.findings,
-  });
+  const FindingsList({super.key, required this.findings});
 
   @override
   State<FindingsList> createState() => _FindingsListState();
@@ -26,17 +26,16 @@ class _FindingsListState extends State<FindingsList> {
   _FindingFilter _activeFilter = _FindingFilter.all;
 
   List<Finding> get _filteredFindings => switch (_activeFilter) {
-        _FindingFilter.all => widget.findings,
-        _FindingFilter.high => widget.findings
-            .where((f) => f.priority == FindingPriority.high)
-            .toList(),
-        _FindingFilter.medium => widget.findings
-            .where((f) => f.priority == FindingPriority.medium)
-            .toList(),
-        _FindingFilter.low => widget.findings
-            .where((f) => f.priority == FindingPriority.low)
-            .toList(),
-      };
+    _FindingFilter.all => widget.findings,
+    _FindingFilter.high =>
+      widget.findings.where((f) => f.priority == FindingPriority.high).toList(),
+    _FindingFilter.medium =>
+      widget.findings
+          .where((f) => f.priority == FindingPriority.medium)
+          .toList(),
+    _FindingFilter.low =>
+      widget.findings.where((f) => f.priority == FindingPriority.low).toList(),
+  };
 
   int _countByPriority(FindingPriority p) =>
       widget.findings.where((f) => f.priority == p).length;
@@ -49,7 +48,12 @@ class _FindingsListState extends State<FindingsList> {
         trailing: _buildTabs(context),
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.lg,
+          AppSpacing.s24,
+          AppSpacing.xl,
+        ),
         child: Column(
           children: [
             for (int i = 0; i < _filteredFindings.length; i++)
@@ -68,19 +72,19 @@ class _FindingsListState extends State<FindingsList> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildTab(context, 'Todos', _FindingFilter.all),
-        const SizedBox(width: 4),
+        const SizedBox(width: AppSpacing.xs),
         _buildTab(
           context,
           'Alta (${_countByPriority(FindingPriority.high)})',
           _FindingFilter.high,
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: AppSpacing.xs),
         _buildTab(
           context,
           'Media (${_countByPriority(FindingPriority.medium)})',
           _FindingFilter.medium,
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: AppSpacing.xs),
         _buildTab(
           context,
           'Baja (${_countByPriority(FindingPriority.low)})',
@@ -97,17 +101,22 @@ class _FindingsListState extends State<FindingsList> {
       child: GestureDetector(
         onTap: () => setState(() => _activeFilter = filter),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xs,
+          ),
           decoration: BoxDecoration(
-            color: isActive ? context.colors.accentBlueSubtle : Colors.transparent,
-            borderRadius: BorderRadius.circular(6),
+            color: isActive
+                ? context.colors.accentBlueSubtle
+                : Colors.transparent,
+            borderRadius: AppRadius.smAll,
           ),
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: isActive ? context.colors.accentBlue : context.colors.textTertiary,
+            style: AppTypography.captionMedium.copyWith(
+              color: isActive
+                  ? context.colors.accentBlue
+                  : context.colors.textTertiary,
             ),
           ),
         ),
@@ -122,26 +131,21 @@ class _FindingItem extends StatelessWidget {
   final Finding finding;
   final bool showBorder;
 
-  const _FindingItem({
-    required this.finding,
-    required this.showBorder,
-  });
+  const _FindingItem({required this.finding, required this.showBorder});
 
   Color _dotColor(BuildContext context) => switch (finding.priority) {
-        FindingPriority.high => context.colors.statusError,
-        FindingPriority.medium => context.colors.statusWarning,
-        FindingPriority.low => context.colors.statusInfo,
-      };
+    FindingPriority.high => context.colors.statusError,
+    FindingPriority.medium => context.colors.statusWarning,
+    FindingPriority.low => context.colors.statusInfo,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
       decoration: BoxDecoration(
         border: showBorder
-            ? Border(
-                bottom: BorderSide(color: context.colors.borderSubtle),
-              )
+            ? Border(bottom: BorderSide(color: context.colors.borderSubtle))
             : null,
       ),
       child: Row(
@@ -159,7 +163,7 @@ class _FindingItem extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           // Content
           Expanded(
             child: Column(
@@ -167,31 +171,26 @@ class _FindingItem extends StatelessWidget {
               children: [
                 Text(
                   finding.title,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                  style: AppTypography.bodySmallMedium.copyWith(
                     color: context.colors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacing.xs),
                 Text(
                   finding.description,
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTypography.caption.copyWith(
                     color: context.colors.textSecondary,
                   ),
                 ),
                 if (finding.fieldPath != null || finding.xPath != null) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     [
                       if (finding.fieldPath != null)
                         'Campo: ${finding.fieldPath}',
-                      if (finding.xPath != null)
-                        'XPath: ${finding.xPath}',
+                      if (finding.xPath != null) 'XPath: ${finding.xPath}',
                     ].join(' \u00b7 '),
-                    style: TextStyle(
-                      fontSize: 11,
+                    style: AppTypography.captionSmall.copyWith(
                       color: context.colors.textTertiary,
                       fontFamily: 'monospace',
                     ),
@@ -199,22 +198,30 @@ class _FindingItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Row(
                   children: [
                     GhostButton(
                       label: 'Corregir',
                       foregroundColor: context.colors.accentBlue,
                       onPressed: () {
-                        GlassToast.show(context, message: 'Aplicando corrección sugerida por IA...', type: StatusType.info);
+                        GlassToast.show(
+                          context,
+                          message: 'Aplicando corrección sugerida por IA...',
+                          type: StatusType.info,
+                        );
                       },
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: AppSpacing.xs),
                     GhostButton(
                       label: 'Sugerir',
                       foregroundColor: context.colors.aiPurple,
                       onPressed: () {
-                        GlassToast.show(context, message: 'Analizando sugerencias...', type: StatusType.info);
+                        GlassToast.show(
+                          context,
+                          message: 'Analizando sugerencias...',
+                          type: StatusType.info,
+                        );
                       },
                     ),
                   ],

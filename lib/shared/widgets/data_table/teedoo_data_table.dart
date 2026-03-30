@@ -76,9 +76,7 @@ class _TeeDooDataTableState<T> extends State<TeeDooDataTable<T>> {
     if (widget.rows.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.s48),
-        child: EmptyState(
-          title: widget.emptyMessage ?? 'No hay datos',
-        ),
+        child: EmptyState(title: widget.emptyMessage ?? 'No hay datos'),
       );
     }
 
@@ -102,9 +100,11 @@ class _TeeDooDataTableState<T> extends State<TeeDooDataTable<T>> {
                 SizedBox(
                   width: 40,
                   child: Checkbox(
-                    value: widget.selectedRows.length == widget.rows.length &&
+                    value:
+                        widget.selectedRows.length == widget.rows.length &&
                         widget.rows.isNotEmpty,
-                    tristate: widget.selectedRows.isNotEmpty &&
+                    tristate:
+                        widget.selectedRows.isNotEmpty &&
                         widget.selectedRows.length < widget.rows.length,
                     onChanged: (_) => _toggleAll(),
                     side: BorderSide(color: context.colors.borderSubtle),
@@ -132,8 +132,8 @@ class _TeeDooDataTableState<T> extends State<TeeDooDataTable<T>> {
                 color: isSelected
                     ? context.colors.accentBlueSubtle
                     : isHovered
-                        ? context.colors.bgGlassHover
-                        : Colors.transparent,
+                    ? context.colors.bgGlassHover
+                    : Colors.transparent,
                 border: Border(
                   bottom: BorderSide(color: context.colors.borderSubtle),
                 ),
@@ -150,16 +150,13 @@ class _TeeDooDataTableState<T> extends State<TeeDooDataTable<T>> {
                       child: Checkbox(
                         value: isSelected,
                         onChanged: (_) => _toggleRow(index),
-                        side: BorderSide(
-                          color: context.colors.borderSubtle,
-                        ),
+                        side: BorderSide(color: context.colors.borderSubtle),
                         activeColor: context.colors.accentBlue,
                         checkColor: context.colors.textOnAccent,
                       ),
                     ),
                   ],
-                  ...widget.columns
-                      .map((col) => _buildDataCell(col, item)),
+                  ...widget.columns.map((col) => _buildDataCell(col, item)),
                 ],
               ),
             ),

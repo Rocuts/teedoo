@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/responsive/responsive.dart';
+import '../../../../core/mock/mock_data.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/router/route_names.dart';
+import '../../data/models/invoice_model.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../widgets/invoice_tabs.dart';
 import '../widgets/detail/detail_header.dart';
@@ -22,10 +25,7 @@ import '../widgets/detail/auditoria_tab.dart';
 class InvoiceDetailScreen extends StatefulWidget {
   final String invoiceId;
 
-  const InvoiceDetailScreen({
-    super.key,
-    required this.invoiceId,
-  });
+  const InvoiceDetailScreen({super.key, required this.invoiceId});
 
   @override
   State<InvoiceDetailScreen> createState() => _InvoiceDetailScreenState();
@@ -35,17 +35,13 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   int _activeTab = 0;
   final _scrollController = ScrollController();
 
-  // Mock data
-  static const _invoiceNumber = 'INV-2026-092';
-  static const _emisorName = 'Mi Empresa S.L.';
-  static const _emisorNif = 'B12345678';
-  static const _emisorAddress = 'Calle Mayor 15, Madrid';
-  static const _receptorName = 'Acme Corporation S.L.';
-  static const _receptorNif = 'A98765432';
-  static const _receptorAddress = 'Av. Diagonal 100, Barcelona';
-  static const _subtotal = 3571.40;
-  static const _taxAmount = 749.39;
-  static const _total = 4320.79;
+  Invoice? get _invoice {
+    try {
+      return MockData.invoices.firstWhere((i) => i.id == widget.invoiceId);
+    } catch (_) {
+      return null;
+    }
+  }
 
   void _onTabChanged(int index) {
     if (index == _activeTab) return;
@@ -63,6 +59,27 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final inv = _invoice;
+
+    if (inv == null) {
+      return Column(
+        children: [
+          AppTopbar(
+            breadcrumbs: [
+              BreadcrumbItem(
+                label: 'Facturas',
+                onTap: () => context.go(RoutePaths.invoices),
+              ),
+              const BreadcrumbItem(label: 'No encontrada'),
+            ],
+          ),
+          const Expanded(child: Center(child: Text('Factura no encontrada'))),
+        ],
+      );
+    }
+
+    final dateFormat = DateFormat('dd MMM yyyy', 'es_ES');
+
     return Column(
       children: [
         AppTopbar(
@@ -71,7 +88,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               label: 'Facturas',
               onTap: () => context.go(RoutePaths.invoices),
             ),
-            const BreadcrumbItem(label: _invoiceNumber),
+            BreadcrumbItem(label: inv.number),
           ],
         ),
         Expanded(
@@ -85,7 +102,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const DetailHeader(invoiceNumber: _invoiceNumber),
+                  DetailHeader(
+                    invoiceNumber: inv.number,
+                    status: inv.status,
+                    complianceStatus: inv.complianceStatus,
+                  ),
                   const SizedBox(height: AppSpacing.s20),
 
                   InvoiceTabs(
@@ -111,17 +132,27 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                   KeyedSubtree(
                     key: ValueKey<int>(_activeTab),
                     child: switch (_activeTab) {
-                      0 => const ResumenTab(
-                          emisorName: _emisorName,
-                          emisorNif: _emisorNif,
-                          emisorAddress: _emisorAddress,
-                          receptorName: _receptorName,
-                          receptorNif: _receptorNif,
-                          receptorAddress: _receptorAddress,
-                          subtotal: _subtotal,
-                          taxAmount: _taxAmount,
-                          total: _total,
-                        ),
+                      0 => ResumenTab(
+                        emisorName: inv.issuerName,
+                        emisorNif: inv.issuerNif,
+                        emisorAddress:
+                            inv.issuerAddress ??
+                            'Calle Gran Vía 28, 28010 Madrid',
+                        receptorName: inv.receiverName,
+                        receptorNif: inv.receiverNif,
+                        receptorAddress: inv.receiverAddress ?? '',
+                        subtotal: inv.subtotal,
+                        taxAmount: inv.taxAmount,
+                        total: inv.total,
+                        paymentTerm: inv.paymentTerm,
+                        paymentMethod: inv.paymentMethod,
+                        paymentIban: inv.paymentIban,
+                        dueDate: inv.dueDate != null
+                            ? dateFormat.format(inv.dueDate!)
+                            : null,
+                        notes: inv.notes,
+                        lines: inv.lines,
+                      ),
                       1 => const DatosEstructuradosTab(),
                       2 => const AdjuntosTab(),
                       3 => const ComplianceTab(),

@@ -1,9 +1,10 @@
-/// Sistema de spacing — escala de 4px con breathing room enterprise.
+/// Sistema de spacing — escala estricta de 4px.
 ///
 /// Principio: el espacio vacío comunica jerarquía y profesionalismo.
+/// Regla: TODOS los valores deben ser múltiplos de 4. Sin excepciones.
 abstract final class AppSpacing {
   static const double xs = 4;
-  static const double sm = 6;
+  static const double sm = 8;
   static const double md = 8;
   static const double lg = 12;
   static const double xl = 16;
@@ -36,5 +37,5 @@ abstract final class AppSpacing {
   static const double formGap = 24;
 
   /// Gap en botones agrupados
-  static const double buttonGap = 14;
+  static const double buttonGap = 12;
 }

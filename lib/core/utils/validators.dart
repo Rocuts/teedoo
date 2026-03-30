@@ -63,8 +63,7 @@ abstract final class Validators {
     var score = 0;
     if (value.length >= 8) score++;
     if (value.length >= 12) score++;
-    if (value.contains(RegExp(r'[A-Z]')) &&
-        value.contains(RegExp(r'[a-z]'))) {
+    if (value.contains(RegExp(r'[A-Z]')) && value.contains(RegExp(r'[a-z]'))) {
       score++;
     }
     if (value.contains(RegExp(r'[0-9]')) &&
@@ -198,18 +197,18 @@ enum PasswordStrength {
   veryStrong;
 
   String get label => switch (this) {
-        PasswordStrength.weak => 'Débil',
-        PasswordStrength.fair => 'Aceptable',
-        PasswordStrength.good => 'Buena',
-        PasswordStrength.strong => 'Fuerte',
-        PasswordStrength.veryStrong => 'Muy fuerte',
-      };
+    PasswordStrength.weak => 'Débil',
+    PasswordStrength.fair => 'Aceptable',
+    PasswordStrength.good => 'Buena',
+    PasswordStrength.strong => 'Fuerte',
+    PasswordStrength.veryStrong => 'Muy fuerte',
+  };
 
   double get normalizedScore => switch (this) {
-        PasswordStrength.weak => 0.0,
-        PasswordStrength.fair => 0.25,
-        PasswordStrength.good => 0.5,
-        PasswordStrength.strong => 0.75,
-        PasswordStrength.veryStrong => 1.0,
-      };
+    PasswordStrength.weak => 0.0,
+    PasswordStrength.fair => 0.25,
+    PasswordStrength.good => 0.5,
+    PasswordStrength.strong => 0.75,
+    PasswordStrength.veryStrong => 1.0,
+  };
 }

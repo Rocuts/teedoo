@@ -8,6 +8,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/glass_theme.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -107,7 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       backgroundColor: context.colors.bgPrimary,
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSpacing.s24),
           child: ClipRRect(
             borderRadius: AppRadius.lgAll,
             child: BackdropFilter(
@@ -150,7 +152,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s24,
+              vertical: AppSpacing.s32,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -159,42 +164,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 36,
-                      height: 36,
+                      width: AppSpacing.s36,
+                      height: AppSpacing.s36,
                       decoration: BoxDecoration(
                         color: context.colors.accentBlue,
                         borderRadius: AppRadius.smAll,
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         'T',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppTypography.logo.copyWith(color: Colors.white),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: AppSpacing.sm),
                     Text(
                       'TeDoo',
-                      style: TextStyle(
+                      style: AppTypography.h3.copyWith(
                         color: context.colors.textPrimary,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   'Facturacion electronica inteligente',
-                  style: TextStyle(
+                  style: AppTypography.bodySmall.copyWith(
                     color: context.colors.textSecondary,
-                    fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSpacing.s32),
 
                 // Form in a glass card
                 ClipRRect(
@@ -206,7 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(AppSpacing.s24),
                       decoration: BoxDecoration(
                         color: glass.cardFill,
                         borderRadius: AppRadius.lgAll,
@@ -227,7 +225,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildBrandingPanel(BuildContext context) {
     return Container(
       width: 380,
-      padding: const EdgeInsets.fromLTRB(40, 48, 40, 48),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s40,
+        AppSpacing.s48,
+        AppSpacing.s40,
+        AppSpacing.s48,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -242,48 +245,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: AppSpacing.s36,
+                height: AppSpacing.s36,
                 decoration: BoxDecoration(
                   color: context.colors.accentBlue,
                   borderRadius: AppRadius.smAll,
                 ),
                 alignment: Alignment.center,
-                child: const Text(
+                child: Text(
                   'T',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTypography.logo.copyWith(color: Colors.white),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 'TeDoo',
-                style: TextStyle(
+                style: AppTypography.h3.copyWith(
                   color: context.colors.textPrimary,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.s20),
           Text(
             'Facturacion electronica inteligente',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: context.colors.textSecondary,
-              fontSize: 14,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.s20),
           Text(
             'Gestiona tus facturas electronicas de forma segura, cumpliendo con la normativa vigente.',
-            style: TextStyle(
+            style: AppTypography.bodySmall.copyWith(
               color: context.colors.textTertiary,
-              fontSize: 13,
               height: 1.6,
             ),
           ),
@@ -295,7 +290,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildFormPanel(BuildContext context, AuthState authState) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s48,
+          vertical: AppSpacing.s32,
+        ),
         child: _buildFormContent(context, authState),
       ),
     );
@@ -308,18 +306,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       children: [
         Text(
           'Iniciar sesion',
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.h2.copyWith(color: context.colors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           'Ingresa tus credenciales para acceder',
-          style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
+          style: AppTypography.bodySmall.copyWith(
+            color: context.colors.textSecondary,
+          ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.s24),
 
         // Email
         TeeDooTextField(
@@ -328,7 +324,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           keyboardType: TextInputType.emailAddress,
           controller: _emailController,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.s24),
 
         // Password
         Column(
@@ -339,9 +335,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 Text(
                   'Contrasena',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                  style: AppTypography.captionMedium.copyWith(
                     color: context.colors.textSecondary,
                   ),
                 ),
@@ -349,15 +343,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onTap: () => context.go(RoutePaths.forgotPassword),
                   child: Text(
                     'Olvide mi contrasena',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTypography.caption.copyWith(
                       color: context.colors.accentBlue,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             TeeDooTextField(
               placeholder: '123456789',
               obscureText: true,
@@ -365,7 +358,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.s24),
 
         // Login button
         PrimaryButton(
@@ -373,18 +366,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           isExpanded: true,
           onPressed: authState.isLoading ? null : _handleLogin,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.s24),
 
         // Divider
         Row(
           children: [
             Expanded(child: Divider(color: context.colors.borderSubtle)),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Text(
                 'o continua con',
-                style: TextStyle(
-                  fontSize: 11,
+                style: AppTypography.captionSmall.copyWith(
                   color: context.colors.textTertiary,
                 ),
               ),
@@ -392,7 +384,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             Expanded(child: Divider(color: context.colors.borderSubtle)),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.s24),
 
         // Passkey button
         SizedBox(
@@ -407,9 +399,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             label: Text(
               'Continuar con passkey',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+              style: AppTypography.bodySmallMedium.copyWith(
                 color: context.colors.textSecondary,
               ),
             ),

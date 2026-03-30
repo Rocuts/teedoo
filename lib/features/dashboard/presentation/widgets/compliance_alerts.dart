@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 /// Datos de una alerta de compliance.
 class ComplianceAlertData {
@@ -27,41 +30,38 @@ class ComplianceAlertData {
 class ComplianceAlertItem extends StatelessWidget {
   final ComplianceAlertData data;
 
-  const ComplianceAlertItem({
-    super.key,
-    required this.data,
-  });
+  const ComplianceAlertItem({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.lg,
+      ),
       decoration: BoxDecoration(
         color: data.bgColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.mdAll,
       ),
       child: Row(
         children: [
           Icon(data.icon, size: 18, color: data.iconColor),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data.title,
-                  style: TextStyle(
+                  style: AppTypography.bodySmallMedium.copyWith(
                     color: context.colors.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   data.subtitle,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: context.colors.textSecondary,
-                    fontSize: 12,
                   ),
                 ),
               ],
@@ -80,10 +80,7 @@ class ComplianceAlertItem extends StatelessWidget {
 class ComplianceAlertsList extends StatelessWidget {
   final List<ComplianceAlertData> alerts;
 
-  const ComplianceAlertsList({
-    super.key,
-    required this.alerts,
-  });
+  const ComplianceAlertsList({super.key, required this.alerts});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +88,7 @@ class ComplianceAlertsList extends StatelessWidget {
       children: [
         for (int i = 0; i < alerts.length; i++) ...[
           ComplianceAlertItem(data: alerts[i]),
-          if (i < alerts.length - 1) const SizedBox(height: 10),
+          if (i < alerts.length - 1) const SizedBox(height: AppSpacing.sm),
         ],
       ],
     );

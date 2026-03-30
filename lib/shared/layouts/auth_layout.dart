@@ -27,10 +27,7 @@ class AuthLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = wrapInCard
-        ? _GlassAuthCard(
-            width: cardWidth,
-            child: child,
-          )
+        ? _GlassAuthCard(width: cardWidth, child: child)
         : child;
 
     return Scaffold(
@@ -45,10 +42,7 @@ class _GlassAuthCard extends StatelessWidget {
   final Widget child;
   final double? width;
 
-  const _GlassAuthCard({
-    required this.child,
-    this.width,
-  });
+  const _GlassAuthCard({required this.child, this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +61,7 @@ class _GlassAuthCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: glass.cardFill,
               borderRadius: AppRadius.cardAll,
-              border: Border.all(
-                color: glass.glassBorder,
-              ),
+              border: Border.all(color: glass.glassBorder),
             ),
             padding: const EdgeInsets.all(32),
             child: child,

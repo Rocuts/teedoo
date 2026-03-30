@@ -35,14 +35,16 @@ class _DropzoneAreaState extends State<DropzoneArea> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
           decoration: BoxDecoration(
-            color: _isHovered 
-                ? context.colors.accentBlue.withValues(alpha: 0.05) 
+            color: _isHovered
+                ? context.colors.accentBlue.withValues(alpha: 0.05)
                 : context.colors.bgInput.withValues(alpha: 0.5),
             borderRadius: AppRadius.lgAll,
             border: Border.all(
-              color: _isHovered ? context.colors.accentBlue : context.colors.borderSubtle,
+              color: _isHovered
+                  ? context.colors.accentBlue
+                  : context.colors.borderSubtle,
               width: 1.5,
-              style: BorderStyle.solid, 
+              style: BorderStyle.solid,
             ),
           ),
           child: Column(
@@ -53,34 +55,40 @@ class _DropzoneAreaState extends State<DropzoneArea> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _isHovered 
-                      ? context.colors.accentBlue.withValues(alpha: 0.1) 
+                  color: _isHovered
+                      ? context.colors.accentBlue.withValues(alpha: 0.1)
                       : context.colors.bgSurface,
                   shape: BoxShape.circle,
-                  boxShadow: _isHovered 
+                  boxShadow: _isHovered
                       ? [
                           BoxShadow(
-                            color: context.colors.accentBlue.withValues(alpha: 0.2),
+                            color: context.colors.accentBlue.withValues(
+                              alpha: 0.2,
+                            ),
                             blurRadius: 12,
                             spreadRadius: 2,
-                          )
+                          ),
                         ]
                       : [],
                 ),
                 child: Icon(
                   LucideIcons.uploadCloud,
                   size: 32,
-                  color: _isHovered ? context.colors.accentBlue : context.colors.textSecondary,
+                  color: _isHovered
+                      ? context.colors.accentBlue
+                      : context.colors.textSecondary,
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Text
               Text(
                 widget.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: _isHovered ? context.colors.accentBlue : context.colors.textPrimary,
+                  color: _isHovered
+                      ? context.colors.accentBlue
+                      : context.colors.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),

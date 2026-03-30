@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../data/models/audit_event.dart';
@@ -11,10 +13,7 @@ import '../../data/models/audit_event.dart';
 class AuditTimeline extends StatelessWidget {
   final List<AuditEvent> events;
 
-  const AuditTimeline({
-    super.key,
-    required this.events,
-  });
+  const AuditTimeline({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -23,22 +22,22 @@ class AuditTimeline extends StatelessWidget {
         title: 'Timeline de eventos',
         trailing: Text(
           'Hoy',
-          style: TextStyle(
-            fontSize: 12,
+          style: AppTypography.captionMedium.copyWith(
             color: context.colors.accentBlue,
-            fontWeight: FontWeight.w500,
           ),
         ),
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.xl,
+        ),
         child: Column(
           children: [
             for (int i = 0; i < events.length; i++)
-              _TimelineEvent(
-                event: events[i],
-                isLast: i == events.length - 1,
-              ),
+              _TimelineEvent(event: events[i], isLast: i == events.length - 1),
           ],
         ),
       ),
@@ -50,34 +49,31 @@ class _TimelineEvent extends StatelessWidget {
   final AuditEvent event;
   final bool isLast;
 
-  const _TimelineEvent({
-    required this.event,
-    required this.isLast,
-  });
+  const _TimelineEvent({required this.event, required this.isLast});
 
   Color _dotColor(BuildContext context) => switch (event.type) {
-        AuditEventType.create => context.colors.accentBlue,
-        AuditEventType.complianceCheck => context.colors.aiPurple,
-        AuditEventType.send => context.colors.statusSuccess,
-        AuditEventType.update => context.colors.statusWarning,
-        AuditEventType.export => context.colors.accentTeal,
-        AuditEventType.login => context.colors.statusInfo,
-        AuditEventType.delete => context.colors.statusError,
-      };
+    AuditEventType.create => context.colors.accentBlue,
+    AuditEventType.complianceCheck => context.colors.aiPurple,
+    AuditEventType.send => context.colors.statusSuccess,
+    AuditEventType.update => context.colors.statusWarning,
+    AuditEventType.export => context.colors.accentTeal,
+    AuditEventType.login => context.colors.statusInfo,
+    AuditEventType.delete => context.colors.statusError,
+  };
 
   StatusType? get _badgeType => switch (event.type) {
-        AuditEventType.create => StatusType.info,
-        AuditEventType.complianceCheck => StatusType.warning,
-        AuditEventType.send => StatusType.success,
-        _ => null,
-      };
+    AuditEventType.create => StatusType.info,
+    AuditEventType.complianceCheck => StatusType.warning,
+    AuditEventType.send => StatusType.success,
+    _ => null,
+  };
 
   String? get _badgeLabel => switch (event.type) {
-        AuditEventType.create => 'Info',
-        AuditEventType.complianceCheck => 'Warnings',
-        AuditEventType.send => 'Enviado',
-        _ => null,
-      };
+    AuditEventType.create => 'Info',
+    AuditEventType.complianceCheck => 'Warnings',
+    AuditEventType.send => 'Enviado',
+    _ => null,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +83,10 @@ class _TimelineEvent extends StatelessWidget {
         children: [
           // Timeline column (dot + line)
           SizedBox(
-            width: 20,
+            width: AppSpacing.s20,
             child: Column(
               children: [
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacing.xs),
                 Container(
                   width: 8,
                   height: 8,
@@ -109,37 +105,31 @@ class _TimelineEvent extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: AppSpacing.sm),
           // Content
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 18),
+              padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.s20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     event.title,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                    style: AppTypography.bodySmallMedium.copyWith(
                       color: context.colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Row(
                     children: [
                       if (_badgeType != null && _badgeLabel != null) ...[
-                        StatusBadge(
-                          label: _badgeLabel!,
-                          type: _badgeType!,
-                        ),
-                        const SizedBox(width: 8),
+                        StatusBadge(label: _badgeLabel!, type: _badgeType!),
+                        const SizedBox(width: AppSpacing.sm),
                       ],
                       Expanded(
                         child: Text(
                           _buildSubtext(),
-                          style: TextStyle(
-                            fontSize: 11,
+                          style: AppTypography.captionSmall.copyWith(
                             color: context.colors.textTertiary,
                           ),
                           maxLines: 1,
@@ -176,8 +166,18 @@ class _TimelineEvent extends StatelessWidget {
     }
 
     const months = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+      'Ene',
+      'Feb',
+      'Mar',
+      'Abr',
+      'May',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dic',
     ];
     final h = dt.hour.toString().padLeft(2, '0');
     final m = dt.minute.toString().padLeft(2, '0');

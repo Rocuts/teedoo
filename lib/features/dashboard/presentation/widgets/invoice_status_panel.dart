@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/mock/mock_data.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
+import '../../../invoices/data/models/invoice_model.dart';
 
 /// Panel de estado de facturas — distribución actual.
 ///
@@ -12,12 +17,36 @@ class InvoiceStatusPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final all = MockData.invoices;
+    final total = all.length;
+
+    final accepted = all
+        .where((i) => i.status == InvoiceStatus.accepted)
+        .length;
+    final pending = all
+        .where(
+          (i) =>
+              i.status == InvoiceStatus.pendingReview ||
+              i.status == InvoiceStatus.sent ||
+              i.status == InvoiceStatus.readyToSend,
+        )
+        .length;
+    final overdue = all.where((i) => i.status == InvoiceStatus.rejected).length;
+    final drafts = all
+        .where(
+          (i) =>
+              i.status == InvoiceStatus.draft ||
+              i.status == InvoiceStatus.cancelled,
+        )
+        .length;
+
+    int pct(int count) => total == 0 ? 0 : (count * 100 / total).round();
 
     final items = [
-      _StatusItem('Pagadas', 156, 72, colors.statusSuccess),
-      _StatusItem('Pendientes', 42, 19, colors.statusWarning),
-      _StatusItem('Vencidas', 12, 6, colors.statusError),
-      _StatusItem('Canceladas', 8, 4, colors.textTertiary),
+      _StatusItem('Aceptadas', accepted, pct(accepted), colors.statusSuccess),
+      _StatusItem('Pendientes', pending, pct(pending), colors.statusWarning),
+      _StatusItem('Rechazadas', overdue, pct(overdue), colors.statusError),
+      _StatusItem('Borradores', drafts, pct(drafts), colors.textTertiary),
     ];
 
     return GlassCard(
@@ -26,16 +55,21 @@ class InvoiceStatusPanel extends StatelessWidget {
         subtitle: 'Distribución actual',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Column(
           children: [
             // ── Bar visual ──
             ClipRRect(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: AppRadius.smAll,
               child: SizedBox(
-                height: 32,
+                height: AppSpacing.s32,
                 child: Row(
-                  children: items.map((item) {
+                  children: items.where((item) => item.percent > 0).map((item) {
                     return Expanded(
                       flex: item.percent,
                       child: Container(color: item.color),
@@ -44,49 +78,48 @@ class InvoiceStatusPanel extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.s20),
             // ── Legend items ──
-            ...items.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Row(
-                children: [
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: item.color,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      item.label,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 13,
+            ...items.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: item.color,
+                        shape: BoxShape.circle,
                       ),
                     ),
-                  ),
-                  Text(
-                    '${item.count}',
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        item.label,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '(${item.percent}%)',
-                    style: TextStyle(
-                      color: colors.textTertiary,
-                      fontSize: 13,
+                    Text(
+                      '${item.count}',
+                      style: AppTypography.h4.copyWith(
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      '(${item.percent}%)',
+                      style: AppTypography.bodySmall.copyWith(
+                        color: colors.textTertiary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ),
       ),

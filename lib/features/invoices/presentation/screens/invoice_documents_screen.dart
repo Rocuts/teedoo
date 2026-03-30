@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
@@ -78,38 +80,47 @@ class _InvoiceDocumentsScreenState extends State<InvoiceDocumentsScreen> {
                   // ── Header ──
                   Text(
                     'Documentos por Facturas',
-                    style: TextStyle(
+                    style: AppTypography.h2.copyWith(
                       color: context.colors.textPrimary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     'Central de archivos, contratos y evidencias asociadas a tus facturas',
-                    style: TextStyle(
+                    style: AppTypography.bodySmall.copyWith(
                       color: context.colors.textSecondary,
-                      fontSize: 13,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.s24),
 
                   // ── Subida ──
                   DropzoneArea(
                     onUploadTap: () {
-                      GlassToast.show(context, message: 'Abriendo explorador de archivos...', type: StatusType.info);
+                      GlassToast.show(
+                        context,
+                        message: 'Abriendo explorador de archivos...',
+                        type: StatusType.info,
+                      );
                     },
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: AppSpacing.s32),
 
                   // ── Galería Central ──
                   DocumentGridView(
                     documents: _mockDocuments,
                     onDownloadTap: (doc) {
-                      GlassToast.show(context, message: 'Descargando ${doc.name}...', type: StatusType.success);
+                      GlassToast.show(
+                        context,
+                        message: 'Descargando ${doc.name}...',
+                        type: StatusType.success,
+                      );
                     },
                     onDeleteTap: (doc) {
-                      GlassToast.show(context, message: 'Eliminando ${doc.name}...', type: StatusType.error);
+                      GlassToast.show(
+                        context,
+                        message: 'Eliminando ${doc.name}...',
+                        type: StatusType.error,
+                      );
                     },
                     onUploadTap: () {},
                   ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
 
 /// KPI card widget extraído del Dashboard.
@@ -34,31 +36,25 @@ class KpiCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: AppTypography.h1.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               subtitle,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: context.colors.textSecondary,
-                fontSize: 12,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               children: [
                 Icon(trendIcon, size: 14, color: trendColor),
-                const SizedBox(width: 6),
+                const SizedBox(width: AppSpacing.sm),
                 Text(
                   trend,
-                  style: TextStyle(
-                    color: trendColor,
-                    fontSize: 12,
-                  ),
+                  style: AppTypography.caption.copyWith(color: trendColor),
                 ),
               ],
             ),

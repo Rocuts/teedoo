@@ -3,6 +3,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
 
 /// Datos de una fila de factura para [InvoiceTable].
@@ -51,7 +54,10 @@ class InvoiceTable extends StatelessWidget {
         // Search bar
         if (showSearch)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.lg,
+            ),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: context.colors.borderSubtle),
@@ -59,26 +65,41 @@ class InvoiceTable extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(LucideIcons.search, size: 16, color: context.colors.textTertiary),
+                Icon(
+                  LucideIcons.search,
+                  size: 16,
+                  color: context.colors.textTertiary,
+                ),
                 const SizedBox(width: 12),
                 Text(
                   'Buscar facturas...',
-                  style: TextStyle(color: context.colors.textTertiary, fontSize: 13),
+                  style: AppTypography.bodySmall.copyWith(
+                    color: context.colors.textTertiary,
+                  ),
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.sm,
+                  ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: AppRadius.mdAll,
                     border: Border.all(color: context.colors.borderSubtle),
                   ),
                   child: Row(
                     children: [
-                      Icon(LucideIcons.filter, size: 14, color: context.colors.textTertiary),
+                      Icon(
+                        LucideIcons.filter,
+                        size: 14,
+                        color: context.colors.textTertiary,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         'Filtros',
-                        style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                        style: AppTypography.caption.copyWith(
+                          color: context.colors.textSecondary,
+                        ),
                       ),
                     ],
                   ),
@@ -89,7 +110,10 @@ class InvoiceTable extends StatelessWidget {
 
         // Table header
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.sm,
+          ),
           color: context.colors.bgSurface,
           child: Row(
             children: [
@@ -98,20 +122,16 @@ class InvoiceTable extends StatelessWidget {
                 width: 140,
                 child: Text(
                   'Nº Factura',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
               Expanded(
                 child: Text(
                   'Cliente',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -119,10 +139,8 @@ class InvoiceTable extends StatelessWidget {
                 width: 100,
                 child: Text(
                   'Monto',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -130,10 +148,8 @@ class InvoiceTable extends StatelessWidget {
                 width: 100,
                 child: Text(
                   'Estado',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -141,10 +157,8 @@ class InvoiceTable extends StatelessWidget {
                 width: 100,
                 child: Text(
                   'Compliance',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -152,10 +166,8 @@ class InvoiceTable extends StatelessWidget {
                 width: 90,
                 child: Text(
                   'Fecha',
-                  style: TextStyle(
+                  style: AppTypography.captionSmallBold.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -174,7 +186,10 @@ class InvoiceTable extends StatelessWidget {
         // Pagination
         if (showPagination)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.lg,
+            ),
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(color: context.colors.borderSubtle),
@@ -184,12 +199,17 @@ class InvoiceTable extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  paginationText ?? 'Mostrando 1-${rows.length} de ${rows.length} facturas',
-                  style: TextStyle(color: context.colors.textTertiary, fontSize: 12),
+                  paginationText ??
+                      'Mostrando 1-${rows.length} de ${rows.length} facturas',
+                  style: AppTypography.caption.copyWith(
+                    color: context.colors.textTertiary,
+                  ),
                 ),
                 Text(
                   'Anterior  ·  Siguiente',
-                  style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                  style: AppTypography.caption.copyWith(
+                    color: context.colors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -205,7 +225,9 @@ class InvoiceTable extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
+          border: Border(
+            bottom: BorderSide(color: context.colors.borderSubtle),
+          ),
         ),
         child: Row(
           children: [
@@ -214,31 +236,36 @@ class InvoiceTable extends StatelessWidget {
               width: 140,
               child: Text(
                 row.id,
-                style: TextStyle(
+                style: AppTypography.bodySmallMedium.copyWith(
                   color: context.colors.accentBlue,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             Expanded(
               child: Text(
                 row.client,
-                style: TextStyle(color: context.colors.textPrimary, fontSize: 13),
+                style: AppTypography.bodySmall.copyWith(
+                  color: context.colors.textPrimary,
+                ),
               ),
             ),
             SizedBox(
               width: 100,
               child: Text(
                 row.amount,
-                style: TextStyle(color: context.colors.textPrimary, fontSize: 13),
+                style: AppTypography.bodySmall.copyWith(
+                  color: context.colors.textPrimary,
+                ),
               ),
             ),
             SizedBox(
               width: 100,
               child: Text(
                 row.statusLabel,
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                style: TextStyle(
+                  color: context.colors.textSecondary,
+                  fontSize: 12,
+                ),
               ),
             ),
             SizedBox(
@@ -249,7 +276,10 @@ class InvoiceTable extends StatelessWidget {
               width: 90,
               child: Text(
                 row.date,
-                style: TextStyle(color: context.colors.textTertiary, fontSize: 12),
+                style: TextStyle(
+                  color: context.colors.textTertiary,
+                  fontSize: 12,
+                ),
               ),
             ),
           ],

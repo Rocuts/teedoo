@@ -25,9 +25,9 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
   /// Glass con bordes morado sutil, blur fuerte para efecto premium
   static const dark = GlassTheme(
     blurSigma: 40.0,
-    cardFill: Color(0x441C2128),       // dark surface semi
-    glassFill: Color(0x331C2128),      // glass dark
-    glassBorder: Color(0x338B5CF6),    // violet-500 tinted border
+    cardFill: Color(0x441C2128), // dark surface semi
+    glassFill: Color(0x331C2128), // glass dark
+    glassBorder: Color(0x338B5CF6), // violet-500 tinted border
     glassHover: Color(0x552D333B),
     cardRadius: 16.0,
   );
@@ -36,13 +36,12 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
   /// Cards con sombra sutil y bordes violet-200 en vez de glassmorphism
   static const light = GlassTheme(
     blurSigma: 16.0,
-    cardFill: Color(0xEEFFFFFF),       // card casi opaca
-    glassFill: Color(0x99F5F3FF),      // glass violet-50 tinted
-    glassBorder: Color(0x88E9D5FF),    // violet-200 semi
-    glassHover: Color(0x88F3E8FF),     // violet-100 hover
+    cardFill: Color(0xEEFFFFFF), // card casi opaca
+    glassFill: Color(0x99F5F3FF), // glass violet-50 tinted
+    glassBorder: Color(0x88E9D5FF), // violet-200 semi
+    glassHover: Color(0x88F3E8FF), // violet-100 hover
     cardRadius: 16.0,
   );
-
 
   @override
   GlassTheme copyWith({

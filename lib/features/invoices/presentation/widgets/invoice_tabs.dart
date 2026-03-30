@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 /// Datos de un tab individual.
 class InvoiceTabItem {
   final String label;
   final Widget? icon;
 
-  const InvoiceTabItem({
-    required this.label,
-    this.icon,
-  });
+  const InvoiceTabItem({required this.label, this.icon});
 }
 
 /// Tab bar reutilizable para facturas.
@@ -34,9 +33,7 @@ class InvoiceTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: context.colors.borderSubtle),
-        ),
+        border: Border(bottom: BorderSide(color: context.colors.borderSubtle)),
       ),
       child: Row(
         children: [
@@ -47,36 +44,51 @@ class InvoiceTabs extends StatelessWidget {
     );
   }
 
-  Widget _buildTab(BuildContext context, InvoiceTabItem tab, {required bool isActive, required int index}) {
+  Widget _buildTab(
+    BuildContext context,
+    InvoiceTabItem tab, {
+    required bool isActive,
+    required int index,
+  }) {
     return GestureDetector(
       onTap: onTabChanged != null ? () => onTabChanged!(index) : null,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.sm,
+          ),
           child: Container(
             decoration: BoxDecoration(
               border: isActive
                   ? Border(
-                      bottom: BorderSide(color: context.colors.accentBlue, width: 2),
+                      bottom: BorderSide(
+                        color: context.colors.accentBlue,
+                        width: 2,
+                      ),
                     )
                   : null,
             ),
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (tab.icon != null) ...[
                   tab.icon!,
-                  const SizedBox(width: 6),
+                  const SizedBox(width: AppSpacing.sm),
                 ],
                 Text(
                   tab.label,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-                    color: isActive ? context.colors.accentBlue : context.colors.textSecondary,
-                  ),
+                  style:
+                      (isActive
+                              ? AppTypography.bodySmallMedium
+                              : AppTypography.bodySmall)
+                          .copyWith(
+                            color: isActive
+                                ? context.colors.accentBlue
+                                : context.colors.textSecondary,
+                          ),
                 ),
               ],
             ),

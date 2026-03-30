@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../data/models/regulation.dart';
 
 /// Selector de regulaciones con radio buttons estilizados.
@@ -24,7 +26,7 @@ class RegulationSelector extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < regulations.length; i++) ...[
-          if (i > 0) const SizedBox(height: 10),
+          if (i > 0) const SizedBox(height: AppSpacing.sm),
           _RegulationOption(
             regulation: regulations[i],
             isSelected: regulations[i].id == selectedId,
@@ -63,7 +65,10 @@ class _RegulationOption extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.lg,
+            ),
             decoration: BoxDecoration(
               color: isSelected
                   ? context.colors.accentBlueSubtle
@@ -103,7 +108,7 @@ class _RegulationOption extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.lg),
                 // Flag placeholder
                 Container(
                   width: 24,
@@ -126,7 +131,7 @@ class _RegulationOption extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: AppSpacing.sm),
                 // Text column
                 Expanded(
                   child: Column(
@@ -134,9 +139,7 @@ class _RegulationOption extends StatelessWidget {
                     children: [
                       Text(
                         '${regulation.country} \u2014 ${regulation.name}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                        style: AppTypography.bodySmallMedium.copyWith(
                           color: context.colors.textPrimary,
                         ),
                       ),
@@ -144,16 +147,14 @@ class _RegulationOption extends StatelessWidget {
                       if (regulation.isActive)
                         Text(
                           '${regulation.version} (activo)',
-                          style: TextStyle(
-                            fontSize: 11,
+                          style: AppTypography.captionSmall.copyWith(
                             color: context.colors.accentBlue,
                           ),
                         )
                       else
                         Text(
                           'Coming soon',
-                          style: TextStyle(
-                            fontSize: 11,
+                          style: AppTypography.captionSmall.copyWith(
                             color: context.colors.textTertiary,
                           ),
                         ),

@@ -19,6 +19,10 @@ abstract final class RouteNames {
   static const compliance = 'compliance';
   static const complianceResults = 'compliance-results';
 
+  // ── Fiscal ──
+  static const fiscal = 'fiscal';
+  static const optimizationDetail = 'optimization-detail';
+
   // ── Audit ──
   static const audit = 'audit';
 
@@ -46,6 +50,10 @@ abstract final class RoutePaths {
   // ── Compliance ──
   static const compliance = '/compliance';
   static String complianceResults(String id) => '/compliance/results/$id';
+
+  // ── Fiscal ──
+  static const fiscal = '/fiscal';
+  static String optimizationDetail(String id) => '/fiscal/optimizations/$id';
 
   // ── Audit ──
   static const audit = '/audit';

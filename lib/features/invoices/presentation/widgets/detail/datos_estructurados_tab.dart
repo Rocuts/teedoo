@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_radius.dart';
+import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 
 class DatosEstructuradosTab extends StatelessWidget {
@@ -15,10 +17,15 @@ class DatosEstructuradosTab extends StatelessWidget {
         subtitle: 'Representación JSON de la factura según FacturaE',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           decoration: BoxDecoration(
             color: context.colors.bgInput,
             borderRadius: AppRadius.mdAll,
@@ -53,9 +60,8 @@ class DatosEstructuradosTab extends StatelessWidget {
             '    "total": 4114.00\n'
             '  }\n'
             '}',
-            style: TextStyle(
+            style: AppTypography.caption.copyWith(
               fontFamily: 'monospace',
-              fontSize: 12,
               color: context.colors.textSecondary,
               height: 1.6,
             ),

@@ -7,17 +7,14 @@ class OrbitVisualizer extends StatefulWidget {
   final AiVoiceState state;
   final double size;
 
-  const OrbitVisualizer({
-    super.key,
-    required this.state,
-    this.size = 64.0,
-  });
+  const OrbitVisualizer({super.key, required this.state, this.size = 64.0});
 
   @override
   State<OrbitVisualizer> createState() => _OrbitVisualizerState();
 }
 
-class _OrbitVisualizerState extends State<OrbitVisualizer> with SingleTickerProviderStateMixin {
+class _OrbitVisualizerState extends State<OrbitVisualizer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -100,10 +97,7 @@ class _OrbitPainter extends CustomPainter {
 
     final corePaint = Paint()
       ..shader = RadialGradient(
-        colors: [
-          coreColor,
-          colors.bgSurface.withValues(alpha: 0.8),
-        ],
+        colors: [coreColor, colors.bgSurface.withValues(alpha: 0.8)],
         stops: const [0.3, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: radius * 0.8));
 
@@ -167,11 +161,7 @@ class _OrbitPainter extends CustomPainter {
     // Rotating arc
     final paint = Paint()
       ..shader = SweepGradient(
-        colors: [
-          Colors.transparent,
-          colors.aiPurple,
-          Colors.transparent,
-        ],
+        colors: [Colors.transparent, colors.aiPurple, Colors.transparent],
         stops: const [0.0, 0.5, 1.0],
         transform: GradientRotation(animationValue * 2 * pi),
       ).createShader(Rect.fromCircle(center: center, radius: radius))
@@ -199,7 +189,9 @@ class _OrbitPainter extends CustomPainter {
     for (int i = 0; i < numSpikes; i++) {
       final angle = (i * 2 * pi) / numSpikes;
       // Fast jittery movement for speaking
-      final noise = sin(angle * 10 + animationValue * 40) * cos(angle * 5 - animationValue * 20);
+      final noise =
+          sin(angle * 10 + animationValue * 40) *
+          cos(angle * 5 - animationValue * 20);
       final spikeLength = radius * 0.6 + (radius * 0.4 * noise.abs());
 
       final px = center.dx + cos(angle) * spikeLength;
@@ -236,6 +228,7 @@ class _OrbitPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _OrbitPainter oldDelegate) {
-    return oldDelegate.animationValue != animationValue || oldDelegate.state != state;
+    return oldDelegate.animationValue != animationValue ||
+        oldDelegate.state != state;
   }
 }

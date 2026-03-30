@@ -14,17 +14,17 @@ enum AppThemeMode { system, light, dark }
 abstract final class AppTheme {
   /// Tema oscuro (por defecto del diseño)
   static ThemeData get dark => _build(
-        colors: AppColorsTheme.dark,
-        glass: GlassTheme.dark,
-        brightness: Brightness.dark,
-      );
+    colors: AppColorsTheme.dark,
+    glass: GlassTheme.dark,
+    brightness: Brightness.dark,
+  );
 
   /// Tema claro (blanco)
   static ThemeData get light => _build(
-        colors: AppColorsTheme.light,
-        glass: GlassTheme.light,
-        brightness: Brightness.light,
-      );
+    colors: AppColorsTheme.light,
+    glass: GlassTheme.light,
+    brightness: Brightness.light,
+  );
 
   /// Devuelve el ThemeData correspondiente al modo dado.
   static ThemeData fromMode(AppThemeMode mode) {
@@ -52,22 +52,20 @@ abstract final class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       scaffoldBackgroundColor: colors.bgPrimary,
-      colorScheme: (isDark
-              ? const ColorScheme.dark()
-              : const ColorScheme.light())
-          .copyWith(
-        primary: colors.accentBlue,
-        onPrimary: colors.textOnAccent,
-        secondary: colors.accentTeal,
-        surface: colors.bgSurface,
-        onSurface: colors.textPrimary,
-        error: colors.statusError,
-        outline: colors.borderSubtle,
-      ),
-      textTheme: GoogleFonts.interTextTheme(baseTextTheme).apply(
-        bodyColor: colors.textPrimary,
-        displayColor: colors.textPrimary,
-      ),
+      colorScheme:
+          (isDark ? const ColorScheme.dark() : const ColorScheme.light())
+              .copyWith(
+                primary: colors.accentBlue,
+                onPrimary: colors.textOnAccent,
+                secondary: colors.accentTeal,
+                surface: colors.bgSurface,
+                onSurface: colors.textPrimary,
+                error: colors.statusError,
+                outline: colors.borderSubtle,
+              ),
+      textTheme: GoogleFonts.interTextTheme(
+        baseTextTheme,
+      ).apply(bodyColor: colors.textPrimary, displayColor: colors.textPrimary),
       dividerColor: colors.borderSubtle,
       dividerTheme: DividerThemeData(
         color: colors.borderSubtle,
@@ -93,10 +91,7 @@ abstract final class AppTheme {
           borderRadius: AppRadius.inputAll,
           borderSide: BorderSide(color: colors.accentBlue, width: 1.5),
         ),
-        hintStyle: TextStyle(
-          color: colors.textTertiary,
-          fontSize: 13,
-        ),
+        hintStyle: TextStyle(color: colors.textTertiary, fontSize: 13),
         labelStyle: TextStyle(
           color: colors.textSecondary,
           fontSize: 12,
@@ -109,9 +104,7 @@ abstract final class AppTheme {
           backgroundColor: colors.accentBlue,
           foregroundColor: colors.textOnAccent,
           minimumSize: const Size(0, 44),
-          shape: RoundedRectangleBorder(
-            borderRadius: AppRadius.buttonAll,
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           textStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -124,22 +117,14 @@ abstract final class AppTheme {
           foregroundColor: colors.textPrimary,
           minimumSize: const Size(0, 44),
           side: BorderSide(color: colors.borderSubtle),
-          shape: RoundedRectangleBorder(
-            borderRadius: AppRadius.buttonAll,
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: colors.accentBlue,
-          textStyle: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
+          textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         ),
       ),
       tooltipTheme: TooltipThemeData(
@@ -148,15 +133,9 @@ abstract final class AppTheme {
           borderRadius: AppRadius.smAll,
           border: Border.all(color: colors.borderSubtle),
         ),
-        textStyle: TextStyle(
-          color: colors.textPrimary,
-          fontSize: 12,
-        ),
+        textStyle: TextStyle(color: colors.textPrimary, fontSize: 12),
       ),
-      extensions: [
-        colors,
-        glass,
-      ],
+      extensions: [colors, glass],
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/responsive/responsive.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/badges/status_badge.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -29,17 +31,14 @@ class UsersTab extends StatelessWidget {
             children: [
               Text(
                 'Gesti\u00f3n de usuarios y roles',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.h4.copyWith(
                   color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
                 'Configura los permisos de acceso de tu equipo',
-                style: TextStyle(
-                  fontSize: 13,
+                style: AppTypography.bodySmall.copyWith(
                   color: context.colors.textSecondary,
                 ),
               ),
@@ -48,7 +47,11 @@ class UsersTab extends StatelessWidget {
                 label: 'Invitar usuario',
                 icon: LucideIcons.userPlus,
                 onPressed: () {
-                  GlassToast.show(context, message: 'Abriendo panel de invitaci\u00f3n de usuarios...', type: StatusType.info);
+                  GlassToast.show(
+                    context,
+                    message: 'Abriendo panel de invitaci\u00f3n de usuarios...',
+                    type: StatusType.info,
+                  );
                 },
               ),
             ],
@@ -82,7 +85,11 @@ class UsersTab extends StatelessWidget {
                 label: 'Invitar usuario',
                 icon: LucideIcons.userPlus,
                 onPressed: () {
-                  GlassToast.show(context, message: 'Abriendo panel de invitaci\u00f3n de usuarios...', type: StatusType.info);
+                  GlassToast.show(
+                    context,
+                    message: 'Abriendo panel de invitaci\u00f3n de usuarios...',
+                    type: StatusType.info,
+                  );
                 },
               ),
             ],
@@ -107,7 +114,9 @@ class UsersTab extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: context.colors.borderSubtle),
+                          bottom: BorderSide(
+                            color: context.colors.borderSubtle,
+                          ),
                         ),
                       ),
                       child: Row(
@@ -116,9 +125,7 @@ class UsersTab extends StatelessWidget {
                             flex: 2,
                             child: Text(
                               'Nombre',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                              style: AppTypography.captionSmallBold.copyWith(
                                 color: context.colors.textTertiary,
                               ),
                             ),
@@ -127,9 +134,7 @@ class UsersTab extends StatelessWidget {
                             flex: 3,
                             child: Text(
                               'Email',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                              style: AppTypography.captionSmallBold.copyWith(
                                 color: context.colors.textTertiary,
                               ),
                             ),
@@ -138,9 +143,7 @@ class UsersTab extends StatelessWidget {
                             width: 120,
                             child: Text(
                               'Rol',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                              style: AppTypography.captionSmallBold.copyWith(
                                 color: context.colors.textTertiary,
                               ),
                             ),
@@ -149,9 +152,7 @@ class UsersTab extends StatelessWidget {
                             width: 100,
                             child: Text(
                               'Estado',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                              style: AppTypography.captionSmallBold.copyWith(
                                 color: context.colors.textTertiary,
                               ),
                             ),
@@ -160,9 +161,7 @@ class UsersTab extends StatelessWidget {
                             width: 80,
                             child: Text(
                               'Acciones',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                              style: AppTypography.captionSmallBold.copyWith(
                                 color: context.colors.textTertiary,
                               ),
                             ),
@@ -172,21 +171,24 @@ class UsersTab extends StatelessWidget {
                     ),
 
                     // Rows
-                    _buildUserRow(context,
+                    _buildUserRow(
+                      context,
                       name: 'Johan Rocuts',
                       email: 'johan@teedoo.es',
                       role: 'Admin',
                       status: StatusType.success,
                       statusLabel: 'Activo',
                     ),
-                    _buildUserRow(context,
+                    _buildUserRow(
+                      context,
                       name: 'Mar\u00eda Garc\u00eda',
                       email: 'maria.garcia@teedoo.es',
                       role: 'Editor',
                       status: StatusType.success,
                       statusLabel: 'Activo',
                     ),
-                    _buildUserRow(context,
+                    _buildUserRow(
+                      context,
                       name: 'Carlos L\u00f3pez',
                       email: 'carlos.lopez@teedoo.es',
                       role: 'Viewer',
@@ -204,7 +206,8 @@ class UsersTab extends StatelessWidget {
     );
   }
 
-  Widget _buildUserRow(BuildContext context, {
+  Widget _buildUserRow(
+    BuildContext context, {
     required String name,
     required String email,
     required String role,
@@ -216,9 +219,7 @@ class UsersTab extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
         border: showBorder
-            ? Border(
-                bottom: BorderSide(color: context.colors.borderSubtle),
-              )
+            ? Border(bottom: BorderSide(color: context.colors.borderSubtle))
             : null,
       ),
       child: Row(
@@ -227,9 +228,7 @@ class UsersTab extends StatelessWidget {
             flex: 2,
             child: Text(
               name,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+              style: AppTypography.bodySmallMedium.copyWith(
                 color: context.colors.textPrimary,
               ),
             ),
@@ -238,8 +237,7 @@ class UsersTab extends StatelessWidget {
             flex: 3,
             child: Text(
               email,
-              style: TextStyle(
-                fontSize: 13,
+              style: AppTypography.bodySmall.copyWith(
                 color: context.colors.textSecondary,
               ),
             ),
@@ -248,18 +246,14 @@ class UsersTab extends StatelessWidget {
             width: 120,
             child: Text(
               role,
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTypography.caption.copyWith(
                 color: context.colors.textSecondary,
               ),
             ),
           ),
           SizedBox(
             width: 100,
-            child: StatusBadge(
-              label: statusLabel,
-              type: status,
-            ),
+            child: StatusBadge(label: statusLabel, type: status),
           ),
           SizedBox(
             width: 80,

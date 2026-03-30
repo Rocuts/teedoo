@@ -3,6 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/services/ai_voice_service.dart';
 import '../../../app.dart';
 import 'orbit_visualizer.dart';
@@ -34,8 +37,8 @@ class AiOrbitWidget extends ConsumerWidget {
             right: 0,
             child: _buildDataCard(context, transcript)
                 .animate()
-                .fadeIn(duration: 400.ms)
-                .slideY(begin: 0.1, duration: 400.ms),
+                .fadeIn(duration: AppMotion.durationNormal)
+                .slideY(begin: 0.1, duration: AppMotion.durationNormal),
           ),
 
         if (state == AiVoiceState.error && errorMsg != null)
@@ -44,15 +47,15 @@ class AiOrbitWidget extends ConsumerWidget {
             right: 0,
             child: _buildErrorCard(context, errorMsg)
                 .animate()
-                .fadeIn(duration: 400.ms)
-                .slideY(begin: 0.1, duration: 400.ms),
+                .fadeIn(duration: AppMotion.durationNormal)
+                .slideY(begin: 0.1, duration: AppMotion.durationNormal),
           ),
 
         // AI Orb Button
         GestureDetector(
           onTap: service.toggleListening,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+            duration: AppMotion.durationNormal,
             width: _orbSize(state),
             height: _orbSize(state),
             decoration: BoxDecoration(
@@ -69,7 +72,9 @@ class AiOrbitWidget extends ConsumerWidget {
             child: Center(
               child: OrbitVisualizer(
                 state: state,
-                size: state == AiVoiceState.idle ? 40 : 60,
+                size: state == AiVoiceState.idle
+                    ? AppDimensions.aiOrbVisualizerIdle
+                    : AppDimensions.aiOrbVisualizerActive,
               ),
             ),
           ),
@@ -79,7 +84,9 @@ class AiOrbitWidget extends ConsumerWidget {
   }
 
   double _orbSize(AiVoiceState state) {
-    return state == AiVoiceState.idle ? 64 : 80;
+    return state == AiVoiceState.idle
+        ? AppDimensions.aiOrbIdle
+        : AppDimensions.aiOrbActive;
   }
 
   Color _orbGlowColor(BuildContext context, AiVoiceState state) {
@@ -95,11 +102,11 @@ class AiOrbitWidget extends ConsumerWidget {
 
   Widget _buildDataCard(BuildContext context, String data) {
     return Container(
-      width: 320,
-      padding: const EdgeInsets.all(20),
+      width: AppDimensions.aiCardWidth,
+      padding: const EdgeInsets.all(AppDimensions.cardPadding),
       decoration: BoxDecoration(
         color: context.colors.bgSurface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.xlAll,
         border: Border.all(color: context.colors.aiPurpleBorder),
         boxShadow: [
           BoxShadow(
@@ -143,12 +150,14 @@ class AiOrbitWidget extends ConsumerWidget {
 
   Widget _buildErrorCard(BuildContext context, String error) {
     return Container(
-      width: 320,
-      padding: const EdgeInsets.all(20),
+      width: AppDimensions.aiCardWidth,
+      padding: const EdgeInsets.all(AppDimensions.cardPadding),
       decoration: BoxDecoration(
         color: context.colors.bgSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colors.statusError.withValues(alpha: 0.5)),
+        borderRadius: AppRadius.xlAll,
+        border: Border.all(
+          color: context.colors.statusError.withValues(alpha: 0.5),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -163,7 +172,11 @@ class AiOrbitWidget extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.error_outline, size: 16, color: context.colors.statusError),
+              Icon(
+                Icons.error_outline,
+                size: 16,
+                color: context.colors.statusError,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Error de conexión',
@@ -187,10 +200,7 @@ class AiOrbitWidget extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             'Toca el orb para reintentar',
-            style: TextStyle(
-              color: context.colors.textTertiary,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: context.colors.textTertiary, fontSize: 12),
           ),
         ],
       ),

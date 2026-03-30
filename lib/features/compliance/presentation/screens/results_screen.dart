@@ -13,10 +13,7 @@ import '../widgets/context_chat_panel.dart';
 class ResultsScreen extends StatelessWidget {
   final String checkId;
 
-  const ResultsScreen({
-    super.key,
-    required this.checkId,
-  });
+  const ResultsScreen({super.key, required this.checkId});
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +37,18 @@ class ResultsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Left panel: Results
-                      Expanded(
-                        child: AiResultPanel(result: result),
-                      ),
+                      Expanded(child: AiResultPanel(result: result)),
                       // Right panel: AI Chat (fixed 360px)
-                      const SizedBox(
-                        width: 360,
-                        child: ContextChatPanel(),
-                      ),
+                      const SizedBox(width: 360, child: ContextChatPanel()),
                     ],
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Top: Results panel
-                      Expanded(
-                        child: AiResultPanel(result: result),
-                      ),
+                      Expanded(child: AiResultPanel(result: result)),
                       // Bottom: AI Chat panel (constrained height)
-                      const SizedBox(
-                        height: 360,
-                        child: ContextChatPanel(),
-                      ),
+                      const SizedBox(height: 360, child: ContextChatPanel()),
                     ],
                   ),
           ),

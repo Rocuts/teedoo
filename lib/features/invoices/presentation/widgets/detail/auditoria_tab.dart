@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors_theme.dart';
+import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 
 class AuditoriaTab extends StatelessWidget {
@@ -14,7 +16,12 @@ class AuditoriaTab extends StatelessWidget {
         subtitle: 'Historial completo de acciones sobre esta factura',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.xl,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: Column(
           children: [
             _buildAuditEntry(
@@ -64,12 +71,10 @@ class AuditoriaTab extends StatelessWidget {
     required bool showBorder,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       decoration: BoxDecoration(
         border: showBorder
-            ? Border(
-                bottom: BorderSide(color: context.colors.borderSubtle),
-              )
+            ? Border(bottom: BorderSide(color: context.colors.borderSubtle))
             : null,
       ),
       child: Row(
@@ -77,30 +82,24 @@ class AuditoriaTab extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(
-              color: dotColor,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   action,
-                  style: TextStyle(
+                  style: AppTypography.bodySmallMedium.copyWith(
                     color: context.colors.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$user · $time',
-                  style: TextStyle(
+                  style: AppTypography.captionSmall.copyWith(
                     color: context.colors.textTertiary,
-                    fontSize: 11,
                   ),
                 ),
               ],

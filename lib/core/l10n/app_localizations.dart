@@ -7,9 +7,7 @@ import 'strings_es.dart';
 /// Provider para el locale actual de la aplicación.
 ///
 /// Cambia este valor para alternar entre idiomas en runtime.
-final localeProvider = StateProvider<Locale>(
-  (_) => const Locale('es'),
-);
+final localeProvider = StateProvider<Locale>((_) => const Locale('es'));
 
 /// Provider que expone la instancia de [AppLocalizations] reactiva.
 ///
@@ -82,10 +80,7 @@ class AppLocalizations {
   bool get isEnglish => locale.languageCode == 'en';
 
   /// Locales soportados por la aplicación.
-  static const supportedLocales = [
-    Locale('es'),
-    Locale('en'),
-  ];
+  static const supportedLocales = [Locale('es'), Locale('en')];
 }
 
 /// Delegate de localización para integrar con MaterialApp.

@@ -124,8 +124,7 @@ const Map<String, String> stringsEs = {
 
   // ── Audit ──
   'evidence_audit': 'Evidencias y Auditoría',
-  'evidence_subtitle':
-      'Trazabilidad completa de operaciones e integridad',
+  'evidence_subtitle': 'Trazabilidad completa de operaciones e integridad',
   'event_log': 'Log de eventos',
   'integrity': 'Integridad',
   'exports': 'Exportaciones',

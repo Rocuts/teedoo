@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../../../core/mock/mock_data.dart';
 
@@ -34,19 +36,23 @@ class MonthlyRevenueChart extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppSpacing.sm),
             Text(
               'Ingresos',
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: colors.textSecondary,
-                fontSize: 12,
               ),
             ),
           ],
         ),
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(16, 20, 24, 20),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          AppSpacing.s20,
+          AppSpacing.s24,
+          AppSpacing.s20,
+        ),
         child: SizedBox(
           height: 280,
           child: LineChart(
@@ -81,12 +87,11 @@ class MonthlyRevenueChart extends StatelessWidget {
                         return const SizedBox.shrink();
                       }
                       return Padding(
-                        padding: const EdgeInsets.only(top: 8),
+                        padding: const EdgeInsets.only(top: AppSpacing.sm),
                         child: Text(
                           _months[idx],
-                          style: TextStyle(
+                          style: AppTypography.captionSmall.copyWith(
                             color: colors.textTertiary,
-                            fontSize: 11,
                           ),
                         ),
                       );
@@ -101,9 +106,8 @@ class MonthlyRevenueChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       return Text(
                         '${value.toInt()}k €',
-                        style: TextStyle(
+                        style: AppTypography.captionSmall.copyWith(
                           color: colors.textTertiary,
-                          fontSize: 11,
                         ),
                       );
                     },
@@ -136,10 +140,8 @@ class MonthlyRevenueChart extends StatelessWidget {
                     return touchedSpots.map((spot) {
                       return LineTooltipItem(
                         '${spot.y.toStringAsFixed(1)}k €',
-                        TextStyle(
+                        AppTypography.button.copyWith(
                           color: colors.textPrimary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
                         ),
                       );
                     }).toList();

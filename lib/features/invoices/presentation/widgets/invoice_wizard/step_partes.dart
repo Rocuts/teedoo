@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../../core/responsive/responsive.dart';
 import '../../../../../core/theme/app_colors_theme.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/glass_card.dart';
 import '../../../../../shared/widgets/inputs/text_input.dart';
 import '../../../../../shared/widgets/buttons/primary_button.dart';
@@ -37,16 +38,19 @@ class StepPartes extends StatelessWidget {
         subtitle: 'Información del emisor y receptor de la factura',
       ),
       content: GlassCardContent(
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s24,
+          AppSpacing.s20,
+          AppSpacing.s24,
+          0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Emisor',
-              style: TextStyle(
+              style: AppTypography.h4.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: AppSpacing.s16),
@@ -58,7 +62,11 @@ class StepPartes extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: buildReadOnlyField(context, 'Razón social', emisorName),
+                    child: buildReadOnlyField(
+                      context,
+                      'Razón social',
+                      emisorName,
+                    ),
                   ),
                   const SizedBox(width: AppSpacing.s16),
                   Expanded(
@@ -70,18 +78,13 @@ class StepPartes extends StatelessWidget {
             buildReadOnlyField(context, 'Dirección', emisorAddress),
             const SizedBox(height: AppSpacing.s28),
 
-            Container(
-              height: 1,
-              color: context.colors.borderSubtle,
-            ),
+            Container(height: 1, color: context.colors.borderSubtle),
             const SizedBox(height: AppSpacing.s24),
 
             Text(
               'Receptor',
-              style: TextStyle(
+              style: AppTypography.h4.copyWith(
                 color: context.colors.textPrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: AppSpacing.s16),

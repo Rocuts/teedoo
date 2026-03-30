@@ -7,8 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app.dart';
 import '../../../../core/mock/mock_data.dart';
 import '../../../../core/responsive/responsive.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_colors_theme.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/navigation/app_topbar.dart';
 import '../../../../shared/widgets/buttons/primary_button.dart';
@@ -84,18 +88,15 @@ class DashboardScreen extends ConsumerWidget {
       children: [
         Text(
           'Dashboard',
-          style: TextStyle(
+          style: (isCompact ? AppTypography.h3 : AppTypography.h2).copyWith(
             color: context.colors.textPrimary,
-            fontSize: isCompact ? 20 : 24,
-            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           'Resumen de actividad \u00b7 Espa\u00f1a',
-          style: TextStyle(
+          style: AppTypography.bodySmall.copyWith(
             color: context.colors.textSecondary,
-            fontSize: 13,
           ),
         ),
       ],
@@ -110,7 +111,7 @@ class DashboardScreen extends ConsumerWidget {
                 icon: LucideIcons.plus,
                 onPressed: () => context.go(RoutePaths.invoiceCreate),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               SecondaryButton(
                 label: 'Exportar',
                 icon: LucideIcons.download,
@@ -132,7 +133,7 @@ class DashboardScreen extends ConsumerWidget {
                 icon: LucideIcons.plus,
                 onPressed: () => context.go(RoutePaths.invoiceCreate),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.buttonGap),
               SecondaryButton(
                 label: 'Exportar',
                 icon: LucideIcons.download,
@@ -152,7 +153,7 @@ class DashboardScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           titleColumn,
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.lg),
           actions,
         ],
       );
@@ -244,10 +245,12 @@ class DashboardScreen extends ConsumerWidget {
             spacing: AppSpacing.s16,
             runSpacing: AppSpacing.s16,
             children: kpiCards
-                .map((card) => SizedBox(
-                      width: (constraints.maxWidth - AppSpacing.s16) / 2,
-                      child: card,
-                    ))
+                .map(
+                  (card) => SizedBox(
+                    width: (constraints.maxWidth - AppSpacing.s16) / 2,
+                    child: card,
+                  ),
+                )
                 .toList(),
           );
         }
@@ -269,19 +272,65 @@ class DashboardScreen extends ConsumerWidget {
   Widget _buildBottomRow(BuildContext context, String? activeWidgetId) {
     final revenueChart = const MonthlyRevenueChart()
         .animate()
-        .fade(delay: 400.ms)
-        .slideY(begin: 0.05, duration: 500.ms)
+        .fade(delay: AppMotion.durationSlow)
+        .slideY(
+          begin: AppMotion.slideEntryOffset,
+          duration: AppMotion.durationSlow,
+        )
         .animate(target: activeWidgetId == 'revenue_chart' ? 1.0 : 0.0)
-        .shimmer(duration: 1200.ms, color: Colors.white24)
-        .scaleXY(begin: 1.0, end: 1.02, curve: Curves.easeOutBack);
+        .scaleXY(
+          begin: 1.0,
+          end: AppMotion.scaleActive,
+          duration: 600.ms,
+          curve: Curves.easeOutBack,
+        )
+        .custom(
+          duration: 600.ms,
+          builder: (context, value, child) => DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.cardAll,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accentBlue.withValues(alpha: 0.3 * value),
+                  blurRadius: 20 * value,
+                  spreadRadius: 2 * value,
+                ),
+              ],
+            ),
+            child: child,
+          ),
+        );
 
     final statusPanel = const InvoiceStatusPanel()
         .animate()
-        .fade(delay: 500.ms)
-        .slideY(begin: 0.05, duration: 500.ms)
+        .fade(delay: AppMotion.durationSlow)
+        .slideY(
+          begin: AppMotion.slideEntryOffset,
+          duration: AppMotion.durationSlow,
+        )
         .animate(target: activeWidgetId == 'invoice_status_panel' ? 1.0 : 0.0)
-        .shimmer(duration: 1200.ms, color: Colors.white24)
-        .scaleXY(begin: 1.0, end: 1.02, curve: Curves.easeOutBack);
+        .scaleXY(
+          begin: 1.0,
+          end: AppMotion.scaleActive,
+          duration: 600.ms,
+          curve: Curves.easeOutBack,
+        )
+        .custom(
+          duration: 600.ms,
+          builder: (context, value, child) => DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.cardAll,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accentBlue.withValues(alpha: 0.3 * value),
+                  blurRadius: 20 * value,
+                  spreadRadius: 2 * value,
+                ),
+              ],
+            ),
+            child: child,
+          ),
+        );
 
     // Compact & Medium: stack vertically
     if (context.isCompact || context.isMedium) {
@@ -320,65 +369,82 @@ class DashboardScreen extends ConsumerWidget {
   }) {
     final isActive = id == activeId;
     return GlassCard(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Top: label + icon ──
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      color: context.colors.textSecondary,
-                      fontSize: 13,
+          padding: const EdgeInsets.all(AppSpacing.s20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Top: label + icon ──
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: context.colors.textSecondary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Container(
+                    width: AppSpacing.s36,
+                    height: AppSpacing.s36,
+                    decoration: BoxDecoration(
+                      color: iconBgColor,
+                      borderRadius: AppRadius.mdAll,
+                    ),
+                    child: Icon(icon, size: 18, color: iconColor),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              // ── Value ──
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  value,
+                  style: AppTypography.h1.copyWith(
+                    color: context.colors.textPrimary,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(icon, size: 18, color: iconColor),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              // ── Trend ──
+              Text(
+                trend,
+                style: AppTypography.caption.copyWith(color: trendColor),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        )
+        .animate()
+        .fade(delay: delay)
+        .slideY(begin: 0.1, duration: AppMotion.durationSlow)
+        .animate(target: isActive ? 1.0 : 0.0)
+        .scaleXY(
+          begin: 1.0,
+          end: 1.05,
+          duration: 600.ms,
+          curve: Curves.easeOutBack,
+        )
+        .custom(
+          duration: 600.ms,
+          builder: (context, value, child) => DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.cardAll,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accentBlue.withValues(alpha: 0.3 * value),
+                  blurRadius: 20 * value,
+                  spreadRadius: 2 * value,
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            // ── Value ──
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: context.colors.textPrimary,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            // ── Trend ──
-            Text(
-              trend,
-              style: TextStyle(
-                color: trendColor,
-                fontSize: 12,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ).animate().fade(delay: delay).slideY(begin: 0.1, duration: 400.ms)
-       .animate(target: isActive ? 1.0 : 0.0)
-       .shimmer(duration: 1000.ms, color: Colors.white24)
-       .scaleXY(begin: 1.0, end: 1.05, curve: Curves.easeOutBack);
+            child: child,
+          ),
+        );
   }
 }

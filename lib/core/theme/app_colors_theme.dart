@@ -93,12 +93,12 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
   // Bordes con tinte violeta sutil para identidad de marca
   // ═══════════════════════════════════════════════════════════════
   static const dark = AppColorsTheme(
-    bgPrimary: Color(0xFF0D1117),       // fondo principal
+    bgPrimary: Color(0xFF0D1117), // fondo principal
     bgSecondary: Color(0xFF161B22),
     bgSurface: Color(0xFF1C2128),
     bgCard: Color(0x441C2128),
     bgGlass: Color(0x331C2128),
-    bgGlassBorder: Color(0x338B5CF6),   // purple-tinted border
+    bgGlassBorder: Color(0x338B5CF6), // purple-tinted border
     bgGlassHover: Color(0x552D333B),
     bgInput: Color(0x660D1117),
     bgModal: Color(0xEE161B22),
@@ -108,11 +108,11 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
     textSecondary: Color(0xFF9EA7B3),
     textTertiary: Color(0xFF8B95A1),
     textOnAccent: Color(0xFFFFFFFF),
-    accentBlue: Color(0xFF8B5CF6),      // violet-500 (primary CTA)
+    accentBlue: Color(0xFF8B5CF6), // violet-500 (primary CTA)
     accentBlueHover: Color(0xFFA78BFA), // violet-400
     accentBlueSubtle: Color(0x1A8B5CF6),
-    accentTeal: Color(0xFF7C3AED),      // violet-600 (secondary)
-    aiPurple: Color(0xFFA78BFA),        // violet-400 (AI)
+    accentTeal: Color(0xFF7C3AED), // violet-600 (secondary)
+    aiPurple: Color(0xFFA78BFA), // violet-400 (AI)
     aiPurpleBg: Color(0x1AA78BFA),
     aiPurpleBorder: Color(0x33A78BFA),
     statusSuccess: Color(0xFF3FB950),
@@ -124,7 +124,7 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
     statusInfo: Color(0xFF58A6FF),
     statusInfoBg: Color(0x1A58A6FF),
     borderPrimary: Color(0xFF3D444D),
-    borderSubtle: Color(0x448B5CF6),    // purple-tinted subtle
+    borderSubtle: Color(0x448B5CF6), // purple-tinted subtle
     borderAccent: Color(0x448B5CF6),
   );
 
@@ -136,41 +136,40 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
   // Cards: sombra sutil + borde violet-200
   // ═══════════════════════════════════════════════════════════════
   static const light = AppColorsTheme(
-    bgPrimary: Color(0xFFFAFAFA),       // fondo principal gris claro
-    bgSecondary: Color(0xFFF5F3FF),     // violet-50
+    bgPrimary: Color(0xFFFAFAFA), // fondo principal gris claro
+    bgSecondary: Color(0xFFF5F3FF), // violet-50
     bgSurface: Color(0xFFFFFFFF),
-    bgCard: Color(0xEEFFFFFF),          // cards casi opacas
-    bgGlass: Color(0x99F5F3FF),         // glass con tinte violet
-    bgGlassBorder: Color(0x88E9D5FF),   // violet-200 semi
+    bgCard: Color(0xEEFFFFFF), // cards casi opacas
+    bgGlass: Color(0x99F5F3FF), // glass con tinte violet
+    bgGlassBorder: Color(0x88E9D5FF), // violet-200 semi
     bgGlassHover: Color(0x88F3E8FF),
-    bgInput: Color(0xFFF3F4F6),         // gray-100
+    bgInput: Color(0xFFF3F4F6), // gray-100
     bgModal: Color(0xF0FFFFFF),
-    bgSidebar: Color(0xFFF5F3FF),       // violet-50 sidebar
+    bgSidebar: Color(0xFFF5F3FF), // violet-50 sidebar
     bgTopbar: Color(0xEEFFFFFF),
-    textPrimary: Color(0xFF1E1B4B),     // indigo-950 (profundo)
-    textSecondary: Color(0xFF6B7280),   // gray-500
-    textTertiary: Color(0xFF6B7280),    // gray-500 (WCAG AA)
+    textPrimary: Color(0xFF1E1B4B), // indigo-950 (profundo)
+    textSecondary: Color(0xFF6B7280), // gray-500
+    textTertiary: Color(0xFF6B7280), // gray-500 (WCAG AA)
     textOnAccent: Color(0xFFFFFFFF),
-    accentBlue: Color(0xFF7C3AED),      // violet-600 (contraste AA)
+    accentBlue: Color(0xFF7C3AED), // violet-600 (contraste AA)
     accentBlueHover: Color(0xFF6D28D9), // violet-700
     accentBlueSubtle: Color(0x1A7C3AED),
-    accentTeal: Color(0xFF8B5CF6),      // violet-500 (secondary)
-    aiPurple: Color(0xFF8B5CF6),        // violet-500 (AI)
+    accentTeal: Color(0xFF8B5CF6), // violet-500 (secondary)
+    aiPurple: Color(0xFF8B5CF6), // violet-500 (AI)
     aiPurpleBg: Color(0x1A8B5CF6),
     aiPurpleBorder: Color(0x338B5CF6),
-    statusSuccess: Color(0xFF16A34A),   // green-600
+    statusSuccess: Color(0xFF16A34A), // green-600
     statusSuccessBg: Color(0x1A16A34A),
-    statusWarning: Color(0xFFCA8A04),   // yellow-600
+    statusWarning: Color(0xFFCA8A04), // yellow-600
     statusWarningBg: Color(0x1ACA8A04),
-    statusError: Color(0xFFDC2626),     // red-600
+    statusError: Color(0xFFDC2626), // red-600
     statusErrorBg: Color(0x1ADC2626),
-    statusInfo: Color(0xFF2563EB),      // blue-600
+    statusInfo: Color(0xFF2563EB), // blue-600
     statusInfoBg: Color(0x1A2563EB),
-    borderPrimary: Color(0xFFE5E7EB),   // gray-200
+    borderPrimary: Color(0xFFE5E7EB), // gray-200
     borderSubtle: Color(0xFFE5E7EB),
-    borderAccent: Color(0x448B5CF6),    // purple accent
+    borderAccent: Color(0x448B5CF6), // purple accent
   );
-
 
   @override
   AppColorsTheme copyWith({
@@ -266,8 +265,11 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
       textOnAccent: Color.lerp(textOnAccent, other.textOnAccent, t)!,
       accentBlue: Color.lerp(accentBlue, other.accentBlue, t)!,
       accentBlueHover: Color.lerp(accentBlueHover, other.accentBlueHover, t)!,
-      accentBlueSubtle:
-          Color.lerp(accentBlueSubtle, other.accentBlueSubtle, t)!,
+      accentBlueSubtle: Color.lerp(
+        accentBlueSubtle,
+        other.accentBlueSubtle,
+        t,
+      )!,
       accentTeal: Color.lerp(accentTeal, other.accentTeal, t)!,
       aiPurple: Color.lerp(aiPurple, other.aiPurple, t)!,
       aiPurpleBg: Color.lerp(aiPurpleBg, other.aiPurpleBg, t)!,
@@ -289,6 +291,5 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
 
 /// Acceso ergonómico: `context.colors.accentBlue`
 extension AppColorsThemeX on BuildContext {
-  AppColorsTheme get colors =>
-      Theme.of(this).extension<AppColorsTheme>()!;
+  AppColorsTheme get colors => Theme.of(this).extension<AppColorsTheme>()!;
 }

@@ -46,9 +46,7 @@ class SkeletonBox extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: context.colors.bgSurface,
-          borderRadius: BorderRadius.circular(
-            borderRadius ?? AppRadius.sm,
-          ),
+          borderRadius: BorderRadius.circular(borderRadius ?? AppRadius.sm),
         ),
       ),
     );
@@ -99,11 +97,7 @@ class SkeletonCard extends StatelessWidget {
   final double? width;
   final double height;
 
-  const SkeletonCard({
-    super.key,
-    this.width,
-    this.height = 160,
-  });
+  const SkeletonCard({super.key, this.width, this.height = 160});
 
   @override
   Widget build(BuildContext context) {
