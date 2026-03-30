@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +19,27 @@ class MonthlyRevenueChart extends StatelessWidget {
 
   static List<double> get _values => MockData.chartValues;
 
+  /// Calcula un intervalo "limpio" para el eje Y (e.g. 5, 10, 25, 50, 100, 250…).
+  static num _niceInterval(double maxValue) {
+    if (maxValue <= 0) return 5;
+    final rough = maxValue / 4; // apunta a ~4-5 líneas de grid
+    final magnitude = pow(10, (log(rough) / ln10).floor());
+    final normalized = rough / magnitude;
+    final nice = normalized <= 1.5
+        ? 1
+        : (normalized <= 3.5 ? 2.5 : (normalized <= 7.5 ? 5 : 10));
+    return (nice * magnitude).toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final values = _values;
+
+    // Escala adaptativa: redondea el máximo al siguiente múltiplo "limpio"
+    final rawMax = values.isEmpty ? 10.0 : values.reduce(max);
+    final interval = _niceInterval(rawMax);
+    final maxY = (rawMax / interval).ceil() * interval;
 
     return GlassCard(
       header: GlassCardHeader(
@@ -58,11 +78,11 @@ class MonthlyRevenueChart extends StatelessWidget {
           child: LineChart(
             LineChartData(
               minY: 0,
-              maxY: 110,
+              maxY: maxY.toDouble(),
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: 25,
+                horizontalInterval: interval.toDouble(),
                 getDrawingHorizontalLine: (value) => FlLine(
                   color: colors.borderSubtle,
                   strokeWidth: 1,
@@ -102,7 +122,7 @@ class MonthlyRevenueChart extends StatelessWidget {
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 48,
-                    interval: 25,
+                    interval: interval.toDouble(),
                     getTitlesWidget: (value, meta) {
                       return Text(
                         '${value.toInt()}k €',
@@ -118,8 +138,8 @@ class MonthlyRevenueChart extends StatelessWidget {
               lineBarsData: [
                 LineChartBarData(
                   spots: List.generate(
-                    _values.length,
-                    (i) => FlSpot(i.toDouble(), _values[i]),
+                    values.length,
+                    (i) => FlSpot(i.toDouble(), values[i]),
                   ),
                   isCurved: true,
                   curveSmoothness: 0.3,
