@@ -19,21 +19,17 @@ function readBody(req) {
 }
 
 function sanitizeSession(session = {}) {
-  return {
+  const sanitized = {
+    type: 'realtime',
     model: typeof session.model === 'string' ? session.model : 'gpt-realtime',
-    voice: typeof session.voice === 'string' ? session.voice : 'coral',
     instructions:
       typeof session.instructions === 'string' ? session.instructions : '',
-    modalities:
-      Array.isArray(session.modalities) && session.modalities.length > 0
-        ? session.modalities
-        : ['audio', 'text'],
-    turn_detection:
-      session.turn_detection && typeof session.turn_detection === 'object'
-        ? session.turn_detection
-        : { type: 'server_vad' },
+    audio: session.audio && typeof session.audio === 'object'
+      ? session.audio
+      : { output: { voice: 'coral' } },
     tools: Array.isArray(session.tools) ? session.tools : [],
   };
+  return sanitized;
 }
 
 module.exports = async function handler(req, res) {

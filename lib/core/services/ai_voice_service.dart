@@ -85,11 +85,9 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
           'type': 'realtime',
           'model': _realtimeModel,
           'instructions': _sessionInstructions,
-          'modalities': ['audio', 'text'],
           'audio': {
             'output': {'voice': 'coral'},
           },
-          'turn_detection': {'type': 'server_vad'},
           'tools': [
             {
               'type': 'function',
@@ -99,7 +97,6 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
               'parameters': {
                 'type': 'object',
                 'properties': <String, dynamic>{},
-                'required': <String>[],
               },
             },
             {
@@ -110,7 +107,6 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
               'parameters': {
                 'type': 'object',
                 'properties': <String, dynamic>{},
-                'required': <String>[],
               },
             },
             {
@@ -135,8 +131,8 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
                         'El ID del elemento gráfico que deseas resaltar en la pantalla durante tu respuesta.',
                   },
                 },
+                'required': ['element_id'],
               },
-              'required': ['element_id'],
             },
             {
               'type': 'function',
