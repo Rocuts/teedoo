@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/services/secure_storage_service.dart';
 import '../data/models/user_model.dart';
 
 /// Estado inmutable de autenticación.
@@ -109,10 +109,9 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> _restoreSession() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final accessToken = prefs.getString(AppConstants.authTokenKey);
-      final refreshToken = prefs.getString(AppConstants.refreshTokenKey);
-      final userJson = prefs.getString(AppConstants.authUserKey);
+      final accessToken = await SecureStorageService.read(AppConstants.authTokenKey);
+      final refreshToken = await SecureStorageService.read(AppConstants.refreshTokenKey);
+      final userJson = await SecureStorageService.read(AppConstants.authUserKey);
 
       if (accessToken == null || userJson == null) {
         state = const AuthState(isBootstrapping: false);
@@ -138,28 +137,29 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> _persistSession(_AuthSession session) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(AppConstants.authTokenKey, session.accessToken);
-    await prefs.setString(
+    await SecureStorageService.write(
+      AppConstants.authTokenKey,
+      session.accessToken,
+    );
+    await SecureStorageService.write(
       AppConstants.authUserKey,
       jsonEncode(session.user.toJson()),
     );
 
     if (session.refreshToken != null && session.refreshToken!.isNotEmpty) {
-      await prefs.setString(
+      await SecureStorageService.write(
         AppConstants.refreshTokenKey,
         session.refreshToken!,
       );
     } else {
-      await prefs.remove(AppConstants.refreshTokenKey);
+      await SecureStorageService.delete(AppConstants.refreshTokenKey);
     }
   }
 
   Future<void> _clearPersistedSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(AppConstants.authTokenKey);
-    await prefs.remove(AppConstants.refreshTokenKey);
-    await prefs.remove(AppConstants.authUserKey);
+    await SecureStorageService.delete(AppConstants.authTokenKey);
+    await SecureStorageService.delete(AppConstants.refreshTokenKey);
+    await SecureStorageService.delete(AppConstants.authUserKey);
   }
 
   /// Login principal de producción.
@@ -198,9 +198,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
     final normalizedEmail = email.trim().toLowerCase();
     if (normalizedEmail != _demoEmail || password != _demoPassword) {
-      throw Exception(
-        'Credenciales inválidas. Demo: $_demoEmail / $_demoPassword',
-      );
+      throw Exception('Credenciales inválidas.');
     }
 
     return _buildDemoSession(email: normalizedEmail);

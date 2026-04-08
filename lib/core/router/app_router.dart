@@ -118,8 +118,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 name: RouteNames.invoiceDetail,
                 path: ':id',
-                builder: (context, state) =>
-                    InvoiceDetailScreen(invoiceId: state.pathParameters['id']!),
+                builder: (context, state) => InvoiceDetailScreen(
+                  invoiceId: state.pathParameters['id'] ?? '',
+                ),
               ),
             ],
           ),
@@ -131,8 +132,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 name: RouteNames.complianceResults,
                 path: 'results/:id',
-                builder: (context, state) =>
-                    ResultsScreen(checkId: state.pathParameters['id']!),
+                builder: (context, state) => ResultsScreen(
+                  checkId: state.pathParameters['id'] ?? '',
+                ),
               ),
             ],
           ),
@@ -145,7 +147,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 name: RouteNames.optimizationDetail,
                 path: 'optimizations/:id',
                 builder: (context, state) => OptimizationDetailScreen(
-                  optimizationId: state.pathParameters['id']!,
+                  optimizationId: state.pathParameters['id'] ?? '',
                 ),
               ),
             ],

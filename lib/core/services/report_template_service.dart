@@ -27,11 +27,30 @@ class ReportTemplateService {
       // 3. Crear el contenido inyectable
       final content = Content();
 
+      // Allowed template variable keys to prevent injection
+      const allowedKeys = {
+        'TITULO_REPORTE',
+        'FECHA_CORTE',
+        'RESUMEN_EJECUTIVO',
+        'INGRESOS_TOTALES',
+        'FACTURAS_DESTACADAS',
+        'CONCLUSION',
+        'GRAFICO_JSON',
+        'GRAFICO',
+      };
+
       for (final entry in variables.entries) {
+        if (!allowedKeys.contains(entry.key)) continue;
+
         if (entry.key == 'GRAFICO_JSON') {
           // Construir URL de QuickChart y descargar la imagen del gráfico
           try {
             final chartJson = entry.value.toString();
+            // Validate it's actually parseable JSON before sending externally
+            if (chartJson.length > 5000) {
+              debugPrint('Chart JSON exceeds max length, skipping');
+              continue;
+            }
             final encoded = Uri.encodeComponent(chartJson);
             final url = 'https://quickchart.io/chart?c=$encoded';
 

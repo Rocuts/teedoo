@@ -90,7 +90,7 @@ class ComplianceTab extends StatelessWidget {
                   icon: LucideIcons.checkCircle,
                   color: context.colors.statusSuccess,
                   title: 'NIF del emisor verificado',
-                  description: 'B12345678 — Registro mercantil validado',
+                  description: 'B****678 — Registro mercantil validado',
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 _buildComplianceCheck(
@@ -98,7 +98,7 @@ class ComplianceTab extends StatelessWidget {
                   icon: LucideIcons.checkCircle,
                   color: context.colors.statusSuccess,
                   title: 'NIF del receptor verificado',
-                  description: 'A98765432 — Registro mercantil validado',
+                  description: 'A****432 — Registro mercantil validado',
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 _buildComplianceCheck(

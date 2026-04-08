@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors_theme.dart';
 
 /// File dropzone del Design System.
@@ -41,7 +42,11 @@ class _FileDropzoneState extends State<FileDropzone> {
     );
 
     if (result != null && result.files.isNotEmpty) {
-      widget.onFilesDropped?.call(result.files);
+      const maxBytes = AppConstants.maxFileUploadMB * 1024 * 1024;
+      final validFiles = result.files.where((f) => (f.size) <= maxBytes).toList();
+      if (validFiles.isNotEmpty) {
+        widget.onFilesDropped?.call(validFiles);
+      }
     }
   }
 

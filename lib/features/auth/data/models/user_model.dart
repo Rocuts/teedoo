@@ -80,7 +80,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, '
-        'organizationId: $organizationId, role: $role, locale: $locale)';
+    return 'UserModel(id: $id, role: $role, locale: $locale)';
   }
 }

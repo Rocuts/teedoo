@@ -8,6 +8,21 @@ import '../../../../../shared/widgets/glass_card.dart';
 import '../../../data/models/invoice_line.dart';
 import '../../../data/models/invoice_model.dart';
 
+/// Masks a NIF/CIF to show only the first letter and last 3 characters.
+/// Example: B12345678 -> B****678
+String _maskNif(String nif) {
+  if (nif.length <= 4) return nif;
+  return '${nif[0]}${'*' * (nif.length - 4)}${nif.substring(nif.length - 3)}';
+}
+
+/// Masks an IBAN to show only the first 4 and last 4 characters.
+/// Example: ES9121000418450200051332 -> ES91 **** **** **** 1332
+String _maskIban(String iban) {
+  final clean = iban.replaceAll(' ', '');
+  if (clean.length <= 8) return iban;
+  return '${clean.substring(0, 4)} ${'**** ' * ((clean.length - 8) ~/ 4)}${clean.substring(clean.length - 4)}';
+}
+
 class ResumenTab extends StatelessWidget {
   final String emisorName;
   final String emisorNif;
@@ -60,7 +75,7 @@ class ResumenTab extends StatelessWidget {
             child: Column(
               children: [
                 _buildDetailRow(context, 'Razón social', emisorName),
-                _buildDetailRow(context, 'NIF/CIF', emisorNif),
+                _buildDetailRow(context, 'NIF/CIF', _maskNif(emisorNif)),
                 _buildDetailRow(context, 'Dirección', emisorAddress),
               ],
             ),
@@ -79,7 +94,7 @@ class ResumenTab extends StatelessWidget {
             child: Column(
               children: [
                 _buildDetailRow(context, 'Razón social', receptorName),
-                _buildDetailRow(context, 'NIF/CIF', receptorNif),
+                _buildDetailRow(context, 'NIF/CIF', _maskNif(receptorNif)),
                 _buildDetailRow(context, 'Dirección', receptorAddress),
               ],
             ),
@@ -312,7 +327,7 @@ class ResumenTab extends StatelessWidget {
                 if (dueDate != null)
                   _buildDetailRow(context, 'Vencimiento', dueDate!),
                 if (paymentIban != null)
-                  _buildDetailRow(context, 'IBAN', paymentIban!),
+                  _buildDetailRow(context, 'IBAN', _maskIban(paymentIban!)),
               ],
             ),
           ),

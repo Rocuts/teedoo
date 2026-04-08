@@ -92,18 +92,19 @@ class FiscalExplanationService {
         data: data,
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        return _extractExplanation(response.data!);
+      final responseData = response.data;
+      if (response.statusCode == 200 && responseData != null) {
+        return _extractExplanation(responseData);
       }
 
       // 422 = validación rechazó la respuesta (alucinación)
-      if (response.statusCode == 422 && response.data != null) {
+      if (response.statusCode == 422 && responseData != null) {
         debugPrint(
           '[FiscalExplanation] Respuesta rechazada por validación: '
-          '${response.data!['error']?['details']}',
+          '${responseData['error']?['details']}',
         );
         // Retornar el fallback del motor de reglas
-        final fallback = response.data!['fallbackExplanation'];
+        final fallback = responseData['fallbackExplanation'];
         return fallback is String ? fallback : null;
       }
 
