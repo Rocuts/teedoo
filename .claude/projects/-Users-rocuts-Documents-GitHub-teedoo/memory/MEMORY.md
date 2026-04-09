@@ -1,0 +1,2 @@
+- [User profile](user_profile.md) — TeeDoo project owner, Flutter/Dart SaaS developer
+- [Security audit 2026-04-08](project_security_audit.md) — Comprehensive security audit findings and fixes applied
