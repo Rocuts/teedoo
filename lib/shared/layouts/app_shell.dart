@@ -22,9 +22,9 @@ class AppShell extends StatelessWidget {
     final screenSize = context.screenSize;
 
     return Stack(
+      clipBehavior: Clip.hardEdge,
       children: [
         Scaffold(
-          key: ValueKey(currentPath),
           backgroundColor: context.colors.bgPrimary,
           // Drawer solo en compact
           drawer: screenSize == ScreenSize.compact
