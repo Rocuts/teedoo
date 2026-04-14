@@ -7,12 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 /// Los colores NO se incluyen en los estilos — se heredan del tema
 /// o se aplican con `.copyWith(color: context.colors.xxx)`.
 abstract final class AppTypography {
-  static String get _fontFamily => GoogleFonts.inter().fontFamily!;
+  static final String _fontFamily = GoogleFonts.inter().fontFamily!;
 
   // ── Headings ──
 
   /// 28px / 700 — KPI grandes, números destacados
-  static TextStyle get h1 => TextStyle(
+  static final TextStyle h1 = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 28,
     fontWeight: FontWeight.w700,
@@ -21,7 +21,7 @@ abstract final class AppTypography {
   );
 
   /// 24px / 600 — Títulos de página
-  static TextStyle get h2 => TextStyle(
+  static final TextStyle h2 = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 24,
     fontWeight: FontWeight.w600,
@@ -30,7 +30,7 @@ abstract final class AppTypography {
   );
 
   /// 22px / 600 — Títulos de sección (auth cards)
-  static TextStyle get h3 => TextStyle(
+  static final TextStyle h3 = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 22,
     fontWeight: FontWeight.w600,
@@ -39,7 +39,7 @@ abstract final class AppTypography {
   );
 
   /// 16px / 600 — Títulos de cards
-  static TextStyle get h4 => TextStyle(
+  static final TextStyle h4 = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 16,
     fontWeight: FontWeight.w600,
@@ -50,7 +50,7 @@ abstract final class AppTypography {
   // ── Body ──
 
   /// 14px / 400 — Texto general, nav items
-  static TextStyle get body => TextStyle(
+  static final TextStyle body = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -58,7 +58,7 @@ abstract final class AppTypography {
   );
 
   /// 14px / 500 — Texto general con peso medio
-  static TextStyle get bodyMedium => TextStyle(
+  static final TextStyle bodyMedium = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 14,
     fontWeight: FontWeight.w500,
@@ -66,7 +66,7 @@ abstract final class AppTypography {
   );
 
   /// 13px / 400 — Subtítulos, inputs, breadcrumbs
-  static TextStyle get bodySmall => TextStyle(
+  static final TextStyle bodySmall = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 13,
     fontWeight: FontWeight.w400,
@@ -74,7 +74,7 @@ abstract final class AppTypography {
   );
 
   /// 13px / 500 — Labels de input
-  static TextStyle get bodySmallMedium => TextStyle(
+  static final TextStyle bodySmallMedium = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 13,
     fontWeight: FontWeight.w500,
@@ -84,7 +84,7 @@ abstract final class AppTypography {
   // ── Caption ──
 
   /// 12px / 400 — Labels, links
-  static TextStyle get caption => TextStyle(
+  static final TextStyle caption = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 12,
     fontWeight: FontWeight.w400,
@@ -93,7 +93,7 @@ abstract final class AppTypography {
   );
 
   /// 12px / 500 — Labels con peso medio
-  static TextStyle get captionMedium => TextStyle(
+  static final TextStyle captionMedium = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 12,
     fontWeight: FontWeight.w500,
@@ -102,7 +102,7 @@ abstract final class AppTypography {
   );
 
   /// 12px / 600 — Badges, labels fuertes
-  static TextStyle get captionBold => TextStyle(
+  static final TextStyle captionBold = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 12,
     fontWeight: FontWeight.w600,
@@ -111,7 +111,7 @@ abstract final class AppTypography {
   );
 
   /// 11px / 500 — Hints, tabla headers
-  static TextStyle get captionSmall => TextStyle(
+  static final TextStyle captionSmall = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 11,
     fontWeight: FontWeight.w500,
@@ -120,7 +120,7 @@ abstract final class AppTypography {
   );
 
   /// 11px / 600 — Headers de tabla (uppercase-ready)
-  static TextStyle get captionSmallBold => TextStyle(
+  static final TextStyle captionSmallBold = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 11,
     fontWeight: FontWeight.w600,
@@ -131,21 +131,21 @@ abstract final class AppTypography {
   // ── Special ──
 
   /// 18px / 600 — Logo "TeeDoo" en sidebar
-  static TextStyle get logo => TextStyle(
+  static final TextStyle logo = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );
 
   /// 13px / 600 — Texto de botón
-  static TextStyle get button => TextStyle(
+  static final TextStyle button = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 13,
     fontWeight: FontWeight.w600,
   );
 
   /// 14px / 500 — Texto de botón mediano
-  static TextStyle get buttonMedium => TextStyle(
+  static final TextStyle buttonMedium = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 14,
     fontWeight: FontWeight.w500,

@@ -81,21 +81,22 @@ class _OptimizationDetailScreenState
 
       // Actualizar la optimización en el estado del provider
       final state = ref.read(fiscalAnalysisProvider);
-      if (state.report != null) {
-        final updatedOpts = state.report!.optimizations.map((o) {
+      final report = state.report;
+      if (report != null) {
+        final updatedOpts = report.optimizations.map((o) {
           if (o.id == opt.id) return o.copyWith(aiExplanation: explanation);
           return o;
         }).toList();
 
         final updatedReport = OptimizationReport(
-          id: state.report!.id,
-          userId: state.report!.userId,
-          fiscalYear: state.report!.fiscalYear,
-          summary: state.report!.summary,
-          evaluations: state.report!.evaluations,
+          id: report.id,
+          userId: report.userId,
+          fiscalYear: report.fiscalYear,
+          summary: report.summary,
+          evaluations: report.evaluations,
           optimizations: updatedOpts,
-          generatedAt: state.report!.generatedAt,
-          processingTime: state.report!.processingTime,
+          generatedAt: report.generatedAt,
+          processingTime: report.processingTime,
         );
 
         ref.read(fiscalAnalysisProvider.notifier).setReport(updatedReport);

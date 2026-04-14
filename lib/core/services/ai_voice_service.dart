@@ -7,12 +7,15 @@ import 'package:http/http.dart' as http;
 
 import '../constants/app_constants.dart';
 import '../mock/mock_data.dart';
-import '../utils/web_file_downloader.dart';
+import '../utils/web_file_downloader_stub.dart'
+    if (dart.library.js_interop) '../utils/web_file_downloader.dart';
 import 'report_template_service.dart';
 
 enum AiVoiceState { idle, connecting, listening, processing, speaking, error }
 
 class AiVoiceService extends ChangeNotifier {
+  bool _disposed = false;
+
   AiVoiceState _state = AiVoiceState.idle;
   AiVoiceState get state => _state;
 
@@ -359,6 +362,7 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
   // ── Execute requested functions and send results back ──
 
   void _handleFunctionCall(Map<String, dynamic> event) async {
+    if (_disposed) return;
     if (_dataChannel == null ||
         _dataChannel!.state != RTCDataChannelState.RTCDataChannelOpen) {
       return;
@@ -441,6 +445,8 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
       functionOutput = 'Error: Función no encontrada o no soportada.';
     }
 
+    if (_disposed || _dataChannel == null) return;
+
     // Send the result back to the model
     final resultEvent = {
       'type': 'conversation.item.create',
@@ -495,6 +501,7 @@ Si te preguntan datos específicos que no tienes, indica que estás conectado a 
 
   @override
   void dispose() {
+    _disposed = true;
     _cleanup(silent: true);
     _audioRenderer.dispose();
     super.dispose();

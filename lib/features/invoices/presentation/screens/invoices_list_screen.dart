@@ -32,44 +32,40 @@ class InvoicesListScreen extends StatefulWidget {
 
 class _InvoicesListScreenState extends State<InvoicesListScreen> {
   int _activeTab = 0;
-  List<Invoice> get _allInvoices => MockData.invoices;
+  late final List<Invoice> _allInvoices;
+  late final List<String> _tabLabels;
+  late List<Invoice> _filteredInvoices;
 
-  List<Invoice> get _filteredInvoices {
-    switch (_activeTab) {
-      case 1:
-        return _allInvoices
-            .where((i) => i.status == InvoiceStatus.draft)
-            .toList();
-      case 2:
-        return _allInvoices
-            .where((i) => i.status == InvoiceStatus.sent)
-            .toList();
-      case 3:
-        return _allInvoices
-            .where((i) => i.status == InvoiceStatus.rejected)
-            .toList();
-      case 4:
-        return _allInvoices
-            .where((i) => i.status == InvoiceStatus.pendingReview)
-            .toList();
-      default:
-        return _allInvoices;
-    }
-  }
-
-  List<String> get _tabLabels {
-    return [
+  @override
+  void initState() {
+    super.initState();
+    _allInvoices = MockData.invoices;
+    _tabLabels = [
       'Todas (${_allInvoices.length})',
       'Borradores (${_allInvoices.where((i) => i.status == InvoiceStatus.draft).length})',
       'Enviadas (${_allInvoices.where((i) => i.status == InvoiceStatus.sent).length})',
       'Rechazadas (${_allInvoices.where((i) => i.status == InvoiceStatus.rejected).length})',
       'Pendientes (${_allInvoices.where((i) => i.status == InvoiceStatus.pendingReview).length})',
     ];
+    _filteredInvoices = _allInvoices;
+  }
+
+  List<Invoice> _computeFiltered(int tab) {
+    return switch (tab) {
+      1 => _allInvoices.where((i) => i.status == InvoiceStatus.draft).toList(),
+      2 => _allInvoices.where((i) => i.status == InvoiceStatus.sent).toList(),
+      3 => _allInvoices.where((i) => i.status == InvoiceStatus.rejected).toList(),
+      4 => _allInvoices.where((i) => i.status == InvoiceStatus.pendingReview).toList(),
+      _ => _allInvoices,
+    };
   }
 
   void _onTabChanged(int index) {
     if (index == _activeTab) return;
-    setState(() => _activeTab = index);
+    setState(() {
+      _activeTab = index;
+      _filteredInvoices = _computeFiltered(index);
+    });
   }
 
   @override

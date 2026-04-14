@@ -48,7 +48,11 @@ class _LiquidityPanelState extends State<LiquidityPanel> {
     final horizon = _today.add(Duration(days: days));
     final inRange = _creditPending
         .where(
-          (i) => !i.dueDate!.isBefore(_today) && !i.dueDate!.isAfter(horizon),
+          (i) {
+            final due = i.dueDate;
+            if (due == null) return false;
+            return !due.isBefore(_today) && !due.isAfter(horizon);
+          },
         )
         .toList();
     final total = inRange.fold<double>(0, (s, i) => s + i.total);
@@ -491,7 +495,7 @@ class _LiquidityPanelState extends State<LiquidityPanel> {
             itemCount: _selected.invoices.length,
             itemBuilder: (context, index) {
               final inv = _selected.invoices[index];
-              final daysLeft = inv.dueDate!.difference(_today).inDays;
+              final daysLeft = inv.dueDate?.difference(_today).inDays ?? 0;
               final accentColor = _horizonColor(_selectedHorizon, colors);
 
               return Container(

@@ -9,7 +9,8 @@ import 'core/router/app_router.dart' show appRouterProvider;
 import 'core/services/ai_voice_service.dart';
 
 /// Riverpod provider for the AI voice service.
-final aiVoiceProvider = ChangeNotifierProvider<AiVoiceService>((ref) {
+final aiVoiceProvider =
+    ChangeNotifierProvider.autoDispose<AiVoiceService>((ref) {
   return AiVoiceService();
 });
 

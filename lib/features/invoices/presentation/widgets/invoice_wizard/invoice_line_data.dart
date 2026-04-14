@@ -18,10 +18,14 @@ class InvoiceLineData {
     this.unitPrice = '',
     this.taxRate = '21',
   }) {
-    descriptionController = TextEditingController(text: description);
-    quantityController = TextEditingController(text: quantity);
-    unitPriceController = TextEditingController(text: unitPrice);
-    taxRateController = TextEditingController(text: taxRate);
+    descriptionController = TextEditingController(text: description)
+      ..addListener(() => description = descriptionController.text);
+    quantityController = TextEditingController(text: quantity)
+      ..addListener(() => quantity = quantityController.text);
+    unitPriceController = TextEditingController(text: unitPrice)
+      ..addListener(() => unitPrice = unitPriceController.text);
+    taxRateController = TextEditingController(text: taxRate)
+      ..addListener(() => taxRate = taxRateController.text);
   }
 
   void dispose() {

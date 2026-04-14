@@ -76,10 +76,12 @@ class FiscalExplanationService {
     );
   }
 
+  static Dio? _devDio;
+
   /// Llama al dev_server local para desarrollo.
   Future<String?> _callDevServer(Map<String, dynamic> data) async {
     try {
-      final dio = Dio(
+      final dio = _devDio ??= Dio(
         BaseOptions(
           baseUrl: _devBaseUrl,
           connectTimeout: const Duration(seconds: 15),

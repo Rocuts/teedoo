@@ -78,7 +78,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
       );
     }
 
-    final dateFormat = DateFormat('dd MMM yyyy', 'es_ES');
+    final dateFormat = DateFormat('dd MMM yyyy', 'es');
 
     return Column(
       children: [

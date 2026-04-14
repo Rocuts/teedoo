@@ -23,7 +23,20 @@ class _OrbitVisualizerState extends State<OrbitVisualizer>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
-    )..repeat();
+    );
+    if (widget.state != AiVoiceState.idle) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(OrbitVisualizer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.state == AiVoiceState.idle) {
+      _controller.stop();
+    } else if (!_controller.isAnimating) {
+      _controller.repeat();
+    }
   }
 
   @override
