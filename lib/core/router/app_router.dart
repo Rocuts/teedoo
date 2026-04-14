@@ -22,6 +22,49 @@ import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../shared/layouts/app_shell.dart';
 import 'route_names.dart';
 
+// ── Shell page transition ──
+// Opaque background covers the previous route instantly, then content
+// fades in with a subtle upward slide. Prevents animation bleed-through
+// while feeling polished (like Linear / Vercel dashboard transitions).
+
+const _kTransitionDuration = Duration(milliseconds: 260);
+const _kReverseTransitionDuration = Duration(milliseconds: 180);
+const _kCurve = Curves.easeOutCubic;
+const _kSlideBegin = Offset(0, 0.015); // ~12px on 800px viewport
+
+Page<void> _shellPage(Widget child, {LocalKey? key}) {
+  return CustomTransitionPage<void>(
+    key: key,
+    child: child,
+    transitionDuration: _kTransitionDuration,
+    reverseTransitionDuration: _kReverseTransitionDuration,
+    transitionsBuilder: (context, animation, _, child) {
+      final curved = CurveTween(curve: _kCurve);
+      return Stack(
+        children: [
+          // Opaque fill — blocks previous page from bleeding through
+          Positioned.fill(
+            child: ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+          ),
+          // Content — fades + slides in
+          FadeTransition(
+            opacity: animation.drive(curved),
+            child: SlideTransition(
+              position: animation.drive(
+                Tween<Offset>(begin: _kSlideBegin, end: Offset.zero)
+                    .chain(curved),
+              ),
+              child: child,
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 /// Clave del navigator raíz para la app shell.
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -90,9 +133,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       // ── App Routes (con AppShell: sidebar + topbar) ──
-      // Todas las rutas dentro del shell usan NoTransitionPage para evitar
-      // que la transición de MaterialPage muestre la pantalla anterior
-      // (y sus animaciones flutter_animate) durante el cambio de ruta.
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) =>
@@ -102,31 +142,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.dashboard,
             path: RoutePaths.dashboard,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: DashboardScreen()),
+                _shellPage(const DashboardScreen()),
           ),
           GoRoute(
             name: RouteNames.invoices,
             path: RoutePaths.invoices,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: InvoicesListScreen()),
+                _shellPage(const InvoicesListScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.invoiceCreate,
                 path: 'new',
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: InvoiceCreateScreen()),
+                    _shellPage(const InvoiceCreateScreen()),
               ),
               GoRoute(
                 name: RouteNames.invoiceDocuments,
                 path: 'documents',
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: InvoiceDocumentsScreen()),
+                    _shellPage(const InvoiceDocumentsScreen()),
               ),
               GoRoute(
                 name: RouteNames.invoiceDetail,
                 path: ':id',
-                pageBuilder: (context, state) => NoTransitionPage(
-                  child: InvoiceDetailScreen(
+                pageBuilder: (context, state) => _shellPage(
+                  InvoiceDetailScreen(
                     invoiceId: state.pathParameters['id'] ?? '',
                   ),
                 ),
@@ -137,13 +177,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.compliance,
             path: RoutePaths.compliance,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: QuickCheckScreen()),
+                _shellPage(const QuickCheckScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.complianceResults,
                 path: 'results/:id',
-                pageBuilder: (context, state) => NoTransitionPage(
-                  child: ResultsScreen(
+                pageBuilder: (context, state) => _shellPage(
+                  ResultsScreen(
                     checkId: state.pathParameters['id'] ?? '',
                   ),
                 ),
@@ -154,13 +194,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.fiscal,
             path: RoutePaths.fiscal,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: FiscalScreen()),
+                _shellPage(const FiscalScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.optimizationDetail,
                 path: 'optimizations/:id',
-                pageBuilder: (context, state) => NoTransitionPage(
-                  child: OptimizationDetailScreen(
+                pageBuilder: (context, state) => _shellPage(
+                  OptimizationDetailScreen(
                     optimizationId: state.pathParameters['id'] ?? '',
                   ),
                 ),
@@ -171,13 +211,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.audit,
             path: RoutePaths.audit,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: AuditScreen()),
+                _shellPage(const AuditScreen()),
           ),
           GoRoute(
             name: RouteNames.settings,
             path: RoutePaths.settings,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: SettingsScreen()),
+                _shellPage(const SettingsScreen()),
           ),
         ],
       ),
