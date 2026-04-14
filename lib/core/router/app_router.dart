@@ -90,6 +90,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       // ── App Routes (con AppShell: sidebar + topbar) ──
+      // Todas las rutas dentro del shell usan NoTransitionPage para evitar
+      // que la transición de MaterialPage muestre la pantalla anterior
+      // (y sus animaciones flutter_animate) durante el cambio de ruta.
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) =>
@@ -98,28 +101,34 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.dashboard,
             path: RoutePaths.dashboard,
-            builder: (context, state) => const DashboardScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: DashboardScreen()),
           ),
           GoRoute(
             name: RouteNames.invoices,
             path: RoutePaths.invoices,
-            builder: (context, state) => const InvoicesListScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: InvoicesListScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.invoiceCreate,
                 path: 'new',
-                builder: (context, state) => const InvoiceCreateScreen(),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: InvoiceCreateScreen()),
               ),
               GoRoute(
                 name: RouteNames.invoiceDocuments,
                 path: 'documents',
-                builder: (context, state) => const InvoiceDocumentsScreen(),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: InvoiceDocumentsScreen()),
               ),
               GoRoute(
                 name: RouteNames.invoiceDetail,
                 path: ':id',
-                builder: (context, state) => InvoiceDetailScreen(
-                  invoiceId: state.pathParameters['id'] ?? '',
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: InvoiceDetailScreen(
+                    invoiceId: state.pathParameters['id'] ?? '',
+                  ),
                 ),
               ),
             ],
@@ -127,13 +136,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.compliance,
             path: RoutePaths.compliance,
-            builder: (context, state) => const QuickCheckScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: QuickCheckScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.complianceResults,
                 path: 'results/:id',
-                builder: (context, state) => ResultsScreen(
-                  checkId: state.pathParameters['id'] ?? '',
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: ResultsScreen(
+                    checkId: state.pathParameters['id'] ?? '',
+                  ),
                 ),
               ),
             ],
@@ -141,13 +153,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.fiscal,
             path: RoutePaths.fiscal,
-            builder: (context, state) => const FiscalScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: FiscalScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.optimizationDetail,
                 path: 'optimizations/:id',
-                builder: (context, state) => OptimizationDetailScreen(
-                  optimizationId: state.pathParameters['id'] ?? '',
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: OptimizationDetailScreen(
+                    optimizationId: state.pathParameters['id'] ?? '',
+                  ),
                 ),
               ),
             ],
@@ -155,12 +170,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.audit,
             path: RoutePaths.audit,
-            builder: (context, state) => const AuditScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: AuditScreen()),
           ),
           GoRoute(
             name: RouteNames.settings,
             path: RoutePaths.settings,
-            builder: (context, state) => const SettingsScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SettingsScreen()),
           ),
         ],
       ),
