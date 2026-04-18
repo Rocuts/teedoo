@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/auth/providers/auth_provider.dart';
 import '../constants/app_constants.dart';
+import '../session/data_source.dart';
+import '../session/data_source_provider.dart';
 import 'api_result.dart';
 
 /// Provider del cliente Dio configurado.
@@ -20,6 +22,11 @@ final dioClientProvider = Provider<DioClient>((ref) {
     tokenProvider: () async {
       return ref.read(authTokenProvider);
     },
+    dataSourceHeaderProvider: () {
+      // Síncrono: el StateProvider se lee sin await, así el interceptor
+      // no paga un hop en cada request.
+      return ref.read(dataSourceProvider).header;
+    },
     onAuthError: () {
       unawaited(
         Future<void>.microtask(() {
@@ -32,6 +39,12 @@ final dioClientProvider = Provider<DioClient>((ref) {
 
 /// Tipo para funciones que proveen el token de autenticación.
 typedef TokenProvider = Future<String?> Function();
+
+/// Tipo para funciones que proveen el valor del header `X-Data-Source`.
+///
+/// Retorna `null` (o un string vacío) para no adjuntar el header —
+/// útil en tests que no necesitan el switch.
+typedef DataSourceHeaderProvider = String? Function();
 
 /// Tipo para callback de error de autenticación (token expirado, etc.).
 typedef AuthErrorCallback = void Function();
@@ -48,13 +61,16 @@ typedef AuthErrorCallback = void Function();
 class DioClient {
   late final Dio _dio;
   final TokenProvider _tokenProvider;
+  final DataSourceHeaderProvider? _dataSourceHeaderProvider;
   final AuthErrorCallback? _onAuthError;
 
   DioClient({
     required TokenProvider tokenProvider,
+    DataSourceHeaderProvider? dataSourceHeaderProvider,
     AuthErrorCallback? onAuthError,
     String? baseUrl,
   }) : _tokenProvider = tokenProvider,
+       _dataSourceHeaderProvider = dataSourceHeaderProvider,
        _onAuthError = onAuthError {
     _dio = Dio(
       BaseOptions(
@@ -71,13 +87,16 @@ class DioClient {
 
     // El orden de los interceptores importa:
     // 1. Auth (agrega token antes de enviar)
-    // 2. Logging (registra la request con token)
-    // 3. Error (convierte errores al salir)
+    // 2. DataSource (agrega X-Data-Source para el switch dual-DB)
+    // 3. Logging (registra la request con headers ya aplicados)
+    // 4. Error (convierte errores al salir)
     _dio.interceptors.addAll([
       _AuthInterceptor(
         tokenProvider: _tokenProvider,
         onAuthError: _onAuthError,
       ),
+      if (_dataSourceHeaderProvider != null)
+        _DataSourceInterceptor(headerProvider: _dataSourceHeaderProvider),
       if (kDebugMode) _LoggingInterceptor(),
       const _ErrorInterceptor(),
     ]);
@@ -360,6 +379,36 @@ class _AuthInterceptor extends Interceptor {
       _onAuthError?.call();
     }
     handler.next(err);
+  }
+}
+
+/// Interceptor que inyecta el header `X-Data-Source` en cada request.
+///
+/// El backend (`api/_lib/db/factory.js`) lee este header para elegir el
+/// repositorio (Mongo | Postgres) en runtime. Si el provider devuelve un
+/// valor vacío/nulo el header NO se adjunta — así fallbackea al default
+/// server-side (`DATA_SOURCE` env var).
+///
+/// Whitelist: sólo valores pertenecientes al enum [DataSource]
+/// (`mongo` | `postgres`).
+class _DataSourceInterceptor extends Interceptor {
+  final DataSourceHeaderProvider _headerProvider;
+
+  static const String _headerName = 'X-Data-Source';
+  static final Set<String> _allowed = DataSource.values
+      .map((e) => e.header)
+      .toSet();
+
+  const _DataSourceInterceptor({required DataSourceHeaderProvider headerProvider})
+      : _headerProvider = headerProvider;
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final value = _headerProvider();
+    if (value != null && value.isNotEmpty && _allowed.contains(value)) {
+      options.headers[_headerName] = value;
+    }
+    handler.next(options);
   }
 }
 

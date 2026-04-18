@@ -1,19 +1,19 @@
 /**
  * Drizzle Postgres schema entry point (Supabase-backed).
  *
- * Each domain defines its table in its own file under this directory, then
- * re-exports from here so `drizzle-kit` picks them up via a single path.
+ * Each domain defines its tables in its own file, then re-exports from
+ * here so `drizzle-kit` picks everything up via a single import path.
  *
- * Example:
- *   const { pgTable, uuid, timestamp, varchar } = require('drizzle-orm/pg-core');
- *   const users = pgTable('users', {
- *     id: uuid('id').primaryKey().defaultRandom(),
- *     email: varchar('email', { length: 255 }).notNull().unique(),
- *     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
- *   });
- *   module.exports = { users };
- *
- * Supabase tip: enable Row-Level Security (RLS) on every table and define
- * policies in a companion SQL migration — Drizzle does not manage RLS for you.
+ * Supabase tip: Row-Level Security is enabled and policies are defined
+ * in `../migrations/rls_policies.sql` — Drizzle does NOT manage RLS for
+ * you. That SQL file must be applied AFTER the generated schema
+ * migrations.
  */
-module.exports = {};
+
+const parties = require('./parties');
+const invoices = require('./invoices');
+
+module.exports = {
+  ...parties,
+  ...invoices,
+};

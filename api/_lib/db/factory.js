@@ -1,5 +1,10 @@
 const mongoHealth = require('./mongo/repos/health');
+const mongoParties = require('./mongo/repos/parties');
+const mongoInvoices = require('./mongo/repos/invoices');
+
 const postgresHealth = require('./postgres/repos/health');
+const postgresParties = require('./postgres/repos/parties');
+const postgresInvoices = require('./postgres/repos/invoices');
 
 const VALID_SOURCES = new Set(['mongo', 'postgres']);
 
@@ -16,12 +21,28 @@ const BUILDERS = {
     mongo: mongoHealth.createHealthRepo,
     postgres: postgresHealth.createHealthRepo,
   },
+  parties: {
+    mongo: mongoParties.createPartiesRepo,
+    postgres: postgresParties.createPartiesRepo,
+  },
+  invoices: {
+    mongo: mongoInvoices.createInvoicesRepo,
+    postgres: postgresInvoices.createInvoicesRepo,
+  },
 };
 
 /**
  * Build repositories for the current request. Each domain resolves its own
  * backend from DATA_SOURCE (or per-domain DATA_SOURCE_<DOMAIN> overrides),
  * so hybrid deployments (some domains on Mongo, others on Postgres) work.
+ *
+ * Handlers typically pass a per-request override derived from the
+ * X-Data-Source request header:
+ *
+ *     const source = req.headers['x-data-source'];
+ *     const { invoices } = getRepositories({
+ *       overrides: source ? { invoices: source, parties: source } : {},
+ *     });
  *
  * @param {import('./types').FactoryOptions} [opts]
  * @returns {import('./types').Repositories}
