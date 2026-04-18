@@ -1,0 +1,24 @@
+{
+  "name": "teedoo-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TeeDoo Vercel Functions + multi-DB layer (MongoDB + MySQL).",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:push": "dotenv -e .env.local -- drizzle-kit push",
+    "db:studio": "dotenv -e .env.local -- drizzle-kit studio"
+  },
+  "dependencies": {
+    "mongodb": "^6.12.0",
+    "mysql2": "^3.11.5",
+    "drizzle-orm": "^0.37.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "^7.4.4",
+    "drizzle-kit": "^0.30.0"
+  }
+}

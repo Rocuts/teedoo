@@ -25,6 +25,18 @@ build/
 *.g.dart
 *.freezed.dart
 
+# Node / Vercel Functions
+node_modules/
+.vercel/
+
+# Claude Code (keep shared agents, ignore per-user state)
+.claude/projects/
+.claude/skills/
+.claude/settings.local.json
+
+# Lighthouse audit cache
+.unlighthouse/
+
 # Misc
 *.log
 flutter_*.png
