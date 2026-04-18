@@ -71,8 +71,8 @@ class PartyMongoModel with _$PartyMongoModel {
     required String orgId,
     required String taxId,
 
-    /// Stored as enum name (`nif`, `nie`, ...) — keeps the document
-    /// schema-agnostic to Dart renames and easy to filter in Atlas.
+    /// Stored as canonical wire value (`NIF`, `NIE`, `NIF_IVA`, ...) —
+    /// SCREAMING_SNAKE_CASE per spec 2026-04-18; filterable in Atlas.
     required String taxIdType,
     required String name,
     required AddressMongoModel address,
@@ -88,7 +88,7 @@ class PartyMongoModel with _$PartyMongoModel {
     id: p.id,
     orgId: p.orgId,
     taxId: p.taxId,
-    taxIdType: p.taxIdType.name,
+    taxIdType: p.taxIdType.wireValue,
     name: p.name,
     address: AddressMongoModel.fromDomain(p.address),
     country: p.country,
@@ -102,7 +102,7 @@ extension PartyMongoModelX on PartyMongoModel {
     id: id,
     orgId: orgId,
     taxId: taxId,
-    taxIdType: TaxIdType.values.byName(taxIdType),
+    taxIdType: TaxIdType.fromWire(taxIdType),
     name: name,
     address: address.toDomain(),
     country: country,

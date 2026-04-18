@@ -31,14 +31,41 @@ part 'party.freezed.dart';
 // Tax identifier taxonomy (AEAT + intra-EU VIES).
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Tipo de identificador fiscal (alineado con el catálogo AEAT):
+/// Tipo de identificador fiscal (catálogo canónico AEAT 2026-04-18):
 ///   NIF → DNI español + letra de control.
 ///   NIE → extranjero residente.
 ///   CIF → histórico (ahora fundido con NIF para personas jurídicas).
-///   VAT_EU → número de IVA intracomunitario (ES, FR, DE, ...).
-///   PASSPORT → operaciones no sujetas a identificación fiscal UE.
-///   OTHER → cualquier otro.
-enum TaxIdType { nif, nie, cif, vatEu, passport, other }
+///   NIF_IVA → número de IVA intracomunitario (ES, FR, DE, ...).
+///   PASAPORTE → operaciones no sujetas a identificación fiscal UE.
+///   OTRO → cualquier otro.
+///
+/// `wireValue` es el SCREAMING_SNAKE_CASE que viaja en JSON y DB. El enum
+/// Dart usa camelCase internamente. [fromWire] lanza [ArgumentError] si el
+/// valor recibido no pertenece al catálogo.
+enum TaxIdType {
+  nif('NIF'),
+  nie('NIE'),
+  cif('CIF'),
+  nifIva('NIF_IVA'),
+  pasaporte('PASAPORTE'),
+  otro('OTRO');
+
+  const TaxIdType(this.wireValue);
+
+  final String wireValue;
+
+  static TaxIdType fromWire(String value) {
+    for (final v in TaxIdType.values) {
+      if (v.wireValue == value) return v;
+    }
+    throw ArgumentError.value(
+      value,
+      'wireValue',
+      'Unknown TaxIdType wire value (expected one of: '
+          '${TaxIdType.values.map((e) => e.wireValue).join(', ')})',
+    );
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Address

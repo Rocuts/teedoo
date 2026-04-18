@@ -65,7 +65,7 @@ class InvoiceLineMongoModel with _$InvoiceLineMongoModel {
         quantity: l.quantity,
         unitPriceCents: l.unitPriceCents,
         discountPercent: l.discountPercent,
-        vatRate: l.vatRate.name,
+        vatRate: l.vatRate.wireValue,
         vatRateValue: l.vatRateValue,
         recargoEquivalenciaRate: l.recargoEquivalenciaRate,
         irpfRate: l.irpfRate,
@@ -81,7 +81,7 @@ extension InvoiceLineMongoModelX on InvoiceLineMongoModel {
     quantity: quantity,
     unitPriceCents: unitPriceCents,
     discountPercent: discountPercent,
-    vatRate: VatRate.values.byName(vatRate),
+    vatRate: VatRate.fromWire(vatRate),
     vatRateValue: vatRateValue,
     recargoEquivalenciaRate: recargoEquivalenciaRate,
     irpfRate: irpfRate,
@@ -104,7 +104,7 @@ class VatBreakMongoModel with _$VatBreakMongoModel {
       _$VatBreakMongoModelFromJson(json);
 
   factory VatBreakMongoModel.fromDomain(VatBreak v) => VatBreakMongoModel(
-    rate: v.rate.name,
+    rate: v.rate.wireValue,
     rateValue: v.rateValue,
     baseCents: v.baseCents,
     vatCents: v.vatCents,
@@ -114,7 +114,7 @@ class VatBreakMongoModel with _$VatBreakMongoModel {
 
 extension VatBreakMongoModelX on VatBreakMongoModel {
   VatBreak toDomain() => VatBreak(
-    rate: VatRate.values.byName(rate),
+    rate: VatRate.fromWire(rate),
     rateValue: rateValue,
     baseCents: baseCents,
     vatCents: vatCents,
@@ -300,7 +300,7 @@ class AuditStampMongoModel with _$AuditStampMongoModel {
     required String at,
     required String actorId,
     required String action,
-    String? note,
+    String? notes,
   }) = _AuditStampMongoModel;
 
   factory AuditStampMongoModel.fromJson(Map<String, dynamic> json) =>
@@ -310,7 +310,7 @@ class AuditStampMongoModel with _$AuditStampMongoModel {
     at: s.at.toIso8601String(),
     actorId: s.actorId,
     action: s.action,
-    note: s.note,
+    notes: s.notes,
   );
 }
 
@@ -319,7 +319,7 @@ extension AuditStampMongoModelX on AuditStampMongoModel {
     at: DateTime.parse(at),
     actorId: actorId,
     action: action,
-    note: note,
+    notes: notes,
   );
 }
 
@@ -372,9 +372,9 @@ class InvoiceMongoModel with _$InvoiceMongoModel {
     recipient: PartyMongoModel.fromDomain(e.recipient),
     lines: e.lines.map(InvoiceLineMongoModel.fromDomain).toList(),
     totals: InvoiceTotalsMongoModel.fromDomain(e.totals),
-    regime: e.regime.name,
-    operationType: e.operationType.name,
-    fiscalRegion: e.fiscalRegion.name,
+    regime: e.regime.wireValue,
+    operationType: e.operationType.wireValue,
+    fiscalRegion: e.fiscalRegion.wireValue,
     compliance: ComplianceFlagsMongoModel.fromDomain(e.compliance),
     paymentTerms: e.paymentTerms == null
         ? null
@@ -405,9 +405,9 @@ extension InvoiceMongoModelX on InvoiceMongoModel {
     recipient: recipient.toDomain(),
     lines: lines.map((e) => e.toDomain()).toList(),
     totals: totals.toDomain(),
-    regime: InvoiceRegime.values.byName(regime),
-    operationType: OperationType.values.byName(operationType),
-    fiscalRegion: FiscalRegion.values.byName(fiscalRegion),
+    regime: InvoiceRegime.fromWire(regime),
+    operationType: OperationType.fromWire(operationType),
+    fiscalRegion: FiscalRegion.fromWire(fiscalRegion),
     compliance: compliance.toDomain(),
     paymentTerms: paymentTerms?.toDomain(),
     notes: notes,

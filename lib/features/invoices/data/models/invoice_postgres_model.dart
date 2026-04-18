@@ -78,7 +78,7 @@ class InvoiceLinePostgresModel with _$InvoiceLinePostgresModel {
         quantity: l.quantity,
         unitPriceCents: l.unitPriceCents,
         discountPercent: l.discountPercent,
-        vatRate: l.vatRate.name,
+        vatRate: l.vatRate.wireValue,
         vatRateValue: l.vatRateValue,
         recargoEquivalenciaRate: l.recargoEquivalenciaRate,
         irpfRate: l.irpfRate,
@@ -94,7 +94,7 @@ extension InvoiceLinePostgresModelX on InvoiceLinePostgresModel {
         quantity: quantity,
         unitPriceCents: unitPriceCents,
         discountPercent: discountPercent,
-        vatRate: VatRate.values.byName(vatRate),
+        vatRate: VatRate.fromWire(vatRate),
         vatRateValue: vatRateValue,
         recargoEquivalenciaRate: recargoEquivalenciaRate,
         irpfRate: irpfRate,
@@ -129,7 +129,7 @@ class VatBreakdownPostgresModel with _$VatBreakdownPostgresModel {
         invoiceId: invoiceId,
         orgId: orgId,
         position: position,
-        rate: v.rate.name,
+        rate: v.rate.wireValue,
         rateValue: v.rateValue,
         baseCents: v.baseCents,
         vatCents: v.vatCents,
@@ -139,7 +139,7 @@ class VatBreakdownPostgresModel with _$VatBreakdownPostgresModel {
 
 extension VatBreakdownPostgresModelX on VatBreakdownPostgresModel {
   VatBreak toDomain() => VatBreak(
-        rate: VatRate.values.byName(rate),
+        rate: VatRate.fromWire(rate),
         rateValue: rateValue,
         baseCents: baseCents,
         vatCents: vatCents,
@@ -200,7 +200,7 @@ class AuditStampPostgresModel with _$AuditStampPostgresModel {
     required String at,
     required String actorId,
     required String action,
-    String? note,
+    String? notes,
   }) = _AuditStampPostgresModel;
 
   factory AuditStampPostgresModel.fromJson(Map<String, dynamic> json) =>
@@ -219,7 +219,7 @@ class AuditStampPostgresModel with _$AuditStampPostgresModel {
         at: s.at.toIso8601String(),
         actorId: s.actorId,
         action: s.action,
-        note: s.note,
+        notes: s.notes,
       );
 }
 
@@ -228,7 +228,7 @@ extension AuditStampPostgresModelX on AuditStampPostgresModel {
         at: DateTime.parse(at),
         actorId: actorId,
         action: action,
-        note: note,
+        notes: notes,
       );
 }
 
@@ -316,9 +316,9 @@ class InvoicePostgresModel with _$InvoicePostgresModel {
       irpfCents: e.totals.irpfCents,
       totalCents: e.totals.totalCents,
       currency: e.totals.currency,
-      regime: e.regime.name,
-      operationType: e.operationType.name,
-      fiscalRegion: e.fiscalRegion.name,
+      regime: e.regime.wireValue,
+      operationType: e.operationType.wireValue,
+      fiscalRegion: e.fiscalRegion.wireValue,
       ticketBaiId: e.compliance.ticketBaiId,
       ticketBaiHash: e.compliance.ticketBaiHash,
       verifactuHash: e.compliance.verifactuHash,
@@ -437,9 +437,9 @@ extension InvoicePostgresModelX on InvoicePostgresModel {
         totalCents: totalCents,
         currency: currency,
       ),
-      regime: InvoiceRegime.values.byName(regime),
-      operationType: OperationType.values.byName(operationType),
-      fiscalRegion: FiscalRegion.values.byName(fiscalRegion),
+      regime: InvoiceRegime.fromWire(regime),
+      operationType: OperationType.fromWire(operationType),
+      fiscalRegion: FiscalRegion.fromWire(fiscalRegion),
       compliance: ComplianceFlags(
         ticketBaiId: ticketBaiId,
         ticketBaiHash: ticketBaiHash,

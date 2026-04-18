@@ -23,7 +23,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 // Reuse the existing [InvoiceStatus] enum so UI/status_extensions keep working.
 // If Phase 2 needs extra states (ISSUED, PAID, RECTIFIED) we extend there.
-import '../data/models/invoice_status.dart' show InvoiceStatus;
+// InvoiceStatus is declared in `invoice_model.dart`; `invoice_status.dart`
+// only extends it with UI helpers, so we import from the canonical source.
+import '../data/models/invoice_model.dart' show InvoiceStatus;
 
 // Party / Address / TaxIdType viven ahora en su propio módulo para permitir
 // normalizarlos como agregado independiente (tabla `parties` / colección
@@ -44,59 +46,142 @@ part 'invoice.freezed.dart';
 // Enums — fiscal metadata
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Régimen fiscal aplicable a la factura (Art. 120 LIVA + RD 1007/2023).
+/// Régimen fiscal aplicable a la factura (Art. 120 LIVA + RD 1007/2023),
+/// spec canónica 2026-04-18 con siglas oficiales AEAT.
 enum InvoiceRegime {
-  general,
-  simplificado,
-  recargoEquivalencia,
-  reagp, // Régimen especial de agricultura, ganadería y pesca
-  bienesUsados,
-  agenciasViajes,
-  criterioCaja,
-  grupoEntidades,
-  exento,
+  general('GENERAL'),
+  simplificado('SIMPLIFICADO'),
+  recargoEquivalencia('RECARGO_EQUIVALENCIA'),
+  reagp('REAGP'), // Régimen especial de agricultura, ganadería y pesca
+  bienesUsadosRebu('BIENES_USADOS_REBU'),
+  agenciasViajesReav('AGENCIAS_VIAJES_REAV'),
+  criterioCajaRecc('CRITERIO_CAJA_RECC'),
+  grupoEntidadesRege('GRUPO_ENTIDADES_REGE'),
+  exento('EXENTO');
+
+  const InvoiceRegime(this.wireValue);
+
+  final String wireValue;
+
+  static InvoiceRegime fromWire(String value) {
+    for (final v in InvoiceRegime.values) {
+      if (v.wireValue == value) return v;
+    }
+    throw ArgumentError.value(
+      value,
+      'wireValue',
+      'Unknown InvoiceRegime wire value (expected one of: '
+          '${InvoiceRegime.values.map((e) => e.wireValue).join(', ')})',
+    );
+  }
 }
 
-/// Claves de operación AEAT (SII / Verifactu):
+/// Claves de operación AEAT (SII / Verifactu), catálogo canónico 2026-04-18:
 ///   F1: Factura completa.
 ///   F2: Factura simplificada (ticket).
+///   F3: Factura emitida en sustitución de simplificadas.
+///   F4: Asiento resumen de facturas.
+///   F5: Importaciones (DUA).
 ///   R1-R5: Facturas rectificativas (por error fundado en derecho, art. 80 LIVA,
 ///          por diferencias, por devoluciones, por sustitución de simplificadas).
-enum OperationType { f1, f2, r1, r2, r3, r4, r5 }
+enum OperationType {
+  f1('F1'),
+  f2('F2'),
+  f3('F3'),
+  f4('F4'),
+  f5('F5'),
+  r1('R1'),
+  r2('R2'),
+  r3('R3'),
+  r4('R4'),
+  r5('R5');
+
+  const OperationType(this.wireValue);
+
+  final String wireValue;
+
+  static OperationType fromWire(String value) {
+    for (final v in OperationType.values) {
+      if (v.wireValue == value) return v;
+    }
+    throw ArgumentError.value(
+      value,
+      'wireValue',
+      'Unknown OperationType wire value (expected one of: '
+          '${OperationType.values.map((e) => e.wireValue).join(', ')})',
+    );
+  }
+}
 
 /// Regiones fiscales españolas con IVA propio o particularidades:
 ///   PENINSULA_BALEARES → IVA estándar.
 ///   CANARIAS → IGIC.
 ///   CEUTA / MELILLA → IPSI.
-///   PAIS_VASCO (Álava, Bizkaia, Gipuzkoa) → TicketBAI obligatorio.
+///   PAIS_VASCO_ARABA / PAIS_VASCO_BIZKAIA / PAIS_VASCO_GIPUZKOA →
+///       Hacienda Foral correspondiente, TicketBAI obligatorio.
 ///   NAVARRA → Hacienda Foral de Navarra.
 enum FiscalRegion {
-  peninsulaBaleares,
-  canarias,
-  ceuta,
-  melilla,
-  paisVasco,
-  navarra,
+  peninsulaBaleares('PENINSULA_BALEARES'),
+  canarias('CANARIAS'),
+  ceuta('CEUTA'),
+  melilla('MELILLA'),
+  paisVascoAraba('PAIS_VASCO_ARABA'),
+  paisVascoBizkaia('PAIS_VASCO_BIZKAIA'),
+  paisVascoGipuzkoa('PAIS_VASCO_GIPUZKOA'),
+  navarra('NAVARRA');
+
+  const FiscalRegion(this.wireValue);
+
+  final String wireValue;
+
+  static FiscalRegion fromWire(String value) {
+    for (final v in FiscalRegion.values) {
+      if (v.wireValue == value) return v;
+    }
+    throw ArgumentError.value(
+      value,
+      'wireValue',
+      'Unknown FiscalRegion wire value (expected one of: '
+          '${FiscalRegion.values.map((e) => e.wireValue).join(', ')})',
+    );
+  }
 }
 
 // [TaxIdType] vive en `features/parties/domain/party.dart` y se re-exporta al
 // principio de este archivo, de modo que los imports existentes no se rompen.
 
-/// Tipos impositivos de IVA aplicables en España (2026):
-///   GENERAL 21%, REDUCIDO 10%, SUPER_REDUCIDO 4%, CERO 0%, EXENTO (sin IVA).
-///   IGIC_* para Canarias; IPSI_* para Ceuta/Melilla — valor numérico lo lleva
-///   la línea, el enum identifica el tramo.
+/// Tipos impositivos / categorías de IVA canónicos 2026-04-18.
+///   IVA_GENERAL_21, IVA_REDUCIDO_10, IVA_SUPERREDUCIDO_4, IVA_CERO.
+///   EXENTO (sin IVA), NO_SUJETO (fuera del ámbito del IVA).
+///   IGIC_* para Canarias; IPSI para Ceuta/Melilla. El valor numérico
+///   efectivo lo lleva la línea en `vatRateValue`.
 enum VatRate {
-  general,
-  reducido,
-  superReducido,
-  cero,
-  exento,
-  igicGeneral,
-  igicReducido,
-  igicCero,
-  ipsi,
-  other,
+  general('IVA_GENERAL_21'),
+  reducido('IVA_REDUCIDO_10'),
+  superReducido('IVA_SUPERREDUCIDO_4'),
+  cero('IVA_CERO'),
+  exento('EXENTO'),
+  noSujeto('NO_SUJETO'),
+  igicGeneral('IGIC_GENERAL_7'),
+  igicReducido('IGIC_REDUCIDO_3'),
+  igicCero('IGIC_CERO'),
+  ipsi('IPSI');
+
+  const VatRate(this.wireValue);
+
+  final String wireValue;
+
+  static VatRate fromWire(String value) {
+    for (final v in VatRate.values) {
+      if (v.wireValue == value) return v;
+    }
+    throw ArgumentError.value(
+      value,
+      'wireValue',
+      'Unknown VatRate wire value (expected one of: '
+          '${VatRate.values.map((e) => e.wireValue).join(', ')})',
+    );
+  }
 }
 
 /// Estado en workflow interno.
@@ -265,7 +350,7 @@ class AuditStamp with _$AuditStamp {
     required DateTime at,
     required String actorId,
     required String action,
-    String? note,
+    String? notes,
   }) = _AuditStamp;
 }
 
