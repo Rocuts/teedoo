@@ -18,7 +18,10 @@ Cada agente conoce el proyecto de 0 a 100: stack Flutter + Vercel Functions, Cle
 | 8 | `teedoo-fiscal-compliance` | TicketBAI, Verifactu, SII 2026, anti-alucinación IA | Reglas fiscales, prompts OpenAI, validadores post-IA. |
 | 9 | `teedoo-design-system` | Colores, tipografía, spacing, glassmorphism, motion | Tokens, parity dark/light, consistencia visual. |
 | 10 | `teedoo-code-reviewer` | Review cross-stack: calidad, seguridad, perf, parity | Antes de mergear cualquier cambio no-trivial. |
-| 11 | `teedoo-invoice-forms` | Formulario de factura dual-DB (Mongo + MySQL), 2 modelos Dart, selector de backend | Cualquier trabajo end-to-end sobre la captura de facturas. |
+| 11 | `teedoo-invoice-forms` | Formulario de factura dual-DB (Mongo + Postgres/Supabase), 2 modelos Dart, coordinador de la captura | Cualquier trabajo end-to-end sobre la captura de facturas. |
+| 12 | `teedoo-invoice-wizard` | Refactor del wizard 4-pasos al nuevo domain + integración selector + validators fiscales | Cambios dentro de `invoice_wizard/*` y `invoice_create_screen.dart`. |
+| 13 | `teedoo-invoice-list` | Lista + detalle de facturas con auto-invalidación al flipear `dataSourceProvider` | Cambios en `invoices_list_screen` / `invoice_detail_screen` y sus tabs. |
+| 14 | `teedoo-db-migrator` | Aplicar migraciones Drizzle, RLS SQL, verificar índices Mongo, seed cross-DB, auditar paridad | Tras cambios de schema, reset del demo, o verificación del estado de Supabase + Atlas. |
 
 ## Cómo invocar
 
