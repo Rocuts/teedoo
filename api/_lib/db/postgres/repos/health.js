@@ -1,5 +1,5 @@
 const { sql } = require('drizzle-orm');
-const { getMysql } = require('../client');
+const { getPostgres } = require('../client');
 const { DbError } = require('../../errors');
 
 /** @returns {import('../../types').HealthRepository} */
@@ -8,11 +8,11 @@ function createHealthRepo() {
     async ping() {
       const start = Date.now();
       try {
-        const { db } = getMysql();
+        const { db } = getPostgres();
         await db.execute(sql`SELECT 1`);
-        return { ok: true, backend: 'mysql', latencyMs: Date.now() - start };
+        return { ok: true, backend: 'postgres', latencyMs: Date.now() - start };
       } catch (err) {
-        throw new DbError('MySQL ping failed', { cause: err });
+        throw new DbError('Postgres ping failed', { cause: err });
       }
     },
   };

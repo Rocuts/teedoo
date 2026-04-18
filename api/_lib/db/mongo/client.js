@@ -4,9 +4,10 @@ const CACHE_KEY = Symbol.for('teedoo.mongo.client');
 
 function getEnv() {
   const uri = process.env.MONGODB_URI;
-  const dbName = process.env.MONGODB_DB;
+  // Atlas Marketplace does not inject MONGODB_DB — default to "teedoo",
+  // override via env if a different database name is needed.
+  const dbName = process.env.MONGODB_DB || 'teedoo';
   if (!uri) throw new Error('MONGODB_URI is not set.');
-  if (!dbName) throw new Error('MONGODB_DB is not set.');
   return { uri, dbName };
 }
 

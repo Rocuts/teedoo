@@ -1,9 +1,9 @@
 /**
  * Shared repository interfaces for the TeeDoo dual-DB layer.
  *
- * Every repository — MongoDB or MySQL — MUST conform to these contracts.
- * Handlers under `api/**` receive repositories from `factory.js` and never
- * import drivers directly.
+ * Every repository — MongoDB Atlas or Supabase Postgres — MUST conform to
+ * these contracts. Handlers under `api/**` receive repositories from
+ * `factory.js` and never import drivers directly.
  *
  * Conventions:
  *  - Primary keys: UUID v4 strings (`id`).
@@ -25,18 +25,18 @@ export interface PageQuery {
 }
 
 export interface HealthRepository {
-  ping(): Promise<{ ok: true; backend: 'mongo' | 'mysql'; latencyMs: number }>;
+  ping(): Promise<{ ok: true; backend: 'mongo' | 'postgres'; latencyMs: number }>;
 }
 
 /**
  * The full repository set exposed by the factory.
- * Add new domain interfaces here, then implement in both mongo/ and mysql/.
+ * Add new domain interfaces here, then implement in both mongo/ and postgres/.
  */
 export interface Repositories {
   health: HealthRepository;
 }
 
-export type DataSource = 'mongo' | 'mysql';
+export type DataSource = 'mongo' | 'postgres';
 
 export interface FactoryOptions {
   /** Override the global DATA_SOURCE for a single domain. */
