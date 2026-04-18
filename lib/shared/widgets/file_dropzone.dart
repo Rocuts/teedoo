@@ -43,7 +43,9 @@ class _FileDropzoneState extends State<FileDropzone> {
 
     if (result != null && result.files.isNotEmpty) {
       const maxBytes = AppConstants.maxFileUploadMB * 1024 * 1024;
-      final validFiles = result.files.where((f) => (f.size) <= maxBytes).toList();
+      final validFiles = result.files
+          .where((f) => (f.size) <= maxBytes)
+          .toList();
       if (validFiles.isNotEmpty) {
         widget.onFilesDropped?.call(validFiles);
       }

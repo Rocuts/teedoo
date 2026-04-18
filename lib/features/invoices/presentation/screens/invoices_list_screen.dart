@@ -54,8 +54,12 @@ class _InvoicesListScreenState extends State<InvoicesListScreen> {
     return switch (tab) {
       1 => _allInvoices.where((i) => i.status == InvoiceStatus.draft).toList(),
       2 => _allInvoices.where((i) => i.status == InvoiceStatus.sent).toList(),
-      3 => _allInvoices.where((i) => i.status == InvoiceStatus.rejected).toList(),
-      4 => _allInvoices.where((i) => i.status == InvoiceStatus.pendingReview).toList(),
+      3 =>
+        _allInvoices.where((i) => i.status == InvoiceStatus.rejected).toList(),
+      4 =>
+        _allInvoices
+            .where((i) => i.status == InvoiceStatus.pendingReview)
+            .toList(),
       _ => _allInvoices,
     };
   }

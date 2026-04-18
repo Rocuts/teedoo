@@ -46,15 +46,11 @@ class _LiquidityPanelState extends State<LiquidityPanel> {
 
   static _LiquidityData _compute(int days) {
     final horizon = _today.add(Duration(days: days));
-    final inRange = _creditPending
-        .where(
-          (i) {
-            final due = i.dueDate;
-            if (due == null) return false;
-            return !due.isBefore(_today) && !due.isAfter(horizon);
-          },
-        )
-        .toList();
+    final inRange = _creditPending.where((i) {
+      final due = i.dueDate;
+      if (due == null) return false;
+      return !due.isBefore(_today) && !due.isAfter(horizon);
+    }).toList();
     final total = inRange.fold<double>(0, (s, i) => s + i.total);
     return _LiquidityData(
       days: days,

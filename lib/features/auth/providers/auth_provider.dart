@@ -109,9 +109,15 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> _restoreSession() async {
     try {
-      final accessToken = await SecureStorageService.read(AppConstants.authTokenKey);
-      final refreshToken = await SecureStorageService.read(AppConstants.refreshTokenKey);
-      final userJson = await SecureStorageService.read(AppConstants.authUserKey);
+      final accessToken = await SecureStorageService.read(
+        AppConstants.authTokenKey,
+      );
+      final refreshToken = await SecureStorageService.read(
+        AppConstants.refreshTokenKey,
+      );
+      final userJson = await SecureStorageService.read(
+        AppConstants.authUserKey,
+      );
 
       if (accessToken == null || userJson == null) {
         state = const AuthState(isBootstrapping: false);

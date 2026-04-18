@@ -37,8 +37,9 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // ── Listen to Voice Agent's Active Widget ID ──
-    final activeWidgetId =
-        ref.watch(aiVoiceProvider.select((s) => s.activeWidgetId));
+    final activeWidgetId = ref.watch(
+      aiVoiceProvider.select((s) => s.activeWidgetId),
+    );
 
     return Column(
       children: [

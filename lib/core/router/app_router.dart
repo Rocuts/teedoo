@@ -44,17 +44,17 @@ Page<void> _shellPage(Widget child, {LocalKey? key}) {
         children: [
           // Opaque fill — blocks previous page from bleeding through
           Positioned.fill(
-            child: ColoredBox(
-              color: Theme.of(context).scaffoldBackgroundColor,
-            ),
+            child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor),
           ),
           // Content — fades + slides in
           FadeTransition(
             opacity: animation.drive(curved),
             child: SlideTransition(
               position: animation.drive(
-                Tween<Offset>(begin: _kSlideBegin, end: Offset.zero)
-                    .chain(curved),
+                Tween<Offset>(
+                  begin: _kSlideBegin,
+                  end: Offset.zero,
+                ).chain(curved),
               ),
               child: child,
             ),
@@ -183,9 +183,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 name: RouteNames.complianceResults,
                 path: 'results/:id',
                 pageBuilder: (context, state) => _shellPage(
-                  ResultsScreen(
-                    checkId: state.pathParameters['id'] ?? '',
-                  ),
+                  ResultsScreen(checkId: state.pathParameters['id'] ?? ''),
                 ),
               ),
             ],
@@ -193,8 +191,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.fiscal,
             path: RoutePaths.fiscal,
-            pageBuilder: (context, state) =>
-                _shellPage(const FiscalScreen()),
+            pageBuilder: (context, state) => _shellPage(const FiscalScreen()),
             routes: [
               GoRoute(
                 name: RouteNames.optimizationDetail,
@@ -210,14 +207,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: RouteNames.audit,
             path: RoutePaths.audit,
-            pageBuilder: (context, state) =>
-                _shellPage(const AuditScreen()),
+            pageBuilder: (context, state) => _shellPage(const AuditScreen()),
           ),
           GoRoute(
             name: RouteNames.settings,
             path: RoutePaths.settings,
-            pageBuilder: (context, state) =>
-                _shellPage(const SettingsScreen()),
+            pageBuilder: (context, state) => _shellPage(const SettingsScreen()),
           ),
         ],
       ),
