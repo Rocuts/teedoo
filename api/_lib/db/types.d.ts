@@ -42,8 +42,7 @@ export interface HealthRepository {
 // Parties (issuers / recipients, normalized in both DBs)
 // ────────────────────────────────────────────────────────────────────
 
-export type TaxIdType = 'NIF' | 'NIE' | 'NIF_IVA' | 'PASAPORTE' | 'OTRO';
-// CIF (pre-2008 legal-entity ID) projects to NIF at the repo boundary.
+export type TaxIdType = 'NIF' | 'NIE' | 'CIF' | 'NIF_IVA' | 'PASAPORTE' | 'OTRO';
 
 export interface PartyAddress {
   line1: string;
@@ -51,7 +50,7 @@ export interface PartyAddress {
   postalCode: string;
   city: string;
   province: string;
-  country: string; // ISO-3166-alpha-2, default "ES"
+  country: string; // ISO-3166-1 alpha-2
 }
 
 export interface Party {
@@ -60,6 +59,10 @@ export interface Party {
   taxId: string;
   taxIdType: TaxIdType;
   name: string;
+  /** ISO-3166-1 alpha-2 top-level. Default "ES". Required for TBAI/Verifactu. */
+  country: string;
+  email?: string | null;
+  phone?: string | null;
   address: PartyAddress;
   createdAt: ISODateTime;
   updatedAt: ISODateTime;
@@ -83,7 +86,41 @@ export interface PartiesRepository {
 // responsible for validating required fields at the repo boundary.
 // ────────────────────────────────────────────────────────────────────
 
-export type VatRate = 'IVA_21' | 'IVA_10' | 'IVA_4' | 'IVA_0' | 'EXENTO' | 'NO_SUJETO';
+export type VatRate =
+  | 'IVA_GENERAL_21'
+  | 'IVA_REDUCIDO_10'
+  | 'IVA_SUPERREDUCIDO_4'
+  | 'IVA_CERO'
+  | 'EXENTO'
+  | 'NO_SUJETO'
+  | 'IGIC_GENERAL_7'
+  | 'IGIC_REDUCIDO_3'
+  | 'IGIC_CERO'
+  | 'IPSI';
+
+export type FiscalRegion =
+  | 'PENINSULA_BALEARES'
+  | 'CANARIAS'
+  | 'CEUTA'
+  | 'MELILLA'
+  | 'PAIS_VASCO_ARABA'
+  | 'PAIS_VASCO_BIZKAIA'
+  | 'PAIS_VASCO_GIPUZKOA'
+  | 'NAVARRA';
+
+export type OperationType = 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'R1' | 'R2' | 'R3' | 'R4' | 'R5';
+
+export type InvoiceRegime =
+  | 'GENERAL'
+  | 'SIMPLIFICADO'
+  | 'RECARGO_EQUIVALENCIA'
+  | 'REAGP'
+  | 'BIENES_USADOS_REBU'
+  | 'AGENCIAS_VIAJES_REAV'
+  | 'CRITERIO_CAJA_RECC'
+  | 'GRUPO_ENTIDADES_REGE'
+  | 'EXENTO';
+
 export type InvoiceStatusCode =
   | 'draft'
   | 'pendingReview'
@@ -119,7 +156,7 @@ export interface AttachmentDoc {
   fileName: string;
   mimeType: string;
   sizeBytes: number;
-  url?: string;
+  url: string;
   storageKey?: string;
   uploadedAt: ISODateTime;
 }
@@ -127,9 +164,9 @@ export interface AttachmentDoc {
 export interface AuditStampDoc {
   id: UUID;
   at: ISODateTime;
-  actor: string;
+  actorId: string;
   action: string;
-  notes?: string;
+  notes?: string | string[] | null;
 }
 
 export interface InvoiceDoc {
@@ -157,9 +194,9 @@ export interface InvoiceDoc {
     totalCents: number;
     currency: string; // ISO-4217
   };
-  regime: string;
-  operationType: string;
-  fiscalRegion: string;
+  regime: InvoiceRegime;
+  operationType: OperationType;
+  fiscalRegion: FiscalRegion;
   compliance: {
     ticketBaiId?: string;
     ticketBaiHash?: string;

@@ -19,7 +19,6 @@
 
 const { eq, and, gte, lte, sql, desc, asc, count: sqlCount } = require('drizzle-orm');
 const { alias } = require('drizzle-orm/pg-core');
-const { drizzle } = require('drizzle-orm/postgres-js');
 const { getPostgres } = require('../client');
 const {
   invoices,
@@ -72,7 +71,43 @@ const INVOICE_STATUSES = new Set([
   'cancelled',
 ]);
 
-const VAT_RATES = new Set(['IVA_21', 'IVA_10', 'IVA_4', 'IVA_0', 'EXENTO', 'NO_SUJETO']);
+const VAT_RATES = new Set([
+  'IVA_GENERAL_21',
+  'IVA_REDUCIDO_10',
+  'IVA_SUPERREDUCIDO_4',
+  'IVA_CERO',
+  'EXENTO',
+  'NO_SUJETO',
+  'IGIC_GENERAL_7',
+  'IGIC_REDUCIDO_3',
+  'IGIC_CERO',
+  'IPSI',
+]);
+
+const FISCAL_REGIONS = new Set([
+  'PENINSULA_BALEARES',
+  'CANARIAS',
+  'CEUTA',
+  'MELILLA',
+  'PAIS_VASCO_ARABA',
+  'PAIS_VASCO_BIZKAIA',
+  'PAIS_VASCO_GIPUZKOA',
+  'NAVARRA',
+]);
+
+const INVOICE_REGIMES = new Set([
+  'GENERAL',
+  'SIMPLIFICADO',
+  'RECARGO_EQUIVALENCIA',
+  'REAGP',
+  'BIENES_USADOS_REBU',
+  'AGENCIAS_VIAJES_REAV',
+  'CRITERIO_CAJA_RECC',
+  'GRUPO_ENTIDADES_REGE',
+  'EXENTO',
+]);
+
+const OPERATION_TYPES = new Set(['F1', 'F2', 'F3', 'F4', 'F5', 'R1', 'R2', 'R3', 'R4', 'R5']);
 
 function validateDoc(doc) {
   if (!doc || typeof doc !== 'object') {
@@ -93,6 +128,15 @@ function validateDoc(doc) {
 
   if (!INVOICE_STATUSES.has(doc.status)) {
     throw new ValidationError('invalid status', { field: 'status' });
+  }
+  if (!INVOICE_REGIMES.has(doc.regime)) {
+    throw new ValidationError('invalid regime', { field: 'regime' });
+  }
+  if (!OPERATION_TYPES.has(doc.operationType)) {
+    throw new ValidationError('invalid operationType', { field: 'operationType' });
+  }
+  if (!FISCAL_REGIONS.has(doc.fiscalRegion)) {
+    throw new ValidationError('invalid fiscalRegion', { field: 'fiscalRegion' });
   }
   if (!Array.isArray(doc.lines)) {
     throw new ValidationError('lines must be an array', { field: 'lines' });
@@ -219,7 +263,7 @@ function assembleDoc(header, lineRows, vatRows, attachmentRows, auditRows) {
     audit: (auditRows || []).map((r) => ({
       id: r.id,
       at: r.at instanceof Date ? r.at.toISOString() : r.at,
-      actor: r.actor,
+      actorId: r.actorId,
       action: r.action,
       notes: r.notes || undefined,
     })),
@@ -232,15 +276,20 @@ function assembleDoc(header, lineRows, vatRows, attachmentRows, auditRows) {
 
 /**
  * Open a transaction with `SET LOCAL app.org_id` set so RLS applies,
- * and hand the caller a transaction-scoped Drizzle instance.
+ * and hand the caller a Drizzle transaction instance.
+ *
+ * Uses Drizzle's native `db.transaction(...)` instead of wrapping a
+ * `postgres-js` tx sql tag: the latter lacks the `.options` surface
+ * Drizzle 0.37's `drizzle(client)` reads (`client.options.parsers`),
+ * and crashes with `Cannot read properties of undefined (reading
+ * 'parsers')`. pgbouncer resets `SET LOCAL` on COMMIT regardless.
  */
 async function withOrg(orgId, fn) {
   assertUuid(orgId, 'orgId');
-  const { sql: pg } = getPostgres();
-  return pg.begin(async (txSql) => {
-    await txSql`SELECT set_config('app.org_id', ${orgId}, true)`;
-    const txDb = drizzle(txSql);
-    return fn({ db: txDb, sql: txSql });
+  const { db } = getPostgres();
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`SELECT set_config('app.org_id', ${orgId}, true)`);
+    return fn({ db: tx, sql });
   });
 }
 
@@ -530,7 +579,7 @@ function createInvoicesRepo() {
                 orgId,
                 invoiceId: id,
                 at: s.at ? new Date(s.at) : now,
-                actor: s.actor,
+                actorId: s.actorId,
                 action: s.action,
                 notes: s.notes || null,
               })),
@@ -726,7 +775,7 @@ function createInvoicesRepo() {
                   orgId,
                   invoiceId: id,
                   at: s.at ? new Date(s.at) : now,
-                  actor: s.actor,
+                  actorId: s.actorId,
                   action: s.action,
                   notes: s.notes || null,
                 })),

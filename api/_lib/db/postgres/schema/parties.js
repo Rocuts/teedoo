@@ -44,20 +44,18 @@ const parties = pgTable(
     province: varchar('province', { length: 128 }),
     country: varchar('country', { length: 2 }).notNull().default('ES'),
 
+    email: varchar('email', { length: 255 }),
+    phone: varchar('phone', { length: 32 }),
+
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
-    // Normalized tax id is unique per org (see repo: trim+uppercase on write).
     orgTaxIdUnique: uniqueIndex('parties_org_tax_id_unique').on(t.orgId, t.taxId),
-    // For RLS predicate + org-scoped list pagination.
     orgCreatedAtIdx: index('parties_org_created_at_idx').on(t.orgId, t.createdAt),
-    // Contract allows: NIF | NIE | NIF_IVA | PASAPORTE | OTRO.
-    // CIF (pre-2008 legal-entity ID) projects to NIF at the repo boundary.
-    // Other Dart enum values (vatEu → NIF_IVA, passport → PASAPORTE, other → OTRO).
     taxIdTypeCheck: check(
       'parties_tax_id_type_check',
-      sql`${t.taxIdType} IN ('NIF','NIE','NIF_IVA','PASAPORTE','OTRO')`,
+      sql`${t.taxIdType} IN ('NIF','NIE','CIF','NIF_IVA','PASAPORTE','OTRO')`,
     ),
     countryFormatCheck: check(
       'parties_country_format_check',

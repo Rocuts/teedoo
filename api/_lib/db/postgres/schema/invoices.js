@@ -108,13 +108,24 @@ const invoices = pgTable(
       'invoices_status_check',
       sql`${t.status} IN ('draft','pendingReview','readyToSend','sent','accepted','rejected','cancelled')`,
     ),
+    regimeCheck: check(
+      'invoices_regime_check',
+      sql`${t.regime} IN ('GENERAL','SIMPLIFICADO','RECARGO_EQUIVALENCIA','REAGP','BIENES_USADOS_REBU','AGENCIAS_VIAJES_REAV','CRITERIO_CAJA_RECC','GRUPO_ENTIDADES_REGE','EXENTO')`,
+    ),
+    operationTypeCheck: check(
+      'invoices_operation_type_check',
+      sql`${t.operationType} IN ('F1','F2','F3','F4','F5','R1','R2','R3','R4','R5')`,
+    ),
+    fiscalRegionCheck: check(
+      'invoices_fiscal_region_check',
+      sql`${t.fiscalRegion} IN ('PENINSULA_BALEARES','CANARIAS','CEUTA','MELILLA','PAIS_VASCO_ARABA','PAIS_VASCO_BIZKAIA','PAIS_VASCO_GIPUZKOA','NAVARRA')`,
+    ),
     currencyFormatCheck: check(
       'invoices_currency_format_check',
       sql`${t.currency} ~ '^[A-Z]{3}$'`,
     ),
     totalsSignCheck: check(
       'invoices_totals_sign_check',
-      // Rectifications allow negatives; we only forbid NaN-equivalent cases.
       sql`${t.subtotalCents} IS NOT NULL AND ${t.totalCents} IS NOT NULL`,
     ),
   }),
@@ -144,7 +155,7 @@ const invoiceLines = pgTable(
     vatRateValue: varchar('vat_rate_value', { length: 16 }).notNull(),
 
     irpfRate: varchar('irpf_rate', { length: 16 }),
-    exemptReason: varchar('exempt_reason', { length: 16 }),
+    exemptReason: varchar('exempt_reason', { length: 255 }),
 
     lineTotalCents: integer('line_total_cents').notNull(),
 
@@ -155,7 +166,7 @@ const invoiceLines = pgTable(
     orgIdx: index('invoice_lines_org_idx').on(t.orgId),
     vatRateCheck: check(
       'invoice_lines_vat_rate_check',
-      sql`${t.vatRate} IN ('IVA_21','IVA_10','IVA_4','IVA_0','EXENTO','NO_SUJETO')`,
+      sql`${t.vatRate} IN ('IVA_GENERAL_21','IVA_REDUCIDO_10','IVA_SUPERREDUCIDO_4','IVA_CERO','EXENTO','NO_SUJETO','IGIC_GENERAL_7','IGIC_REDUCIDO_3','IGIC_CERO','IPSI')`,
     ),
   }),
 );
@@ -184,7 +195,7 @@ const invoiceVatBreakdowns = pgTable(
     ).on(t.invoiceId, t.vatRate, t.vatRateValue),
     vatRateCheck: check(
       'invoice_vat_breakdowns_rate_check',
-      sql`${t.vatRate} IN ('IVA_21','IVA_10','IVA_4','IVA_0','EXENTO','NO_SUJETO')`,
+      sql`${t.vatRate} IN ('IVA_GENERAL_21','IVA_REDUCIDO_10','IVA_SUPERREDUCIDO_4','IVA_CERO','EXENTO','NO_SUJETO','IGIC_GENERAL_7','IGIC_REDUCIDO_3','IGIC_CERO','IPSI')`,
     ),
   }),
 );
@@ -202,7 +213,7 @@ const invoiceAttachments = pgTable(
     fileName: varchar('file_name', { length: 255 }).notNull(),
     mimeType: varchar('mime_type', { length: 128 }).notNull(),
     sizeBytes: integer('size_bytes').notNull(),
-    url: text('url'),
+    url: text('url').notNull(),
     storageKey: text('storage_key'),
     uploadedAt: timestamp('uploaded_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -223,7 +234,7 @@ const invoiceAudit = pgTable(
       .references(() => invoices.id, { onDelete: 'cascade' }),
 
     at: timestamp('at', { withTimezone: true }).notNull().defaultNow(),
-    actor: varchar('actor', { length: 255 }).notNull(),
+    actorId: varchar('actor_id', { length: 255 }).notNull(),
     action: varchar('action', { length: 64 }).notNull(),
     notes: text('notes'),
   },

@@ -11,6 +11,7 @@
 const { randomUUID } = require('crypto');
 const { getMongo } = require('../client');
 const { ensureIndexes } = require('../indexes');
+const { ensureValidators } = require('../validators');
 const {
   DbError,
   NotFoundError,
@@ -54,7 +55,8 @@ function normalizeLimit(limit) {
 
 // ── Validation ────────────────────────────────────────────────────────────
 
-const VALID_TAX_ID_TYPES = new Set(['NIF', 'NIE', 'NIF_IVA', 'PASAPORTE', 'OTRO']);
+const VALID_TAX_ID_TYPES = new Set(['NIF', 'NIE', 'CIF', 'NIF_IVA', 'PASAPORTE', 'OTRO']);
+const COUNTRY_PATTERN = /^[A-Z]{2}$/;
 
 function validateParty(p) {
   if (!p || typeof p !== 'object') throw new ValidationError('Party is required');
@@ -72,6 +74,17 @@ function validateParty(p) {
   }
   if (typeof p.name !== 'string' || !p.name) {
     throw new ValidationError('name is required', { field: 'name' });
+  }
+  if (typeof p.country !== 'string' || !COUNTRY_PATTERN.test(p.country)) {
+    throw new ValidationError('country must be an ISO-3166-1 alpha-2 code (e.g. "ES")', {
+      field: 'country',
+    });
+  }
+  if (p.email != null && typeof p.email !== 'string') {
+    throw new ValidationError('email must be a string when present', { field: 'email' });
+  }
+  if (p.phone != null && typeof p.phone !== 'string') {
+    throw new ValidationError('phone must be a string when present', { field: 'phone' });
   }
   if (!p.address || typeof p.address !== 'object') {
     throw new ValidationError('address is required', { field: 'address' });
@@ -100,6 +113,7 @@ function createPartiesRepo() {
     const { db } = await getMongo();
     // Cached per-instance; costs one pointer lookup on the hot path.
     await ensureIndexes(db);
+    await ensureValidators(db);
     return db.collection(COLLECTION);
   }
 
@@ -166,12 +180,15 @@ function createPartiesRepo() {
     async upsert(p) {
       validateParty(p);
       const now = new Date().toISOString();
-      const { id, orgId, taxId, taxIdType, name, address } = p;
+      const { id, orgId, taxId, taxIdType, name, country, email, phone, address } = p;
       const $set = {
         orgId,
         taxId,
         taxIdType,
         name,
+        country,
+        email: email ?? null,
+        phone: phone ?? null,
         address,
         updatedAt: now,
       };

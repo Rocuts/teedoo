@@ -43,7 +43,7 @@ function normalizeTaxId(raw) {
   return trimmed;
 }
 
-const ALLOWED_TAX_ID_TYPES = new Set(['NIF', 'NIE', 'NIF_IVA', 'PASAPORTE', 'OTRO']);
+const ALLOWED_TAX_ID_TYPES = new Set(['NIF', 'NIE', 'CIF', 'NIF_IVA', 'PASAPORTE', 'OTRO']);
 
 function assertTaxIdType(type) {
   if (!ALLOWED_TAX_ID_TYPES.has(type)) {
@@ -62,6 +62,9 @@ function toDomain(row) {
     taxId: row.taxId,
     taxIdType: row.taxIdType,
     name: row.name,
+    country: row.country || 'ES',
+    email: row.email || null,
+    phone: row.phone || null,
     address: {
       line1: row.addressLine1 || '',
       line2: row.addressLine2 || undefined,
@@ -85,6 +88,17 @@ function validatePartyInput(p) {
   if (typeof p.name !== 'string' || !p.name.trim()) {
     throw new ValidationError('name is required', { field: 'name' });
   }
+  if (p.country !== undefined && p.country !== null) {
+    if (typeof p.country !== 'string' || !/^[A-Z]{2}$/.test(p.country)) {
+      throw new ValidationError('country must be ISO-3166-1 alpha-2', { field: 'country' });
+    }
+  }
+  if (p.email != null && typeof p.email !== 'string') {
+    throw new ValidationError('email must be a string when present', { field: 'email' });
+  }
+  if (p.phone != null && typeof p.phone !== 'string') {
+    throw new ValidationError('phone must be a string when present', { field: 'phone' });
+  }
   if (!p.address || typeof p.address !== 'object') {
     throw new ValidationError('address is required', { field: 'address' });
   }
@@ -99,25 +113,23 @@ function validatePartyInput(p) {
 /**
  * Run `fn` inside a transaction with `SET LOCAL app.org_id` applied,
  * so RLS predicates match. Returns whatever `fn` returns.
+ *
+ * Uses Drizzle's native `db.transaction(...)` rather than wrapping a
+ * `postgres-js` transaction sql tag: the latter lacks the `.options`
+ * surface that `drizzle(...)` reads (`client.options.parsers`), and
+ * Drizzle 0.37 throws `Cannot read properties of undefined (reading
+ * 'parsers')` if you try. `db.transaction` opens the tx on the same
+ * underlying pooled connection, and the `SET LOCAL` we issue is reset
+ * automatically by pgbouncer on COMMIT — identical semantics to the
+ * previous implementation, minus the driver mismatch.
  */
 async function withOrg(orgId, fn) {
   assertUuid(orgId, 'orgId');
-  const { sql: pg, db } = getPostgres();
-  // postgres-js `sql.begin` yields a transaction-scoped sql tag. We pass
-  // it to `drizzle(...)` so Drizzle runs all statements on the same tx.
-  return pg.begin(async (txSql) => {
-    await txSql`SELECT set_config('app.org_id', ${orgId}, true)`;
-    // Reuse the outer Drizzle wrapper — postgres-js tx handle shares the
-    // same connection, and Drizzle statements internally delegate to
-    // whichever `sql` tag is in scope. However, to guarantee the tx
-    // connection is used, we build a transaction-local Drizzle:
-    const { drizzle } = require('drizzle-orm/postgres-js');
-    const txDb = drizzle(txSql);
-    return fn({ db: txDb, sql: txSql });
+  const { db } = getPostgres();
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`SELECT set_config('app.org_id', ${orgId}, true)`);
+    return fn({ db: tx, sql });
   });
-  // Suppress unused `db` warning — intentional: we build a tx-scoped db.
-  // eslint-disable-next-line no-unused-vars
-  void db;
 }
 
 // ─── repo ─────────────────────────────────────────────────────────────
@@ -210,6 +222,7 @@ function createPartiesRepo() {
     async upsert(p) {
       validatePartyInput(p);
       const now = new Date();
+      const topCountry = (p.country || p.address.country || 'ES').toUpperCase();
       const row = {
         id: p.id || undefined,
         orgId: p.orgId,
@@ -221,7 +234,9 @@ function createPartiesRepo() {
         postalCode: p.address.postalCode || null,
         city: p.address.city || null,
         province: p.address.province || null,
-        country: (p.address.country || 'ES').toUpperCase(),
+        country: topCountry,
+        email: p.email || null,
+        phone: p.phone || null,
         updatedAt: now,
       };
       try {
@@ -240,6 +255,8 @@ function createPartiesRepo() {
                 city: row.city,
                 province: row.province,
                 country: row.country,
+                email: row.email,
+                phone: row.phone,
                 updatedAt: now,
               },
             })

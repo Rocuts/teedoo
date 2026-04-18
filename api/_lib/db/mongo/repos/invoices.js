@@ -16,6 +16,7 @@
 const { randomUUID } = require('crypto');
 const { getMongo } = require('../client');
 const { ensureIndexes } = require('../indexes');
+const { ensureValidators } = require('../validators');
 const {
   DbError,
   NotFoundError,
@@ -198,6 +199,7 @@ function createInvoicesRepo() {
   async function handles() {
     const { db } = await getMongo();
     await ensureIndexes(db);
+    await ensureValidators(db);
     return { db, col: db.collection(COLLECTION) };
   }
 

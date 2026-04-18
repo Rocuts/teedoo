@@ -1,0 +1,1 @@
+ALTER TABLE "invoice_lines" ALTER COLUMN "exempt_reason" SET DATA TYPE varchar(255);

@@ -40,3 +40,5 @@ node_modules/
 # Misc
 *.log
 flutter_*.png
+.vercel
+.env*.local
