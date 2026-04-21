@@ -509,6 +509,17 @@ Cada KPI muestra: label, valor principal, indicador de tendencia (ej. "+12%") e 
 #### Tabs de Lista
 Todas | Borradores | Enviadas | Rechazadas | Pendientes (con contadores)
 
+#### Dual-DB en lista y detalle (Fase 3 Paso 2, 2026-04-21)
+
+Lista y detalle ya no usan `MockData`; consumen `/api/invoices` a traves del repositorio Flutter. El header del listado muestra un `DbTargetSelector` (Mongo ↔ Supabase) y un `ActiveBackendChip` con el backend servido.
+
+- **Repositorio:** `lib/features/invoices/data/invoices_repository.dart` — envuelve `DioClient`, llama `GET /api/invoices` y `GET /api/invoices/:id`, y mapea la forma canonica wire (`InvoiceDoc`, centimos + enums SCREAMING_SNAKE) a la forma legada que ya consumen las pantallas. En el detalle hidrata NIF + direccion del emisor y receptor con dos `GET /api/parties/:id` en paralelo.
+- **Providers (Riverpod):**
+  - `invoicesListProvider` (autoDispose) — observa `dataSourceProvider`, refetchea al togglear.
+  - `invoiceByIdProvider.family<Invoice, String>` — idem por id.
+- **Estados UI:** loading con spinner, error con mensaje + boton "Reintentar" (`ref.invalidate`), empty state contextual al backend activo ("No hay facturas en MongoDB / Supabase").
+- **Wizard de creacion y `LiquidityPanel`** siguen apoyados en `MockData` — migrar en la siguiente fase.
+
 ### 6.4 Compliance IA
 
 **Ruta:** `/lib/features/compliance/`
@@ -708,9 +719,11 @@ class AuthState {
 
 ### Cliente HTTP (Dio)
 
-**Base URL:** `https://api.teedoo.app/v1` (configurable via `TEEDOO_API_BASE_URL`)
+**Base URL:** `/api` por defecto (same-origin — el Flutter Web se sirve desde el mismo deploy de Vercel que expone las Functions). Overrideable con `--dart-define=TEEDOO_API_BASE_URL=…` (ej. `http://localhost:3001/api` cuando se corre contra `dev_server.js`).
 
 **Autenticacion:** JWT Bearer tokens con interceptor automatico.
+
+**Header `X-Data-Source`:** inyectado por `_DataSourceInterceptor` en cada request, leyendo `dataSourceProvider` (`mongo` | `postgres`). El backend enruta a Mongo Atlas o Supabase Postgres en runtime vía `api/_lib/db/factory.js`. Cuando el usuario togglea el selector, los `FutureProvider` que lo observan (lista / detalle) se auto-invalidan y refetchean.
 
 **Patron Result<T>:**
 ```dart

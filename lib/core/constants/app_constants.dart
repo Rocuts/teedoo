@@ -10,9 +10,12 @@ abstract final class AppConstants {
   static const String appTaglineEn = 'Smart electronic invoicing';
 
   // ── API ──
+  // Same-origin por defecto: el Flutter Web build se sirve desde el mismo
+  // deploy de Vercel que expone `/api/*`. Para dev local contra el
+  // `dev_server.js` en 3001 pasar `--dart-define=TEEDOO_API_BASE_URL=http://localhost:3001/api`.
   static const String apiBaseUrl = String.fromEnvironment(
     'TEEDOO_API_BASE_URL',
-    defaultValue: 'https://api.teedoo.app/v1',
+    defaultValue: '/api',
   );
   static const Duration connectTimeout = Duration(seconds: 15);
   static const Duration receiveTimeout = Duration(seconds: 30);
