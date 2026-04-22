@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -284,42 +285,167 @@ class _InvoicesListScreenState extends ConsumerState<InvoicesListScreen> {
   }
 
   Widget _buildError(Object err) {
+    final active = ref.read(dataSourceProvider);
+    final other = active == DataSource.mongo
+        ? DataSource.postgres
+        : DataSource.mongo;
+    final diagnosis = _diagnoseError(err, active);
+
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.alertCircle,
-              size: 40,
-              color: context.colors.statusError,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'No se pudieron cargar las facturas',
-              style: AppTypography.bodyMedium.copyWith(
-                color: context.colors.textPrimary,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 520),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                LucideIcons.alertCircle,
+                size: 40,
+                color: context.colors.statusError,
               ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '$err',
-              textAlign: TextAlign.center,
-              style: AppTypography.bodySmall.copyWith(
-                color: context.colors.textTertiary,
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                diagnosis.headline,
+                textAlign: TextAlign.center,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: context.colors.textPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            PrimaryButton(
-              label: 'Reintentar',
-              icon: LucideIcons.refreshCw,
-              onPressed: () => ref.invalidate(invoicesListProvider),
-            ),
-          ],
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                diagnosis.subtitle,
+                textAlign: TextAlign.center,
+                style: AppTypography.bodySmall.copyWith(
+                  color: context.colors.textTertiary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: AppSpacing.buttonGap,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  PrimaryButton(
+                    label: 'Reintentar',
+                    icon: LucideIcons.refreshCw,
+                    onPressed: () => ref.invalidate(invoicesListProvider),
+                  ),
+                  SecondaryButton(
+                    label: 'Probar ${other.label}',
+                    icon: LucideIcons.database,
+                    onPressed: () {
+                      ref.read(dataSourceProvider.notifier).state = other;
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Theme(
+                data: Theme.of(context).copyWith(
+                  dividerColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
+                child: ExpansionTile(
+                  tilePadding: EdgeInsets.zero,
+                  childrenPadding: const EdgeInsets.only(
+                    top: AppSpacing.xs,
+                    bottom: AppSpacing.sm,
+                  ),
+                  title: Text(
+                    'Detalle técnico',
+                    style: AppTypography.caption.copyWith(
+                      color: context.colors.textTertiary,
+                    ),
+                  ),
+                  children: [
+                    SelectableText(
+                      diagnosis.technical,
+                      style: AppTypography.caption.copyWith(
+                        color: context.colors.textTertiary,
+                        fontFamilyFallback: const ['Menlo', 'monospace'],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  _InvoiceLoadErrorInfo _diagnoseError(Object err, DataSource active) {
+    final backend = active.label;
+
+    if (err is DioException) {
+      final status = err.response?.statusCode;
+      final apiMessage = _extractApiMessage(err.response?.data);
+      final technical = apiMessage ?? err.message ?? err.toString();
+
+      switch (err.type) {
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.sendTimeout:
+        case DioExceptionType.receiveTimeout:
+          return _InvoiceLoadErrorInfo(
+            headline: 'Sin respuesta de la API',
+            subtitle:
+                'La petición tardó demasiado. Revisa tu conexión o vuelve a intentarlo.',
+            technical: technical,
+          );
+        case DioExceptionType.connectionError:
+          return _InvoiceLoadErrorInfo(
+            headline: 'No se pudo conectar con la API',
+            subtitle:
+                'Comprueba que el servidor local (dev_server.js) esté activo en el puerto 3001.',
+            technical: technical,
+          );
+        case DioExceptionType.badResponse:
+          if (status != null && status >= 500) {
+            return _InvoiceLoadErrorInfo(
+              headline: '$backend devolvió un error del servidor',
+              subtitle:
+                  'El backend respondió con $status. Puede ser un fallo temporal de $backend o de su conectividad DNS.',
+              technical: technical,
+            );
+          }
+          if (status == 401 || status == 403) {
+            return _InvoiceLoadErrorInfo(
+              headline: 'Acceso denegado a $backend',
+              subtitle:
+                  'Las credenciales almacenadas pueden haber caducado. Regenera las variables con `vercel env pull .env.local`.',
+              technical: technical,
+            );
+          }
+          return _InvoiceLoadErrorInfo(
+            headline: 'No se pudieron cargar las facturas',
+            subtitle: 'La API respondió con ${status ?? "un error"}.',
+            technical: technical,
+          );
+        default:
+          return _InvoiceLoadErrorInfo(
+            headline: 'No se pudieron cargar las facturas',
+            subtitle: 'Inténtalo de nuevo o cambia al otro backend.',
+            technical: technical,
+          );
+      }
+    }
+
+    return _InvoiceLoadErrorInfo(
+      headline: 'No se pudieron cargar las facturas',
+      subtitle: 'Ocurrió un error inesperado al procesar la respuesta.',
+      technical: err.toString(),
+    );
+  }
+
+  String? _extractApiMessage(dynamic data) {
+    if (data is Map && data['error'] is Map) {
+      final inner = (data['error'] as Map)['message'];
+      if (inner is String && inner.isNotEmpty) return inner;
+    }
+    return null;
   }
 
   Widget _buildSearchBar() {
@@ -450,33 +576,59 @@ class _InvoicesListScreenState extends ConsumerState<InvoicesListScreen> {
 
   Widget _buildEmptyState() {
     final source = ref.read(dataSourceProvider);
+    final other = source == DataSource.mongo
+        ? DataSource.postgres
+        : DataSource.mongo;
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.inbox,
-              size: 40,
-              color: context.colors.textTertiary,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'No hay facturas en ${source.label}',
-              style: AppTypography.bodyMedium.copyWith(
-                color: context.colors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              'Prueba a cambiar de backend o a ejecutar el seed.',
-              textAlign: TextAlign.center,
-              style: AppTypography.bodySmall.copyWith(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 480),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                LucideIcons.inbox,
+                size: 40,
                 color: context.colors.textTertiary,
               ),
-            ),
-          ],
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'No hay facturas en ${source.label}',
+                style: AppTypography.bodyMedium.copyWith(
+                  color: context.colors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                'Puedes cambiar al backend ${other.label} o crear una nueva factura para empezar.',
+                textAlign: TextAlign.center,
+                style: AppTypography.bodySmall.copyWith(
+                  color: context.colors.textTertiary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: AppSpacing.buttonGap,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  SecondaryButton(
+                    label: 'Probar ${other.label}',
+                    icon: LucideIcons.database,
+                    onPressed: () {
+                      ref.read(dataSourceProvider.notifier).state = other;
+                    },
+                  ),
+                  PrimaryButton(
+                    label: 'Nueva factura',
+                    icon: LucideIcons.plus,
+                    onPressed: () => context.go(RoutePaths.invoiceCreate),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -719,4 +871,16 @@ class _InvoicesListScreenState extends ConsumerState<InvoicesListScreen> {
       ),
     );
   }
+}
+
+class _InvoiceLoadErrorInfo {
+  const _InvoiceLoadErrorInfo({
+    required this.headline,
+    required this.subtitle,
+    required this.technical,
+  });
+
+  final String headline;
+  final String subtitle;
+  final String technical;
 }

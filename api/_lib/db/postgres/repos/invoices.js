@@ -17,7 +17,7 @@
  * The owner picked this split deliberately so each DB demonstrates its idiomatic pattern.
  */
 
-const { eq, and, gte, lte, sql, desc, asc, count: sqlCount } = require('drizzle-orm');
+const { eq, and, gte, lte, sql, desc, asc, count: sqlCount, inArray } = require('drizzle-orm');
 const { alias } = require('drizzle-orm/pg-core');
 const { getPostgres } = require('../client');
 const {
@@ -427,24 +427,27 @@ function createInvoicesRepo() {
           if (headers.length === 0) return { items: [], nextCursor };
 
           // Batch-fetch children across the full page (avoids N+1).
+          // NOTE: `inArray(col, ids)` over `ANY(${ids}::uuid[])` — postgres-js
+          // binds array params as a `record` composite without type hints, which
+          // Postgres refuses to cast to uuid[] (SQLSTATE 42846).
           const ids = headers.map((h) => h.id);
           const [linesAll, vatAll, attAll, auditAll] = await Promise.all([
             db
               .select()
               .from(invoiceLines)
-              .where(sql`${invoiceLines.invoiceId} = ANY(${ids}::uuid[])`),
+              .where(inArray(invoiceLines.invoiceId, ids)),
             db
               .select()
               .from(invoiceVatBreakdowns)
-              .where(sql`${invoiceVatBreakdowns.invoiceId} = ANY(${ids}::uuid[])`),
+              .where(inArray(invoiceVatBreakdowns.invoiceId, ids)),
             db
               .select()
               .from(invoiceAttachments)
-              .where(sql`${invoiceAttachments.invoiceId} = ANY(${ids}::uuid[])`),
+              .where(inArray(invoiceAttachments.invoiceId, ids)),
             db
               .select()
               .from(invoiceAudit)
-              .where(sql`${invoiceAudit.invoiceId} = ANY(${ids}::uuid[])`)
+              .where(inArray(invoiceAudit.invoiceId, ids))
               .orderBy(asc(invoiceAudit.at)),
           ]);
           const groupBy = (rows, key) => {
