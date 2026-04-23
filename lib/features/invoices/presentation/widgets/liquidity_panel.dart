@@ -227,8 +227,9 @@ class _LiquidityPanelState extends State<LiquidityPanel> {
                         getTitlesWidget: (value, meta) {
                           final labels = ['15 días', '30 días', '45 días'];
                           final idx = value.toInt();
-                          if (idx < 0 || idx >= labels.length)
+                          if (idx < 0 || idx >= labels.length) {
                             return const SizedBox.shrink();
+                          }
                           final isSelected = idx == _selectedHorizon;
                           final isTouched = idx == _touchedBarIndex;
                           return Padding(

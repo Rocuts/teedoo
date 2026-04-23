@@ -76,7 +76,7 @@ class _InvoiceDetailScreenState extends ConsumerState<InvoiceDetailScreen> {
         ),
         Expanded(
           child: invoiceAsync.when(
-            data: (inv) => _buildLoaded(inv),
+            data: _buildLoaded,
             loading: () =>
                 const Center(child: CircularProgressIndicator()),
             error: (err, _) => _buildError(err),

@@ -184,7 +184,7 @@ class GlassCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
+      padding: const EdgeInsets.fromLTRB(
         AppDimensions.cardPaddingLarge,
         AppSpacing.xxl,
         AppDimensions.cardPaddingLarge,
@@ -214,7 +214,7 @@ class GlassCardHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );
@@ -252,7 +252,7 @@ class GlassCardActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
+      padding: const EdgeInsets.fromLTRB(
         AppDimensions.cardPaddingLarge,
         AppSpacing.lg,
         AppDimensions.cardPaddingLarge,

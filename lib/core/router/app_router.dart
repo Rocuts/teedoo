@@ -83,7 +83,7 @@ const _publicPaths = {
 /// so GoRouter can re-evaluate its redirect when auth state changes.
 class _AuthRefreshListenable extends ChangeNotifier {
   _AuthRefreshListenable(Ref ref) {
-    ref.listen<AuthState>(authProvider, (_, __) {
+    ref.listen<AuthState>(authProvider, (_, _) {
       notifyListeners();
     });
   }

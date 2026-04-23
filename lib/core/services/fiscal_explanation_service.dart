@@ -71,7 +71,7 @@ class FiscalExplanationService {
     );
 
     return result.when(
-      success: (responseData) => _extractExplanation(responseData),
+      success: _extractExplanation,
       failure: (_) => null,
     );
   }
