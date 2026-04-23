@@ -1,16 +1,80 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teedoo/core/constants/app_constants.dart';
 import 'package:teedoo/features/auth/providers/auth_provider.dart';
 
+// Channel name used internally by flutter_secure_storage.
+// Unit tests run on the Dart VM (not web), so SecureStorageService hits the
+// native MethodChannel path; we shim it with an in-memory store so we don't
+// need platform plugins.
+const _secureStorageChannel = MethodChannel(
+  'plugins.it_nomads.com/flutter_secure_storage',
+);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  late Map<String, String> fakeSecureStore;
+
+  setUp(() {
+    fakeSecureStore = <String, String>{};
+
+    TestDefaultBinaryMessengerBinding
+        .instance
+        .defaultBinaryMessenger
+        .setMockMethodCallHandler(_secureStorageChannel, (call) async {
+      final args = (call.arguments as Map?)?.cast<String, dynamic>() ?? {};
+      final key = args['key'] as String?;
+
+      switch (call.method) {
+        case 'read':
+          return key == null ? null : fakeSecureStore[key];
+        case 'readAll':
+          return Map<String, String>.from(fakeSecureStore);
+        case 'write':
+          if (key != null) {
+            fakeSecureStore[key] = (args['value'] as String?) ?? '';
+          }
+          return null;
+        case 'delete':
+          if (key != null) fakeSecureStore.remove(key);
+          return null;
+        case 'deleteAll':
+          fakeSecureStore.clear();
+          return null;
+        case 'containsKey':
+          return key != null && fakeSecureStore.containsKey(key);
+        default:
+          return null;
+      }
+    });
+  });
+
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding
+        .instance
+        .defaultBinaryMessenger
+        .setMockMethodCallHandler(_secureStorageChannel, null);
+  });
+
   group('AuthNotifier', () {
     test('restaura sesión persistida al iniciar', () async {
+      fakeSecureStore.addAll({
+        AppConstants.authTokenKey: 'token_123',
+        AppConstants.refreshTokenKey: 'refresh_123',
+        AppConstants.authUserKey: jsonEncode({
+          'id': 'usr_001',
+          'email': 'demo@teedoo.app',
+          'name': 'Demo User',
+          'organizationId': 'org_001',
+          'role': 'admin',
+          'locale': 'es',
+        }),
+      });
       SharedPreferences.setMockInitialValues({
         AppConstants.authTokenKey: 'token_123',
         AppConstants.refreshTokenKey: 'refresh_123',
