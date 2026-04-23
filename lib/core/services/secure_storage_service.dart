@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// consider HTTP-only cookies via your backend instead.
 class SecureStorageService {
   static const _storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
     iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
   );
 
