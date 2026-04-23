@@ -77,7 +77,7 @@ enum TaxIdType {
 /// público [PartyAddress] se expone para consumidores que prefieren el naming
 /// normalizado (equivalente semántico al `PartyAddress` del API TypeScript).
 @freezed
-class Address with _$Address {
+abstract class Address with _$Address {
   const factory Address({
     required String line1,
     String? line2,
@@ -108,7 +108,7 @@ typedef PartyAddress = Address;
 /// persistir el Party antes de emitir cualquier factura que lo referencie
 /// por FK (`issuerId` / `recipientId`).
 @freezed
-class Party with _$Party {
+abstract class Party with _$Party {
   const factory Party({
     /// UUID v4. PK lógica (Postgres) / `id` opaco (Mongo — no se mapea a
     /// `_id`, que es gestionado por el servidor).

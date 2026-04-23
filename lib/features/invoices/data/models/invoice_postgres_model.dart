@@ -41,7 +41,7 @@ part 'invoice_postgres_model.g.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class InvoiceLinePostgresModel with _$InvoiceLinePostgresModel {
+abstract class InvoiceLinePostgresModel with _$InvoiceLinePostgresModel {
   const factory InvoiceLinePostgresModel({
     required String id,
     required String invoiceId,
@@ -104,7 +104,7 @@ extension InvoiceLinePostgresModelX on InvoiceLinePostgresModel {
 }
 
 @freezed
-class VatBreakdownPostgresModel with _$VatBreakdownPostgresModel {
+abstract class VatBreakdownPostgresModel with _$VatBreakdownPostgresModel {
   const factory VatBreakdownPostgresModel({
     required String invoiceId,
     required String orgId,
@@ -148,7 +148,7 @@ extension VatBreakdownPostgresModelX on VatBreakdownPostgresModel {
 }
 
 @freezed
-class AttachmentPostgresModel with _$AttachmentPostgresModel {
+abstract class AttachmentPostgresModel with _$AttachmentPostgresModel {
   const factory AttachmentPostgresModel({
     required String id,
     required String invoiceId,
@@ -192,7 +192,7 @@ extension AttachmentPostgresModelX on AttachmentPostgresModel {
 }
 
 @freezed
-class AuditStampPostgresModel with _$AuditStampPostgresModel {
+abstract class AuditStampPostgresModel with _$AuditStampPostgresModel {
   const factory AuditStampPostgresModel({
     required String invoiceId,
     required String orgId,
@@ -237,7 +237,7 @@ extension AuditStampPostgresModelX on AuditStampPostgresModel {
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class InvoicePostgresModel with _$InvoicePostgresModel {
+abstract class InvoicePostgresModel with _$InvoicePostgresModel {
   const factory InvoicePostgresModel({
     required String id,
     required String orgId,

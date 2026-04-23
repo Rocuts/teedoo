@@ -40,7 +40,7 @@ part 'invoice_mongo_model.g.dart';
 // utilizando el modelo normalizado para mantener un único shape canónico.
 
 @freezed
-class InvoiceLineMongoModel with _$InvoiceLineMongoModel {
+abstract class InvoiceLineMongoModel with _$InvoiceLineMongoModel {
   const factory InvoiceLineMongoModel({
     required String id,
     required String description,
@@ -91,7 +91,7 @@ extension InvoiceLineMongoModelX on InvoiceLineMongoModel {
 }
 
 @freezed
-class VatBreakMongoModel with _$VatBreakMongoModel {
+abstract class VatBreakMongoModel with _$VatBreakMongoModel {
   const factory VatBreakMongoModel({
     required String rate,
     required double rateValue,
@@ -123,7 +123,7 @@ extension VatBreakMongoModelX on VatBreakMongoModel {
 }
 
 @freezed
-class InvoiceTotalsMongoModel with _$InvoiceTotalsMongoModel {
+abstract class InvoiceTotalsMongoModel with _$InvoiceTotalsMongoModel {
   const factory InvoiceTotalsMongoModel({
     required int subtotalCents,
     required List<VatBreakMongoModel> vatBreakdown,
@@ -158,7 +158,7 @@ extension InvoiceTotalsMongoModelX on InvoiceTotalsMongoModel {
 }
 
 @freezed
-class ComplianceFlagsMongoModel with _$ComplianceFlagsMongoModel {
+abstract class ComplianceFlagsMongoModel with _$ComplianceFlagsMongoModel {
   const factory ComplianceFlagsMongoModel({
     String? ticketBaiId,
     String? ticketBaiHash,
@@ -198,7 +198,7 @@ extension ComplianceFlagsMongoModelX on ComplianceFlagsMongoModel {
 }
 
 @freezed
-class PaymentTermsMongoModel with _$PaymentTermsMongoModel {
+abstract class PaymentTermsMongoModel with _$PaymentTermsMongoModel {
   const factory PaymentTermsMongoModel({
     required String method,
     String? iban,
@@ -227,7 +227,7 @@ extension PaymentTermsMongoModelX on PaymentTermsMongoModel {
 }
 
 @freezed
-class AttachmentMongoModel with _$AttachmentMongoModel {
+abstract class AttachmentMongoModel with _$AttachmentMongoModel {
   const factory AttachmentMongoModel({
     required String id,
     required String filename,
@@ -262,7 +262,7 @@ extension AttachmentMongoModelX on AttachmentMongoModel {
 }
 
 @freezed
-class RectificationMongoModel with _$RectificationMongoModel {
+abstract class RectificationMongoModel with _$RectificationMongoModel {
   const factory RectificationMongoModel({
     required String originalInvoiceId,
     required String originalInvoiceNumber,
@@ -295,7 +295,7 @@ extension RectificationMongoModelX on RectificationMongoModel {
 }
 
 @freezed
-class AuditStampMongoModel with _$AuditStampMongoModel {
+abstract class AuditStampMongoModel with _$AuditStampMongoModel {
   const factory AuditStampMongoModel({
     required String at,
     required String actorId,
@@ -328,7 +328,7 @@ extension AuditStampMongoModelX on AuditStampMongoModel {
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class InvoiceMongoModel with _$InvoiceMongoModel {
+abstract class InvoiceMongoModel with _$InvoiceMongoModel {
   const factory InvoiceMongoModel({
     required String id,
     required String orgId,

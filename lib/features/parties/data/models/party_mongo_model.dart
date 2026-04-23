@@ -26,7 +26,7 @@ part 'party_mongo_model.g.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class AddressMongoModel with _$AddressMongoModel {
+abstract class AddressMongoModel with _$AddressMongoModel {
   const factory AddressMongoModel({
     required String line1,
     String? line2,
@@ -65,7 +65,7 @@ extension AddressMongoModelX on AddressMongoModel {
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class PartyMongoModel with _$PartyMongoModel {
+abstract class PartyMongoModel with _$PartyMongoModel {
   const factory PartyMongoModel({
     required String id,
     required String orgId,

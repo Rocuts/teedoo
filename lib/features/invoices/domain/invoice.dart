@@ -201,7 +201,7 @@ typedef DomainInvoiceStatus = InvoiceStatus;
 
 /// Línea de factura. Todos los importes en CENTS.
 @freezed
-class DomainInvoiceLine with _$DomainInvoiceLine {
+abstract class DomainInvoiceLine with _$DomainInvoiceLine {
   const factory DomainInvoiceLine({
     required String id,
     required String description,
@@ -239,7 +239,7 @@ class DomainInvoiceLine with _$DomainInvoiceLine {
 
 /// Desglose de IVA agregado por tipo impositivo.
 @freezed
-class VatBreak with _$VatBreak {
+abstract class VatBreak with _$VatBreak {
   const factory VatBreak({
     required VatRate rate,
     required double rateValue,
@@ -257,7 +257,7 @@ class VatBreak with _$VatBreak {
 
 /// Totales agregados de la factura.
 @freezed
-class InvoiceTotals with _$InvoiceTotals {
+abstract class InvoiceTotals with _$InvoiceTotals {
   const factory InvoiceTotals({
     /// Base imponible total en céntimos.
     required int subtotalCents,
@@ -276,7 +276,7 @@ class InvoiceTotals with _$InvoiceTotals {
 
 /// Datos de compliance y huellas Verifactu / TicketBAI / SII.
 @freezed
-class ComplianceFlags with _$ComplianceFlags {
+abstract class ComplianceFlags with _$ComplianceFlags {
   const factory ComplianceFlags({
     /// Identificador TicketBAI (cuando aplica País Vasco).
     String? ticketBaiId,
@@ -300,7 +300,7 @@ class ComplianceFlags with _$ComplianceFlags {
 
 /// Condiciones de pago.
 @freezed
-class PaymentTerms with _$PaymentTerms {
+abstract class PaymentTerms with _$PaymentTerms {
   const factory PaymentTerms({
     /// Método libre (transferencia, tarjeta, domiciliación, efectivo, …).
     required String method,
@@ -311,7 +311,7 @@ class PaymentTerms with _$PaymentTerms {
 
 /// Adjunto (PDF, XML Facturae, justificante).
 @freezed
-class Attachment with _$Attachment {
+abstract class Attachment with _$Attachment {
   const factory Attachment({
     required String id,
     required String filename,
@@ -326,7 +326,7 @@ class Attachment with _$Attachment {
 
 /// Rectificación (factura R1-R5).
 @freezed
-class Rectification with _$Rectification {
+abstract class Rectification with _$Rectification {
   const factory Rectification({
     /// ID de la factura que rectifica.
     required String originalInvoiceId,
@@ -345,7 +345,7 @@ class Rectification with _$Rectification {
 
 /// Marca de auditoría — quien tocó qué y cuándo.
 @freezed
-class AuditStamp with _$AuditStamp {
+abstract class AuditStamp with _$AuditStamp {
   const factory AuditStamp({
     required DateTime at,
     required String actorId,
@@ -364,7 +364,7 @@ class AuditStamp with _$AuditStamp {
 /// [InvoicePostgresModel] (cabecera + tablas hijas). Ambos modelos deben
 /// ofrecer round-trip sin pérdida: `Model.fromDomain(e).toDomain() == e`.
 @freezed
-class Invoice with _$Invoice {
+abstract class Invoice with _$Invoice {
   const factory Invoice({
     required String id,
     required String orgId,

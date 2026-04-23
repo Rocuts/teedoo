@@ -29,7 +29,7 @@ part 'party_postgres_model.g.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class AddressPostgresModel with _$AddressPostgresModel {
+abstract class AddressPostgresModel with _$AddressPostgresModel {
   const factory AddressPostgresModel({
     required String line1,
     String? line2,
@@ -68,7 +68,7 @@ extension AddressPostgresModelX on AddressPostgresModel {
 // ─────────────────────────────────────────────────────────────────────────────
 
 @freezed
-class PartyPostgresModel with _$PartyPostgresModel {
+abstract class PartyPostgresModel with _$PartyPostgresModel {
   const factory PartyPostgresModel({
     required String id,
     required String orgId,
