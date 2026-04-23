@@ -14,7 +14,6 @@ dependencies:
 
   # State Management
   flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
 
   # Routing
   go_router: ^14.8.1
@@ -35,11 +34,6 @@ dependencies:
 
   # i18n
   intl: ^0.20.2
-  slang: ^3.31.2
-  slang_flutter: ^3.31.0
-
-  # Forms
-  reactive_forms: ^17.0.1
 
   # File Upload
   file_picker: ^8.1.6
@@ -64,13 +58,9 @@ dev_dependencies:
   build_runner: ^2.4.13
   freezed: ^2.5.7
   json_serializable: ^6.8.0
-  riverpod_generator: ^2.6.2
 
   # Linting
   flutter_lints: ^5.0.0
-
-  # i18n codegen
-  slang_build_runner: ^3.31.0
 
 flutter:
   uses-material-design: true
