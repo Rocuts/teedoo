@@ -172,7 +172,7 @@ class _TaxBreakdownChartState extends State<TaxBreakdownChart> {
                     touchTooltipData: BarTouchTooltipData(
                       getTooltipColor: (_) =>
                           colors.bgSurface.withValues(alpha: 0.95),
-                      tooltipRoundedRadius: 8,
+                      tooltipBorderRadius: BorderRadius.circular(8),
                       tooltipPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 8,
