@@ -47,13 +47,10 @@ class CertificateCard extends StatelessWidget {
     return GlassCard(
       header: GlassCardHeader(
         title: 'Certificado digital',
-        trailing: SizedBox(
-          height: 34,
-          child: SecondaryButton(
-            label: 'Subir certificado',
-            icon: LucideIcons.upload,
-            onPressed: onUpload,
-          ),
+        trailing: SecondaryButton(
+          label: 'Subir certificado',
+          icon: LucideIcons.upload,
+          onPressed: onUpload,
         ),
       ),
       content: GlassCardContent(
