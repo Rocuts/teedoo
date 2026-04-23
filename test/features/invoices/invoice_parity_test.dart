@@ -13,7 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:teedoo/features/invoices/domain/invoice.dart';
 import 'package:teedoo/features/invoices/data/models/invoice_mongo_model.dart';
 import 'package:teedoo/features/invoices/data/models/invoice_postgres_model.dart';
-import 'package:teedoo/features/invoices/data/models/invoice_status.dart';
+import 'package:teedoo/features/invoices/data/models/invoice_model.dart'
+    show InvoiceStatus;
 
 // UUIDs v4 fijos para que el round-trip sea determinista.
 const String _issuerUuid = 'aaaaaaaa-1111-4111-8111-111111111111';
@@ -152,7 +153,7 @@ Invoice _buildFixture() {
         at: DateTime.utc(2026, 4, 18, 9, 30, 10),
         actorId: 'user_admin_01',
         action: 'created',
-        note: 'Draft desde wizard',
+        notes: 'Draft desde wizard',
       ),
     ],
   );

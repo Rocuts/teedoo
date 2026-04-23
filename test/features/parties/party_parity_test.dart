@@ -53,7 +53,7 @@ Party _buildIntraEu() => const Party(
   id: 'cccccccc-3333-4333-8333-333333333333',
   orgId: 'org_aurora_01',
   taxId: 'DE123456789',
-  taxIdType: TaxIdType.vatEu,
+  taxIdType: TaxIdType.nifIva,
   name: 'Cliente Alemán GmbH',
   address: Address(
     line1: 'Unter den Linden 5',
@@ -93,10 +93,10 @@ void main() {
       expect(m2.toDomain(), equals(p));
     });
 
-    test('taxIdType serialises as enum name', () {
+    test('taxIdType serialises as canonical wire value', () {
       final p = _buildIntraEu();
       final json = PartyMongoModel.fromDomain(p).toJson();
-      expect(json['taxIdType'], 'vatEu');
+      expect(json['taxIdType'], 'NIF_IVA');
     });
   });
 
